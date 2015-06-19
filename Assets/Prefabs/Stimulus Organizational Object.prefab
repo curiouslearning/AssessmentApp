@@ -9,6 +9,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 446306}
   - 114: {fileID: 11439060}
+  - 61: {fileID: 6134114}
   m_Layer: 0
   m_Name: Stimulus Organizational Object
   m_TagString: Untagged
@@ -28,6 +29,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!61 &6134114
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 165186}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Size: {x: 15.5500002, y: 10.1499996}
 --- !u!114 &11439060
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -39,13 +53,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa43548fe42e07040ac16548f7ac90a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 58.1300011
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_Size.x
+      value: 15.5500002
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Size.y
+      value: 10.1499996
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: speed
+      value: 58.1300011
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 165186}

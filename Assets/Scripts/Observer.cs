@@ -2,9 +2,7 @@
 using System.Collections;
 
 //a base Observer class other classes can inherit from for event observation functionality
-public class Observer {
-private
-	string name;
+public class Observer : MonoBehaviour {
 	Observer next;
 	Observer prev;
 
@@ -24,7 +22,7 @@ private
 		prev = iter;
 	}
 
-	public virtual void onNotify(Event e){}
+	public virtual void onNotify(EventInstance<GameObject> e){}
 	public Observer forward ()
 	{
 		return next;

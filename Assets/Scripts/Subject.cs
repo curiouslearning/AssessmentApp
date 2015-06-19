@@ -8,10 +8,8 @@ public class Subject : MonoBehaviour {
 	private Observer tail;
 	void Start ()
 	{
-		head = new Observer();
-		tail = new Observer();
 	}
-	/*public void notify (EventInstance<T> e)
+	public void notify (EventInstance<GameObject> e)
 	{
 		Observer temp;
 		temp = head.forward();
@@ -19,10 +17,15 @@ public class Subject : MonoBehaviour {
 			temp.onNotify(e);
 			temp.forward();
 		}		
-	}*/
+	}
 	public void addObserver (Observer observer)
 	{
 		if (head == null)
+		{
+			head = observer;
+			tail = observer;
+		}
+		else if (head == tail)
 		{
 			head.setNext(observer);
 			tail.setPrev(observer);
@@ -32,12 +35,16 @@ public class Subject : MonoBehaviour {
 			tail.setPrev(observer);
 		}
 	}
-	private void removeObserver (Observer observer)
+	void removeObserver (Observer observer)
 	{
 		//prevent head or tail from calling observer self
-		if(observer == head || observer == tail)
-			return;
-		observer.removeSelf();                                                                  
+		if(observer == head)
+			head = observer.forward();
+		if(observer == tail)
+			tail = observer.backward();
+		else {
+			observer.removeSelf();
+		}                                                             
 	}
 
 		

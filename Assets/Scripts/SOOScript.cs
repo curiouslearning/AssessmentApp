@@ -3,80 +3,107 @@ using System.Collections;
 
 public class SOOScript : MonoBehaviour {
 
-	private StimulusScript[] stimArray = new StimulusScript[4];
-	private Transform[] posArray = new Transform[4];
-	private Transform[] destArray = new Transform[4];
-	private int lengthStimArray;
-
+	private GameObject[] stimArray = new GameObject[4];
+	private Vector3 [] posArray = new Vector3[4];
+	private Vector3[] destArray = new Vector3[4];
+	private int questionNumber;
+	bool isDraggable;
+	Vector3 curDest;
+	public float speed;
+	float distance;
+	bool moving;
+	void Start () {
+		isDraggable = false;
+	}
 
 	// Methods for accessing variables
+	public bool getDrag ()
+	{
+		return isDraggable;
+	}
 	
+	public int getQNumber ()
+	{
+		return questionNumber;
+	}
 
-	public StimulusScript[] returnStimArray() {
+	public GameObject[] returnStimArray() {
 		return stimArray;
 	}
 
-	public Transform[] returnPosArray() {
+	public Vector3[] returnPosArray() {
 		return posArray;
 	}
 
-	public Transform[] returnDestArray() {
+	public Vector3[] returnDestArray() {
 		return destArray;
 	}
 
 	// Methods for setting variables
+	
+	public void setQNumber (int num)
+	{
+		questionNumber = num;
+	}
 
-	public void setStimArray(StimulusScript[] input) {
+	public void setStimArray(GameObject[] input) {
 		stimArray = input;
 	}
 
-	public void setPosArray(Transform[] input) {
+	public void setPosArray(Vector3[] input) {
 		posArray = input;
 	}
 
-	public void setDestArray(Transform[] input) {
+	public void setDestArray(Vector3[] input) {
 		destArray = input;
 	}
+	
 
-
-	public StimulusScript updateStimPos(Transform newPos, StimulusScript stim) {
-		stim.setCurPos (newPos);
-		return stim; 
+	public void setPos (Vector3 pos)
+	{
+		transform.position = pos;
 	}
-
 	 
-
-	public StimulusScript[] releaseStim(StimulusScript stim) {
-		StimulusScript[] temp = new StimulusScript[lengthStimArray];
-		for (int i = 0; i < lengthStimArray; i++) {
+//tell SOO to forget about deleted stimulus
+	public void releaseStim(GameObject stim) {
+		GameObject[] temp = new GameObject[stimArray.Length];
+		for (int i = 0; i < stimArray.Length; i++) {
 			if (stimArray[i].Equals (stim)) {
 				i++;
 			} else temp[i] = stimArray[i];
 		} 
 		stimArray = temp;
-		return stimArray;
 	}
 
+//move the SOO to the next destination
 
-	public StimulusScript[] move() {
-		StimulusScript[] temp = new StimulusScript[lengthStimArray];
-		for (int i = 0; i < lengthStimArray; i++) {
-			 temp[i] = updateStimPos (destArray[i], stimArray[i]);
-		} 
-		stimArray = temp;
-		return stimArray;
+	public void move(int dest)
+	{
+		Debug.Log("moving now true");
+		moving = true;
+		curDest = destArray[dest];
+		distance = Vector3.Distance(transform.position, curDest);
 	}
-
-
-	void Start () {
-		this.stimArray = stimArray;
-		this.posArray = posArray;
-		this.destArray = destArray;
-		lengthStimArray = stimArray.Length;
-	}
-
-	void Update () {
-		lengthStimArray = stimArray.Length;
 	
+	//initialization function
+	public void setSoo (GameObject[] array, int qNum) {
+		this.stimArray = array;
+		questionNumber = qNum;
 	}
+	void Update()
+	{
+		if(moving == true)
+		{
+			Debug.Log("yes moving!");
+			transform.position = Vector3.Lerp(transform.position, curDest, Time.deltaTime * speed/distance);
+		}
+		if(transform.position == curDest)
+		{
+			Debug.Log("moving is false");
+			moving = false;
+		}
+	}
+		
+			
+
 }

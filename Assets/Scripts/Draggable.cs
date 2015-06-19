@@ -16,7 +16,6 @@ public class Draggable : MonoBehaviour {
 		screenPoint = 0;
 		touchTime = 0;
 		e = new EventInstance <Draggable>();
-		eManager = new Subject();
 	}
 
 	public void onSelect (Vector3 position) {

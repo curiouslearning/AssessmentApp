@@ -6,8 +6,13 @@ public class StimulusScript : MonoBehaviour {
 	private bool isCorrect;
 	private bool isBeingDragged; 
 	private bool isDraggable;
-	private Transform curPos;
-	private Vector3 size;
+	private Vector3 curPos;
+
+	void Start ()
+	{
+		isBeingDragged = false;
+		curPos = transform.position;
+	}
 
 	// Methods for accessing variables
 
@@ -23,13 +28,10 @@ public class StimulusScript : MonoBehaviour {
 		return isDraggable;
 	}
 
-	public Transform returnCurPos() {
+	public Vector3 returnCurPos() {
 		return curPos;  
 	}
 
-	public Vector3 returnSize() {
-		return curPos.lossyScale;
-	}
 
 	// Methods for setting variables
 
@@ -45,7 +47,7 @@ public class StimulusScript : MonoBehaviour {
 		isDraggable = input;
 	}
 
-	public void setCurPos(Transform input) {
+	public void setCurPos(Vector3 input) {
 		curPos = input;
 	}
 
@@ -53,12 +55,11 @@ public class StimulusScript : MonoBehaviour {
 	// size = size * distanceToHost/someConstant
 	// }
 
-	void Start () {
-		this.isCorrect = isCorrect;
-		this.isBeingDragged = false;
-		this.isDraggable = true;
-		this.curPos = curPos;
-		this.size = curPos.lossyScale;
+	public	void setStim (serStim input) {
+		this.isCorrect = input.isCorrect;
+		this.isDraggable = input.isDraggable;
+		this.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Art/" + input.sprite);
+		this.GetComponent<AudioSource>().clip = Resources.Load<AudioClip>("Audio/" + input.audio);
 	}
 	
 
