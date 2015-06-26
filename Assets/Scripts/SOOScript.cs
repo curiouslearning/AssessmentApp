@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SOOScript : MonoBehaviour {
+public class SOOScript : Observer {
 
 	private GameObject[] stimArray = new GameObject[4];
 	private Vector3 [] posArray = new Vector3[4];
@@ -64,42 +64,44 @@ public class SOOScript : MonoBehaviour {
 		transform.position = pos;
 	}
 	 
-//tell SOO to forget about deleted stimulus
-	public void releaseStim(GameObject stim) {
-		GameObject[] temp = new GameObject[stimArray.Length];
-		for (int i = 0; i < stimArray.Length; i++) {
-			if (stimArray[i].Equals (stim)) {
-				i++;
-			} else temp[i] = stimArray[i];
-		} 
-		stimArray = temp;
+	public override void onNotify (EventInstance<GameObject> e)
+	{
+		Debug.Log("boo"); //debugger
+		//releaseStim(e.signaler);
 	}
-
+	
 //move the SOO to the next destination
 
 	public void move(int dest)
 	{
-		Debug.Log("moving now true");
 		moving = true;
 		curDest = destArray[dest];
 		distance = Vector3.Distance(transform.position, curDest);
 	}
+
+	void updatePos()
+	{
+		for (int i = 0; i < stimArray.Length; i++)
+		{
+			if (stimArray[i] != null)
+				stimArray[i].GetComponent<StimulusScript>().setHomePos();
+		}
+	}
 	
 	//initialization function
 	public void setSoo (GameObject[] array, int qNum) {
-		this.stimArray = array;
+		stimArray = array;
 		questionNumber = qNum;
 	}
 	void Update()
 	{
 		if(moving == true)
 		{
-			Debug.Log("yes moving!");
-			transform.position = Vector3.Lerp(transform.position, curDest, Time.deltaTime * speed/distance);
+			transform.position = Vector3.Lerp(transform.position, curDest, Time.deltaTime * speed);
+			updatePos();
 		}
 		if(transform.position == curDest)
 		{
-			Debug.Log("moving is false");
 			moving = false;
 		}
 	}

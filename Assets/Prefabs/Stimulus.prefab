@@ -10,12 +10,11 @@ GameObject:
   - 4: {fileID: 410196}
   - 82: {fileID: 8258288}
   - 114: {fileID: 11461342}
-  - 114: {fileID: 11466886}
   - 61: {fileID: 6130282}
   - 212: {fileID: 21243502}
   m_Layer: 0
   m_Name: Stimulus
-  m_TagString: Untagged
+  m_TagString: Stimulus
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -125,17 +124,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9f0d30fc1c6e9f44a6db09d5a1ee789, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &11466886
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 149632}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef1db1c3598924622870e4767e015fcd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!212 &21243502
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -184,6 +172,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_LocalScale.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_TagString
+      value: Stimulus
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

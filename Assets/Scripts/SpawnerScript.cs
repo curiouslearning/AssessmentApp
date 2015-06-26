@@ -50,6 +50,7 @@ public class SpawnerScript : MonoBehaviour {
 		holder.setSoo(newStims, q.getNumber());
 		holder.setPosArray(positions);
 		holder.setDestArray(destinations);
+		holder.transform.localScale = new Vector3 (0.6f,0.6f,0.6f);
 		return newSoo;
 		
 	}	

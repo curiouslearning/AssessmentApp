@@ -19,14 +19,15 @@ SpawnerScript spawnHolder;
 GameObject stimOrgOb;
 SOOScript sooHolder;
 Queue<Question> qList;
-CollisionNotification trashHolder;
+int eTester; //debugger
 	// Use this for initialization
 	void Start () {
+		eTester = 0; //debugger
+		CollisionNotification trashHolder;
 		spawnHolder = spawner.GetComponent<SpawnerScript>();
 		trashHolder = receptacle.GetComponent<CollisionNotification>();
-		if(trashHolder.sub == null) {Debug.Log ("trashHolder");} //debugger
 		trashHolder.sub.addObserver(this);
-		gCollector.GetComponent<CollisionNotification>();	
+		trashHolder = gCollector.GetComponent<CollisionNotification>();	
 		trashHolder.sub.addObserver(this);
 		initQList ();
 		startQuestion();
@@ -46,25 +47,31 @@ CollisionNotification trashHolder;
 	}
 	public override void onNotify (EventInstance<GameObject> e)
 	{
+		Debug.Log("this is call " + eTester++); //debugger
 		if (e.type == eType.Trashed)
 		{
+			Destroy(e.signaler);
 			//don't end the world
 			if(qList.Count == 0)
 				return;
+			Debug.Log("going through the next question"); //debugger
 			startQuestion();
+			return; //prevent repeated action on same event
 		}
 		else if (e.type == eType.Selected);
 		{
+			Debug.Log("got event from: " + e.signaler.name); //debugger
+			Destroy(e.signaler);
 			sooHolder.move(1);
+			return;
 		}
 	}
 	void startQuestion ()
 	{
 	stimOrgOb = spawnHolder.spawnNext(qList.Dequeue());
+	Debug.Log("got new SOO"); //debugger
 	sooHolder = stimOrgOb.GetComponent<SOOScript>();
-	Debug.Log("moving from: " + stimOrgOb.transform.position); //debugger
 	sooHolder.move(0);
-	Debug.Log("SOO now at: " + stimOrgOb.transform.position); //debugger
 	}
 //game iterating functions
 	void nextQuestion()

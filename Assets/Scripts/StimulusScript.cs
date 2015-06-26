@@ -7,9 +7,12 @@ public class StimulusScript : MonoBehaviour {
 	private bool isBeingDragged; 
 	private bool isDraggable;
 	private Vector3 curPos;
+	private Vector3 homePos;
+	private Vector3 startScale;
 
 	void Start ()
 	{
+		startScale = transform.localScale;
 		isBeingDragged = false;
 		curPos = transform.position;
 	}
@@ -28,8 +31,8 @@ public class StimulusScript : MonoBehaviour {
 		return isDraggable;
 	}
 
-	public Vector3 returnCurPos() {
-		return curPos;  
+	public Vector3 returnHomePos() {
+		return homePos;  
 	}
 
 
@@ -47,8 +50,16 @@ public class StimulusScript : MonoBehaviour {
 		isDraggable = input;
 	}
 
-	public void setCurPos(Vector3 input) {
-		curPos = input;
+	public void setHomePos() {
+		homePos = transform.position;
+	}
+	public void scaleToTarget (float mod)
+	{
+		transform.localScale = startScale*mod;
+	}
+	public void resetScale ()
+	{
+		transform.localScale = startScale;
 	}
 
 	// private Stimulus resize() {
