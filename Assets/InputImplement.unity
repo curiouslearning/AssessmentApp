@@ -200,7 +200,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1523307913}
-  distanceMod: .0500000007
+  distanceMod: .100000001
 --- !u!1 &955094559
 GameObject:
   m_ObjectHideFlags: 0
@@ -347,7 +347,7 @@ GameObject:
   - 114: {fileID: 1523307915}
   - 114: {fileID: 1523307918}
   - 50: {fileID: 1523307919}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Receptacle
   m_TagString: Untagged
   m_Icon: {fileID: 0}

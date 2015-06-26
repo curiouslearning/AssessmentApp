@@ -45,7 +45,7 @@ public class TouchProcessor : MonoBehaviour {
 					curScreenPoint = new Vector3(touch.position.x, touch.position.y, screenPoint);
 					curPos = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
 					selection.transform.position = curPos;
-					//selection.GetComponent<StimulusScript>().scaleToTarget(Vector3.Distance(selection.transform.position, target.transform.position)*distanceMod);
+					selection.GetComponent<StimulusScript>().scaleToTarget(Vector3.Distance(selection.transform.position, target.transform.position)*distanceMod);
 				}
 					
 			}
@@ -55,7 +55,7 @@ public class TouchProcessor : MonoBehaviour {
 				if(selection != null)
 				{
 					selection.transform.position = selection.GetComponent<StimulusScript>().returnHomePos();
-					//selection.GetComponent<StimulusScript>().resetScale();
+					selection.GetComponent<StimulusScript>().resetScale();
 					selection.transform.parent = parentBuffer;
 					selection = null;
 				}

@@ -12,7 +12,7 @@ public class StimulusScript : MonoBehaviour {
 
 	void Start ()
 	{
-		startScale = transform.localScale;
+		startScale = transform.localScale*0.6f;
 		isBeingDragged = false;
 		curPos = transform.position;
 	}
