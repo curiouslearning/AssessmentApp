@@ -5,6 +5,9 @@ using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
+/* [Serializable] serStim
+ * serializable class to store stimulus data for question data persistance
+ */
 [Serializable]
 public class serStim{
 	public string audio;
@@ -12,11 +15,22 @@ public class serStim{
 	public bool isCorrect;
 	public bool isDraggable;
 }
+
+/* Question : Scriptable Object
+ * A class to hold information about each question in the assessment
+ * Contains:
+ * 		serStim array of stimuli
+ * 		prompt for host
+ *		question number
+ * initialized by fileWrapper, passed to Spawner by GameManagerScript for question initialization
+ * Stored in a GameManagerScript Queue
+ */
 public class Question : ScriptableObject {
 
 	int questionNumber;
 	List<serStim> stimuli;
 	serStim temp;
+	serStim prompt;
 	
 	void Awake ()
 	{
@@ -31,7 +45,7 @@ public class Question : ScriptableObject {
 			temp = new serStim();
 			temp.audio = sounds [i];
 			temp.sprite = sprites[i];
-			if(i == correct)
+			if(i == correct) 
 				temp.isCorrect = true;
 			else
 				temp.isCorrect = false;

@@ -2,12 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/* GameManager Class
+ * Centralized data storage and functionality for Question iteration
+ * Contains a queue of Questions, pointers to the spawner, Garbage Collector
+ * and current Stimulus Organizational Object
+ */
 public class GameManagerScript : Observer {
 /* Component instances
  * Instances to create/add:
- * Input Processor
  * Animation Handler
- * SOO handler
  * Character Customizer
  * File Wrapper
  * Scoring system
@@ -32,6 +35,8 @@ int eTester; //debugger
 		initQList ();
 		startQuestion();
 	}
+
+//Gets queue of Questions from FileWrapper
 	void initQList ()
 	{ // SUPER HACK, YOU MUST GO  BACK TO THIS
 		string [] sprites1 = new string [] {"sprite0", "sprite1", "sprite2", "sprite3"};
@@ -58,7 +63,7 @@ int eTester; //debugger
 			startQuestion();
 			return; //prevent repeated action on same event
 		}
-		else if (e.type == eType.Selected);
+		else if (e.type == eType.Selected)
 		{
 			Debug.Log("got event from: " + e.signaler.name); //debugger
 			Destroy(e.signaler);
@@ -66,6 +71,8 @@ int eTester; //debugger
 			return;
 		}
 	}
+
+//Dequeue the next question and initialize the question period
 	void startQuestion ()
 	{
 	stimOrgOb = spawnHolder.spawnNext(qList.Dequeue());
@@ -73,11 +80,7 @@ int eTester; //debugger
 	sooHolder = stimOrgOb.GetComponent<SOOScript>();
 	sooHolder.move(0);
 	}
-//game iterating functions
-	void nextQuestion()
-	{
-		//load the next question and the scene updating process
-	}
+
 //top down information passing functions	
 	void generateCmd ()
 	{

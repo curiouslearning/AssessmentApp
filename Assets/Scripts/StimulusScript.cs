@@ -1,23 +1,29 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/* StimulusScript
+ * Class containg data and functionality for individual stimuli 
+ * initialized by the SpawnerScript using Question instances
+ * attached to the SOO instance as child objects
+ */
+
 public class StimulusScript : MonoBehaviour {
 
-	private bool isCorrect;
+	private bool isCorrect; //bool for indicating the correct stimulus response in a question
 	private bool isBeingDragged; 
 	private bool isDraggable;
-	private Vector3 curPos;
-	private Vector3 homePos;
-	private Vector3 startScale;
+	private Vector3 homePos; //snapback functionality
+	private Vector3 startScale; //scaling functionality
 
 	void Start ()
 	{
 		startScale = transform.localScale*0.6f;
 		isBeingDragged = false;
-		curPos = transform.position;
 	}
 
-	// Methods for accessing variables
+//*******************
+// Getter functions *
+//*******************
 
 	public bool returnIsCorrect() {
 		return isCorrect;
@@ -36,7 +42,9 @@ public class StimulusScript : MonoBehaviour {
 	}
 
 
-	// Methods for setting variables
+//*******************
+// Setter functions *
+//*******************
 
 	public void setIsCorrect(bool input) {
 		isCorrect = input;
@@ -53,19 +61,22 @@ public class StimulusScript : MonoBehaviour {
 	public void setHomePos() {
 		homePos = transform.position;
 	}
+
+//********************
+// Scaling functions *
+//********************
+
 	public void scaleToTarget (float mod)
 	{
 		transform.localScale = startScale*mod;
 	}
+
 	public void resetScale ()
 	{
 		transform.localScale = startScale;
 	}
 
-	// private Stimulus resize() {
-	// size = size * distanceToHost/someConstant
-	// }
-
+//initialization function
 	public	void setStim (serStim input) {
 		this.isCorrect = input.isCorrect;
 		this.isDraggable = input.isDraggable;

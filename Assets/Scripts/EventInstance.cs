@@ -1,7 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum eType {Tapped, Trashed, Selected, Dragged};
+/* EventInstance.cs
+ * Contains event signaling data types (enum eType, EventInstance <T>)
+ */
+public enum eType {Tapped, Trashed, Selected, Dragged}; //basic enum that contains all signalable events
+
+/* EventInstance <T>
+ * Generic class that wraps an eType signal and the signaler object for
+ * notify to pass to an observer list.
+ * The Subject passing the EventInstance and the Observer receiving it must
+ * have the same type of EventInstance<T>  (i.e: EventInstance<GameObject>)
+ */
 public class EventInstance <T> 
 {
 	public eType type;

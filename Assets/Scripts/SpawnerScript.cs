@@ -1,6 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/* SpawnerScript
+ * Class used to initialize SOO an stimuli
+ * for each new question
+ * Gets question information from Question Queue
+ * Gets SOO and stimulus positioning info from Editor
+ */
 public class SpawnerScript : MonoBehaviour {
 	GameObject newSoo;
 	GameObject[] newStims;
@@ -47,15 +53,13 @@ public class SpawnerScript : MonoBehaviour {
 			positions[i] = transform.position;
 			newStims[i].GetComponent<StimulusScript>().setStim(q.getStim(i));  
 		}
-		holder.setSoo(newStims, q.getNumber());
+		//add stims, stim positions, and SOO destinations to SOO instance
+		holder.setSoo(newStims, q.getNumber()); 
 		holder.setPosArray(positions);
 		holder.setDestArray(destinations);
+		//scale size to screen
 		holder.transform.localScale = new Vector3 (0.6f,0.6f,0.6f);
 		return newSoo;
 		
-	}	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+	}		
 }

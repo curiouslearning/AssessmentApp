@@ -2,11 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 
-
+/*
+ * ObsNode
+ * node class for the observer list
+ * contains next and prev ObsNode pointers
+ * and a data pointer to an instance of an observer class
+ */
 public class ObsNode {
 	ObsNode next;
 	ObsNode prev;
 	Observer data;
+
+//*******************
+// Setter functions *
+//*******************
 	public void setData (Observer input)
 	{
 		data = input;
@@ -20,6 +29,10 @@ public class ObsNode {
 	{
 		prev = iter;
 	}
+
+//*******************
+// Getter functions *
+//*******************
 	public Observer getData ()
 	{
 		return data;
@@ -33,7 +46,8 @@ public class ObsNode {
 	{
 		return prev;
 	}
-	
+
+//remove node from Subject's Observer list	
 	public void removeSelf ()
 	{
 		next.setPrev(prev);
@@ -42,6 +56,14 @@ public class ObsNode {
 		prev = null;
 	}
 }
+
+/* Subject
+ * Notifier class for the Obeserver Design Pattern.
+ * Add an instance of this class as a component to any class that requires Subject functionality
+ * Contains a doubly linked list of ObsNode pointers that Observers can add themselves to
+ * Notifies Observers with notify (eType, EventInstance<GameObject>)
+ */
+
 public class Subject : MonoBehaviour {
 	private int numObservers;
 	private ObsNode head;
