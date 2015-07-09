@@ -7,18 +7,20 @@ using System.Collections;
  * attached to the SOO instance as child objects
  */
 
-public class StimulusScript : MonoBehaviour {
+public class StimulusScript : MonoBehaviour{
 
 	private bool isCorrect; //bool for indicating the correct stimulus response in a question
 	private bool isBeingDragged; 
 	private bool isDraggable;
 	private Vector3 homePos; //snapback functionality
 	private Vector3 startScale; //scaling functionality
+	public Selectable touchInput;
 
 	void Start ()
 	{
 		startScale = transform.localScale*0.6f;
 		isBeingDragged = false;
+		touchInput.initP(onSelect);
 	}
 
 //*******************
@@ -84,7 +86,13 @@ public class StimulusScript : MonoBehaviour {
 		this.GetComponent<AudioSource>().clip = Resources.Load<AudioClip>("Audio/" + input.audio);
 	}
 	
-
+	public void onSelect (touchInstance t)
+	{
+		Debug.Log("successful selection!");
+		Debug.Log("There was a " + t.getType() + " of length " + t.getTime());
+		//Animation stuff here
+		//sound stuff here
+	}
 	void Update () {
 
 	}

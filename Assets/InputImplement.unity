@@ -101,6 +101,8 @@ GameObject:
   - 81: {fileID: 829527120}
   - 114: {fileID: 829527125}
   - 114: {fileID: 829527126}
+  - 114: {fileID: 829527128}
+  - 114: {fileID: 829527127}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -185,9 +187,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fcf45963fe75410fbb10133f50b2881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  questionNumber: 0
+  questionTime: 0
   spawner: {fileID: 955094559}
   receptacle: {fileID: 1523307913}
   gCollector: {fileID: 1331431048}
+  eventHandler: {fileID: 829527127}
 --- !u!114 &829527126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,6 +206,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 1523307913}
   distanceMod: .100000001
+  scoring: {fileID: 829527128}
+--- !u!114 &829527127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 829527119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4f642768f1eb4e3aa1032a4147584c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &829527128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 829527119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8185fe2690d0544fa9d668c7d5692636, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reference: {fileID: 829527125}
+  receptacle: {fileID: 1523307915}
 --- !u!1 &955094559
 GameObject:
   m_ObjectHideFlags: 0
@@ -281,7 +311,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sub: {fileID: 0}
   type: 1
-  tag: SOO
+  dragTag: SOO
 --- !u!4 &1331431050
 Transform:
   m_ObjectHideFlags: 0
@@ -393,7 +423,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sub: {fileID: 0}
   type: 2
-  tag: Stimulus
+  dragTag: Stimulus
 --- !u!61 &1523307916
 BoxCollider2D:
   m_ObjectHideFlags: 0

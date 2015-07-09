@@ -2,7 +2,7 @@
 using System.Collections;
 
 /* SpawnerScript
- * Class used to initialize SOO an stimuli
+ * Class used to initialize Stimulus Organization Object (SOO) and stimuli
  * for each new question
  * Gets question information from Question Queue
  * Gets SOO and stimulus positioning info from Editor
@@ -12,10 +12,12 @@ public class SpawnerScript : MonoBehaviour {
 	GameObject[] newStims;
 	public GameObject sooPrefab;
 	public GameObject stimPrefab;
+	//placement modifiers for stimulus positions
 	public float left;
 	public float right;
 	public float up;
 	public float down;
+	//variables for the SOO to hold onto
 	public Vector3[] destinations;
 	Vector3[] positions;
 	// Use this for initialization

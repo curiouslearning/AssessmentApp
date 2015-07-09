@@ -65,16 +65,42 @@ public class ObsNode {
  */
 
 public class Subject : MonoBehaviour {
+	
 	private int numObservers;
 	private ObsNode head;
 	private ObsNode tail;
+
+	//delegates for notifying using GameObjects
+	public delegate void GameObjectNotify (EventInstance<GameObject> key);
+	public event GameObjectNotify gameObjectEvent;
+	//delegates for notifying using ints
+	public delegate void gameManagerNotify (EventInstance<GameManagerScript> key);
+	public event gameManagerNotify gMEvent;	
 	void Start ()
 	{
 		numObservers = 0;
 	}
-	public void notify (EventInstance<GameObject> e)
+
+
+	//overridden functions for notifying using multiple types
+	public void notify(EventInstance<GameObject> e)
 	{
-		Debug.Log("in notify");
+		Debug.Log("in go notify");
+		if (gameObjectEvent != null){
+			Debug.Log("notifying");
+			gameObjectEvent(e);
+		}
+	}
+	public void notify(EventInstance<GameManagerScript> e)
+	{
+		Debug.Log("in gm notify");
+		if (gMEvent != null){
+			Debug.Log("notifying");
+			gMEvent(e);
+		}
+	}
+/*	public void oldNotify (EventInstance<GameObject> e)
+	{
 		ObsNode temp;
 		temp = head;
 		while (temp != null){
@@ -82,10 +108,12 @@ public class Subject : MonoBehaviour {
 			temp.getData ().onNotify(e);
 			temp = temp.forward();
 		}		
-	}
-	public void addObserver (Observer observer)
+	}*/
+	public void addObserver (GameObjectNotify observer)
 	{
-		ObsNode node = new ObsNode ();
+		gameObjectEvent += observer;
+		numObservers++;
+		/*ObsNode node = new ObsNode ();
 		node.setData(observer);
 		
 		Debug.Log ("adding observer"); //debugger
@@ -109,12 +137,21 @@ public class Subject : MonoBehaviour {
 			tail.backward().setNext(node);
 			tail.setPrev(node);
 		}
+		*/
 			Debug.Log("there are " + numObservers + " observers in the queue"); //debugger
 	}
-	public void removeObserver (ObsNode node)
+	public void addObserver (gameManagerNotify ob)
 	{
+		gMEvent += ob;
+		numObservers++;		
+		Debug.Log("there are " + numObservers + " observers in the queue"); //debugger
+	}
+	public void removeObserver (GameObjectNotify ob)
+	{
+		gameObjectEvent -= ob; 
+		numObservers--;
 		//prevent head or tail from calling observer self
-		if(node == head)
+		/*if(node == head)
 		{
 			head = node.forward();
 			node.setData (null);
@@ -126,7 +163,12 @@ public class Subject : MonoBehaviour {
 		}
 		else {
 			node.removeSelf();
-		}                                                             
+		}*/                                                             
+	}
+	public void removeObserver (gameManagerNotify ob)
+	{
+		gMEvent -= ob;
+		numObservers--;
 	}
 
 		

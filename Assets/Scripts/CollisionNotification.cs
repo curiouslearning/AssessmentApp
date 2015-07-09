@@ -15,13 +15,16 @@ public class CollisionNotification : MonoBehaviour {
 	}
 	void OnTriggerEnter2D (Collider2D col){ 
 		Debug.Log("caught: " + col.gameObject.name); //debugger
-		if(col.gameObject.tag != dragTag) //prevent unwanted collisions from affecting gameplay
+		if(col.gameObject.tag != dragTag){ //prevent unwanted collisions from affecting gameplay
+			Debug.Log("oops!");
 			return;
+		}
 		selected = col.gameObject;
 		EventInstance<GameObject> e = new EventInstance<GameObject>();
 		e.setEvent(type, selected);
 		col.transform.parent = null;
-		sub.notify(e) ;
+		sub.notify(e);
+		Debug.Log("notified!");
 		selected = null;
 	}
 }
