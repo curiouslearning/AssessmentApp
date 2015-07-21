@@ -68,6 +68,8 @@ public class ScoreTracker : Observer {
 	public CollisionNotification receptacle;
 	public List<Score> scoreList;
 	int totalScore;
+	int numCorrect;
+	int numWrong;
 	Score s;	
 
 	void Start () {
@@ -109,10 +111,12 @@ public class ScoreTracker : Observer {
 	
 	// Update is called once per frame
 	void changeQuestion () {
-		if (s.isCorrect())
+		if (s.isCorrect ())
 			totalScore++;
+		    // numCorrect++;
 		else
 			totalScore--;
+		    // numWrong++;  
 		scoreList.Add(s);
 		s = new Score(reference.questionNumber);		
 	}

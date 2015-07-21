@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -14,6 +14,7 @@ public class serStim{
 	public string sprite;
 	public bool isCorrect;
 	public bool isDraggable;
+	public Difficulty difficulty; 
 }
 
 /* Question : Scriptable Object
@@ -31,6 +32,7 @@ public class Question : ScriptableObject {
 	List<serStim> stimuli;
 	serStim temp;
 	serStim prompt;
+ 
 	
 	void Awake ()
 	{
