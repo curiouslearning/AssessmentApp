@@ -53,14 +53,14 @@ int eTester; //debugger
 		trashHolder.sub.addObserver(new Subject.GameObjectNotify(this.onNotify));
 		trashHolder = gCollector.GetComponent<CollisionNotification>();	
 		trashHolder.sub.addObserver(new Subject.GameObjectNotify(this.onNotify));
-		scoreHolder.eventHandler.addObserver(new Subject.scoreTrackerNotify (this.onNotify));
+		scoreHolder.GetComponent<Subject>().addObserver(new Subject.scoreTrackerNotify (this.onNotify));
 		questionNumber = 0;
 		questionTime = 0f;
 		startTime = Time.time;
 		initQList ();
 		startQuestion(); 
 		currentDifficulty = Difficulty.Easy;
-		currentCategory = Category (0);
+		currentCategory = Category.ReceptiveVocabulary;
 	}
 
 //Gets queue of Questions from FileWrapper

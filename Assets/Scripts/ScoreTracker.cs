@@ -70,6 +70,7 @@ public class ScoreTracker : Observer {
 	int totalScore;
 	int numCorrect;
 	int numWrong;
+	int numAnswered;
 	Score s;	
 	public Subject eventHandler;
 
@@ -112,6 +113,7 @@ public class ScoreTracker : Observer {
 	
 	// Update is called once per frame
 	void changeQuestion () {
+		numAnswered++;
 		if (s.isCorrect ()) {
 			totalScore++;
 			numCorrect++;
@@ -121,16 +123,22 @@ public class ScoreTracker : Observer {
 		}
 		if (numCorrect >= 3) {
 			numCorrect = 0;
-			 EventInstance<ScoreTracker> e;
-			 e = new EventInstance<ScoreTracker> ();
-			 e.setEvent (eType.ChangeDifficulty, this);
-			 eventHandler.notify(e);
+			EventInstance<ScoreTracker> e;
+			e = new EventInstance<ScoreTracker> ();
+			e.setEvent (eType.ChangeDifficulty, this);
+			eventHandler.notify (e);
 		} else if (numWrong >= 4) {
 			numWrong = 0;
-			 EventInstance<ScoreTracker> e;
-			 e = new EventInstance<ScoreTracker> ();
-			 e.setEvent (eType.ChangeCategory, this);
-			 eventHandler.notify(e);
+			EventInstance<ScoreTracker> e;
+			e = new EventInstance<ScoreTracker> ();
+			e.setEvent (eType.ChangeCategory, this);
+			eventHandler.notify (e);
+		} else if (numAnswered >= 20) {
+			numAnswered = 0;
+			EventInstance<ScoreTracker> e;
+			e = new EventInstance<ScoreTracker> ();
+			e.setEvent (eType.ChangeCategory, this);
+			eventHandler.notify (e);
 		}
 		scoreList.Add(s);
 		s = new Score(reference.questionNumber);		
