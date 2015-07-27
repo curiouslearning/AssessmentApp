@@ -76,6 +76,9 @@ public class Subject : MonoBehaviour {
 	//delegates for notifying using ints
 	public delegate void gameManagerNotify (EventInstance<GameManagerScript> key);
 	public event gameManagerNotify gMEvent;	
+	// delegates for ScoreTracker notifications
+	public delegate void scoreTrackerNotify (EventInstance<ScoreTracker> key);
+	public event scoreTrackerNotify scoreEvent;
 	void Start ()
 	{
 		numObservers = 0;
@@ -97,6 +100,14 @@ public class Subject : MonoBehaviour {
 		if (gMEvent != null){
 			Debug.Log("notifying");
 			gMEvent(e);
+		}
+	}
+	public void notify(EventInstance<ScoreTracker> e)
+	{
+		Debug.Log ("in go notify");
+		if (scoreEvent != null) {
+			Debug.Log("notifying");
+			scoreEvent(e);
 		}
 	}
 /*	public void oldNotify (EventInstance<GameObject> e)
@@ -146,6 +157,12 @@ public class Subject : MonoBehaviour {
 		numObservers++;		
 		Debug.Log("there are " + numObservers + " observers in the queue"); //debugger
 	}
+	public void addObserver (scoreTrackerNotify ob)
+	{
+		scoreEvent += ob;
+		numObservers++;
+		Debug.Log ("there are " + numObservers + " observers in the queue"); //debugger
+	}
 	public void removeObserver (GameObjectNotify ob)
 	{
 		gameObjectEvent -= ob; 
@@ -170,6 +187,11 @@ public class Subject : MonoBehaviour {
 		gMEvent -= ob;
 		numObservers--;
 	}
+	public void removeObserver (scoreTrackerNotify ob)
+	{
+		scoreEvent -= ob;
+		numObservers--;
+	} 
 
 		
 		 

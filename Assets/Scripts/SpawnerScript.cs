@@ -12,7 +12,6 @@ public class SpawnerScript : MonoBehaviour {
 	GameObject[] newStims;
 	public GameObject sooPrefab;
 	public GameObject stimPrefab;
-	Difficulty currentDifficulty;
 	//placement modifiers for stimulus positions
 	public float left;
 	public float right;
@@ -24,8 +23,7 @@ public class SpawnerScript : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 		newStims = new GameObject[4];
-		positions = new Vector3[4];
-		currentDifficulty = Difficulty.Easy; 
+		positions = new Vector3[4]; 
 	}
 	//to do: split SOO and stimuli into layers
 	public GameObject spawnNext (Question q)

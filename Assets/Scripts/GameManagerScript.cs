@@ -2,6 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 
+public enum Category {ReceptiveVocabulary, 
+				      LetterNameRecognition, 
+				      LetterSoundMatching, 
+					  CVCWordIdentification, 
+					  SightWordIdentification, 
+	                  RhymingWordMatching,
+	                  BlendingWordIdentification, 
+	                  PseudowordMatching};   
+
 /* GameManager Class
  * Centralized data storage and functionality for Question iteration
  * Contains a queue of Questions, pointers to the spawner, Garbage Collector
@@ -25,8 +34,11 @@ public GameObject spawner;
 SpawnerScript spawnHolder;
 public GameObject receptacle;
 public GameObject gCollector;
+public ScoreTracker scoreHolder;
 GameObject stimOrgOb;
 SOOScript sooHolder;
+Difficulty currentDifficulty; 
+Category currentCategory;
 
 Queue<Question> qList;
 //Event variables
@@ -41,11 +53,14 @@ int eTester; //debugger
 		trashHolder.sub.addObserver(new Subject.GameObjectNotify(this.onNotify));
 		trashHolder = gCollector.GetComponent<CollisionNotification>();	
 		trashHolder.sub.addObserver(new Subject.GameObjectNotify(this.onNotify));
+		scoreHolder.eventHandler.addObserver(new Subject.scoreTrackerNotify (this.onNotify));
 		questionNumber = 0;
 		questionTime = 0f;
 		startTime = Time.time;
 		initQList ();
-		startQuestion();
+		startQuestion(); 
+		currentDifficulty = Difficulty.Easy;
+		currentCategory = Category (0);
 	}
 
 //Gets queue of Questions from FileWrapper
@@ -84,10 +99,25 @@ int eTester; //debugger
 		}
 	}
 
+    public override void onNotify (EventInstance<ScoreTracker> e) {
+		Debug.Log ("this is call " + eTester++);
+		if (e.type == eType.ChangeDifficulty) {
+			Debug.Log ("got a ChangeDifficulty event from " + e.signaler.name); // debugger
+			if (currentDifficulty == Difficulty.Hard) {
+				currentCategory++;
+			} else 
+				currentDifficulty++;
+			    return;
+		} else if (e.type == eType.ChangeCategory) {
+			Debug.Log ("got a ChangeCategory event from " + e.signaler.name); // debugger
+			currentCategory++;
+		}
+	}
+
 //Dequeue the next question and initialize the question period
 	void startQuestion ()
 	{
-		if(qList.Count == 0){
+		if(qList.Count == 0){ 
 				endGame();
 				return;
 		}
