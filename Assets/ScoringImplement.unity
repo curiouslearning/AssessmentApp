@@ -192,7 +192,7 @@ MonoBehaviour:
   receptacle: {fileID: 1523307913}
   gCollector: {fileID: 1331431048}
   scoreHolder: {fileID: 829527128}
-  eventHandler: {fileID: 0}
+  eventHandler: {fileID: 829527127}
 --- !u!114 &829527126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -231,7 +231,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reference: {fileID: 829527125}
   receptacle: {fileID: 1523307915}
-  eventHandler: {fileID: 0}
+  eventHandler: {fileID: 829527127}
 --- !u!1 &955094559
 GameObject:
   m_ObjectHideFlags: 0

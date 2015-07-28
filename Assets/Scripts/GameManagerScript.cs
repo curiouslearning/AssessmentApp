@@ -61,6 +61,7 @@ int eTester; //debugger
 		startQuestion(); 
 		currentDifficulty = Difficulty.Easy;
 		currentCategory = Category.ReceptiveVocabulary;
+		Debug.Log ("Current category/difficulty is " + currentCategory + "/" + currentDifficulty); 
 	}
 
 //Gets queue of Questions from FileWrapper
@@ -107,10 +108,13 @@ int eTester; //debugger
 				currentCategory++;
 			} else 
 				currentDifficulty++;
+			    Debug.Log ("current Category is " + currentCategory + " and current difficulty is " + currentDifficulty);
 			    return;
 		} else if (e.type == eType.ChangeCategory) {
 			Debug.Log ("got a ChangeCategory event from " + e.signaler.name); // debugger
 			currentCategory++;
+			Debug.Log ("current Category is " + currentCategory + " and current difficulty is " + currentDifficulty);
+			return;
 		}
 	}
 
@@ -131,6 +135,7 @@ int eTester; //debugger
 	void changeQuestion ()
 	{
 		Debug.Log("we're in changeQuestion!");
+		Debug.Log ("current Category is " + currentCategory + " and current difficulty is " + currentDifficulty);
 		questionTime = 0;
 		startTime = Time.time;
 		questionNumber++;

@@ -127,18 +127,21 @@ public class ScoreTracker : Observer {
 			e = new EventInstance<ScoreTracker> ();
 			e.setEvent (eType.ChangeDifficulty, this);
 			eventHandler.notify (e);
+			Debug.Log ("sent ChangeDifficulty notification");
 		} else if (numWrong >= 4) {
 			numWrong = 0;
 			EventInstance<ScoreTracker> e;
 			e = new EventInstance<ScoreTracker> ();
 			e.setEvent (eType.ChangeCategory, this);
 			eventHandler.notify (e);
+			Debug.Log ("sent ChangeCategory notification");
 		} else if (numAnswered >= 20) {
 			numAnswered = 0;
 			EventInstance<ScoreTracker> e;
 			e = new EventInstance<ScoreTracker> ();
 			e.setEvent (eType.ChangeCategory, this);
 			eventHandler.notify (e);
+			Debug.Log ("sent ChangeCategory notification");
 		}
 		scoreList.Add(s);
 		s = new Score(reference.questionNumber);		
