@@ -76,6 +76,9 @@ public class Subject : MonoBehaviour {
 	//delegates for notifying using ints
 	public delegate void gameManagerNotify (EventInstance<GameManagerScript> key);
 	public event gameManagerNotify gMEvent;	
+
+	public delegate void animatorNotify (EventInstance<AnimationManager> key);
+	public event animatorNotify anEvent;
 	void Start ()
 	{
 		numObservers = 0;
@@ -145,6 +148,17 @@ public class Subject : MonoBehaviour {
 		gMEvent += ob;
 		numObservers++;		
 		Debug.Log("there are " + numObservers + " observers in the queue"); //debugger
+	}
+	public void addObserver (animatorNotify ob)
+	{
+		anEvent += ob;
+		numObservers ++;
+		Debug.Log("there are " + numObservers + " observers in the queue"); //debugger
+	}
+	public void removeObserver (animatorNotify ob)
+	{
+		anEvent -= ob;
+		numObservers--;
 	}
 	public void removeObserver (GameObjectNotify ob)
 	{
