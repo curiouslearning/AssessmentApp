@@ -104,6 +104,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   subjects:
   - {fileID: 1523307913}
+  bodyParts:
+  - {fileID: 1983210885}
+  - {fileID: 1561732185}
+  - {fileID: 655050617}
+  - {fileID: 683295207}
+  - {fileID: 1058090990}
+  - {fileID: 1190361500}
+  - {fileID: 2044375531}
+  newTexture: {fileID: 2100000, guid: 13f73e833d4c84ecfae6be0cbc63595f, type: 2}
 --- !u!1 &465682942
 GameObject:
   m_ObjectHideFlags: 0
@@ -158,6 +167,14 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1523307917}
   m_RootOrder: 0
+--- !u!1 &655050617 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100010, guid: 05f9c3804acb941f7b56c89b847cab60, type: 3}
+  m_PrefabInternal: {fileID: 1007595679}
+--- !u!1 &683295207 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100024, guid: 05f9c3804acb941f7b56c89b847cab60, type: 3}
+  m_PrefabInternal: {fileID: 1007595679}
 --- !u!1 &829527119
 GameObject:
   m_ObjectHideFlags: 0
@@ -396,6 +413,14 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 05f9c3804acb941f7b56c89b847cab60, type: 3}
   m_IsPrefabParent: 0
+--- !u!1 &1058090990 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100032, guid: 05f9c3804acb941f7b56c89b847cab60, type: 3}
+  m_PrefabInternal: {fileID: 1007595679}
+--- !u!1 &1190361500 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100050, guid: 05f9c3804acb941f7b56c89b847cab60, type: 3}
+  m_PrefabInternal: {fileID: 1007595679}
 --- !u!1 &1331431048
 GameObject:
   m_ObjectHideFlags: 0
@@ -594,3 +619,15 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!1 &1561732185 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100006, guid: 05f9c3804acb941f7b56c89b847cab60, type: 3}
+  m_PrefabInternal: {fileID: 1007595679}
+--- !u!1 &1983210885 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100004, guid: 05f9c3804acb941f7b56c89b847cab60, type: 3}
+  m_PrefabInternal: {fileID: 1007595679}
+--- !u!1 &2044375531 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100058, guid: 05f9c3804acb941f7b56c89b847cab60, type: 3}
+  m_PrefabInternal: {fileID: 1007595679}

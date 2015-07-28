@@ -4,6 +4,8 @@ using System.Collections;
 public class AnimationManager : Observer {
 	Animator animator;
 	public GameObject[] subjects;
+	public GameObject[] bodyParts;
+	public Material newTexture;
 
 	// Use this for initialization
 	void Start () {
@@ -22,13 +24,18 @@ public class AnimationManager : Observer {
 		}
 	}
 
-	void onNotify (EventInstance<GameObject> e)
+	public override void onNotify (EventInstance<GameObject> e)
 	{
 		animator.SetTrigger("Success");
+	}
+	void changeBodyPart (int part, Material newMat)
+	{
+		GameObject temp = bodyParts[part];
+		temp.GetComponent<SkinnedMeshRenderer>().material = newMat;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+
 	}
 }
