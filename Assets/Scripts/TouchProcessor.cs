@@ -110,12 +110,14 @@ public class TouchProcessor : Observer {
 
 	public override void onNotify (EventInstance<GameManagerScript> e)
 	{
-		if(e.type == eType.EndGame)
+		if (e.type == eType.EndGame) {
 			return;
-		Debug.Log("adding a question"); //debugger
-		scoring.addTouch(touchSum);
-		touchSum = new TouchSummary();
-		//send stuff to score tracker
+			Debug.Log ("adding a question"); //debugger
+		} else if (e.type == eType.NewQuestion) {
+			scoring.addTouch (touchSum);
+			touchSum = new TouchSummary ();
+			//send stuff to score tracker
+		}
 	}
 	
 	void Update () {

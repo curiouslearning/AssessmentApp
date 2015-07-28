@@ -106,14 +106,17 @@ int eTester; //debugger
 			Debug.Log ("got a ChangeDifficulty event from " + e.signaler.name); // debugger
 			if (currentDifficulty == Difficulty.Hard) {
 				currentCategory++;
+				currentDifficulty = Difficulty.Easy;
+				return;
 			} else 
 				currentDifficulty++;
-			    Debug.Log ("current Category is " + currentCategory + " and current difficulty is " + currentDifficulty);
+			    Debug.Log ("current Category is " + currentCategory + " and current difficulty is " + currentDifficulty); // debugger
 			    return;
 		} else if (e.type == eType.ChangeCategory) {
 			Debug.Log ("got a ChangeCategory event from " + e.signaler.name); // debugger
 			currentCategory++;
-			Debug.Log ("current Category is " + currentCategory + " and current difficulty is " + currentDifficulty);
+			currentDifficulty = Difficulty.Easy;
+			Debug.Log ("current Category is " + currentCategory + " and current difficulty is " + currentDifficulty); // debugger
 			return;
 		}
 	}
@@ -166,6 +169,16 @@ int eTester; //debugger
 	
 	void Update () {
 		questionTime = Time.time - startTime;
+		//Debug.Log ("questionTime: " + questionTime);
+		if (questionTime >= 15.0f) {
+			startTime = Time.time;
+			EventInstance<GameManagerScript> e;
+			e = new EventInstance<GameManagerScript>();
+			e.setEvent (eType.Timeout, this);
+			eventHandler.notify(e);
+			Debug.Log ("Sent Timeout notification to ScoreTracker");
+			sooHolder.move (1);
+		}
 		//if scene is changing do not process input
 		//otherwise generate input commands and pass them to the proper objects
 	}
