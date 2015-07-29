@@ -343,7 +343,7 @@ AnimatorStateMachine:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: New StateMachine
+  m_Name: SuccessDance
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 110232412}
