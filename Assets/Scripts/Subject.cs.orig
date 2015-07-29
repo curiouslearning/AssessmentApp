@@ -1,0 +1,219 @@
+﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+
+/*
+ * ObsNode
+ * node class for the observer list
+ * contains next and prev ObsNode pointers
+ * and a data pointer to an instance of an observer class
+ */
+public class ObsNode {
+	ObsNode next;
+	ObsNode prev;
+	Observer data;
+
+//*******************
+// Setter functions *
+//*******************
+	public void setData (Observer input)
+	{
+		data = input;
+
+	}
+	public void setNext (ObsNode iter)
+	{
+		next = iter;
+	}
+	public	void setPrev (ObsNode iter)
+	{
+		prev = iter;
+	}
+
+//*******************
+// Getter functions *
+//*******************
+	public Observer getData ()
+	{
+		return data;
+	}
+	public ObsNode forward ()
+	{
+		return next;
+	}
+
+	public	ObsNode backward ()
+	{
+		return prev;
+	}
+
+//remove node from Subject's Observer list	
+	public void removeSelf ()
+	{
+		next.setPrev(prev);
+		prev.setNext(next);
+		next = null;
+		prev = null;
+	}
+}
+
+/* Subject
+ * Notifier class for the Obeserver Design Pattern.
+ * Add an instance of this class as a component to any class that requires Subject functionality
+ * Contains a doubly linked list of ObsNode pointers that Observers can add themselves to
+ * Notifies Observers with notify (eType, EventInstance<GameObject>)
+ */
+
+public class Subject : MonoBehaviour {
+	
+	private int numObservers;
+	private ObsNode head;
+	private ObsNode tail;
+
+	//delegates for notifying using GameObjects
+	public delegate void GameObjectNotify (EventInstance<GameObject> key);
+	public event GameObjectNotify gameObjectEvent;
+	//delegates for notifying using ints
+	public delegate void gameManagerNotify (EventInstance<GameManagerScript> key);
+	public event gameManagerNotify gMEvent;	
+<<<<<<< HEAD
+
+	public delegate void animatorNotify (EventInstance<AnimationManager> key);
+	public event animatorNotify anEvent;
+=======
+	// delegates for ScoreTracker notifications
+	public delegate void scoreTrackerNotify (EventInstance<ScoreTracker> key);
+	public event scoreTrackerNotify scoreEvent;
+>>>>>>> f13c277a5336417d5d8f77e50b9305dbf3ea224d
+	void Start ()
+	{
+		numObservers = 0;
+	}
+
+
+	//overridden functions for notifying using multiple types
+	public void notify(EventInstance<GameObject> e)
+	{
+		Debug.Log("in go notify");
+		if (gameObjectEvent != null){
+			Debug.Log("notifying");
+			gameObjectEvent(e);
+		}
+	}
+	public void notify(EventInstance<GameManagerScript> e)
+	{
+		Debug.Log("in gm notify");
+		if (gMEvent != null){
+			Debug.Log("notifying");
+			gMEvent(e);
+		}
+	}
+	public void notify(EventInstance<ScoreTracker> e)
+	{
+		Debug.Log ("in go notify");
+		if (scoreEvent != null) {
+			Debug.Log("notifying");
+			scoreEvent(e);
+		}
+	}
+/*	public void oldNotify (EventInstance<GameObject> e)
+	{
+		ObsNode temp;
+		temp = head;
+		while (temp != null){
+			Debug.Log ("notifying: " + temp.getData().gameObject.name);
+			temp.getData ().onNotify(e);
+			temp = temp.forward();
+		}		
+	}*/
+	public void addObserver (GameObjectNotify observer)
+	{
+		gameObjectEvent += observer;
+		numObservers++;
+		/*ObsNode node = new ObsNode ();
+		node.setData(observer);
+		
+		Debug.Log ("adding observer"); //debugger
+		if (head == null)
+		{
+			Debug.Log("head is null"); //debugger
+			head = node;
+			tail = node;
+			node.setNext(null);
+			numObservers++;
+		}
+		else if (head == tail)
+		{
+			Debug.Log("count is one"); //debugger
+			head.setNext(node);
+			tail.setPrev(node);
+			if(tail.forward() == null) { Debug.Log("tail.next is null"); } //debugger
+		}
+		else{
+			Debug.Log("no edge case");
+			tail.backward().setNext(node);
+			tail.setPrev(node);
+		}
+		*/
+			Debug.Log("there are " + numObservers + " observers in the queue"); //debugger
+	}
+	public void addObserver (gameManagerNotify ob)
+	{
+		gMEvent += ob;
+		numObservers++;		
+		Debug.Log("there are " + numObservers + " observers in the queue"); //debugger
+	}
+<<<<<<< HEAD
+	public void addObserver (animatorNotify ob)
+	{
+		anEvent += ob;
+		numObservers ++;
+		Debug.Log("there are " + numObservers + " observers in the queue"); //debugger
+	}
+	public void removeObserver (animatorNotify ob)
+	{
+		anEvent -= ob;
+		numObservers--;
+=======
+	public void addObserver (scoreTrackerNotify ob)
+	{
+		scoreEvent += ob;
+		numObservers++;
+		Debug.Log ("there are " + numObservers + " observers in the queue"); //debugger
+>>>>>>> f13c277a5336417d5d8f77e50b9305dbf3ea224d
+	}
+	public void removeObserver (GameObjectNotify ob)
+	{
+		gameObjectEvent -= ob; 
+		numObservers--;
+		//prevent head or tail from calling observer self
+		/*if(node == head)
+		{
+			head = node.forward();
+			node.setData (null);
+		}
+		if(node == tail)
+		{
+			tail = node.backward();
+			node.setData (null);
+		}
+		else {
+			node.removeSelf();
+		}*/                                                             
+	}
+	public void removeObserver (gameManagerNotify ob)
+	{
+		gMEvent -= ob;
+		numObservers--;
+	}
+	public void removeObserver (scoreTrackerNotify ob)
+	{
+		scoreEvent -= ob;
+		numObservers--;
+	} 
+
+		
+		 
+}
+
+

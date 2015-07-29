@@ -112,8 +112,8 @@ public class TouchProcessor : Observer {
 	{
 		if (e.type == eType.EndGame) {
 			return;
-			Debug.Log ("adding a question"); //debugger
 		} else if (e.type == eType.NewQuestion) {
+			Debug.Log ("adding a question"); //debugger
 			scoring.addTouch (touchSum);
 			touchSum = new TouchSummary ();
 			//send stuff to score tracker
