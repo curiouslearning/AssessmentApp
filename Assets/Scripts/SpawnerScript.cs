@@ -23,7 +23,7 @@ public class SpawnerScript : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 		newStims = new GameObject[4];
-		positions = new Vector3[4];
+		positions = new Vector3[4]; 
 	}
 	//to do: split SOO and stimuli into layers
 	public GameObject spawnNext (Question q)

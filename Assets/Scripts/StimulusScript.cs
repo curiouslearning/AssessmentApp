@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 /* StimulusScript
@@ -7,11 +7,14 @@ using System.Collections;
  * attached to the SOO instance as child objects
  */
 
+public enum Difficulty {Easy, Medium, Hard};
+
 public class StimulusScript : MonoBehaviour{
 
 	private bool isCorrect; //bool for indicating the correct stimulus response in a question
 	private bool isBeingDragged; 
 	private bool isDraggable;
+	private Difficulty difficulty;
 	private Vector3 homePos; //snapback functionality
 	private Vector3 startScale; //scaling functionality
 	public Selectable touchInput;
@@ -43,6 +46,10 @@ public class StimulusScript : MonoBehaviour{
 		return homePos;  
 	}
 
+	public Difficulty returnDifficulty() {
+		return difficulty;
+	}
+
 
 //*******************
 // Setter functions *
@@ -64,6 +71,10 @@ public class StimulusScript : MonoBehaviour{
 		homePos = transform.position;
 	}
 
+	public void setDifficulty(Difficulty newDiff) {
+		difficulty = newDiff;
+	}
+
 //********************
 // Scaling functions *
 //********************
@@ -82,6 +93,7 @@ public class StimulusScript : MonoBehaviour{
 	public	void setStim (serStim input) {
 		this.isCorrect = input.isCorrect;
 		this.isDraggable = input.isDraggable;
+		this.difficulty = input.difficulty;
 		this.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Art/" + input.sprite);
 		this.GetComponent<AudioSource>().clip = Resources.Load<AudioClip>("Audio/" + input.audio);
 	}

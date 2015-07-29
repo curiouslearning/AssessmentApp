@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -76,7 +76,10 @@ public class Subject : MonoBehaviour {
 	//delegates for notifying using ints
 	public delegate void gameManagerNotify (EventInstance<GameManagerScript> key);
 	public event gameManagerNotify gMEvent;	
-
+	// delegates for ScoreTracker notifications
+	public delegate void scoreTrackerNotify (EventInstance<ScoreTracker> key);
+	public event scoreTrackerNotify scoreEvent;
+	//delegates for animator notifications
 	public delegate void animatorNotify (EventInstance<AnimationManager> key);
 	public event animatorNotify anEvent;
 	void Start ()
@@ -100,6 +103,14 @@ public class Subject : MonoBehaviour {
 		if (gMEvent != null){
 			Debug.Log("notifying");
 			gMEvent(e);
+		}
+	}
+	public void notify(EventInstance<ScoreTracker> e)
+	{
+		Debug.Log ("in go notify");
+		if (scoreEvent != null) {
+			Debug.Log("notifying");
+			scoreEvent(e);
 		}
 	}
 /*	public void oldNotify (EventInstance<GameObject> e)
@@ -149,16 +160,11 @@ public class Subject : MonoBehaviour {
 		numObservers++;		
 		Debug.Log("there are " + numObservers + " observers in the queue"); //debugger
 	}
-	public void addObserver (animatorNotify ob)
+	public void addObserver (scoreTrackerNotify ob)
 	{
-		anEvent += ob;
-		numObservers ++;
-		Debug.Log("there are " + numObservers + " observers in the queue"); //debugger
-	}
-	public void removeObserver (animatorNotify ob)
-	{
-		anEvent -= ob;
-		numObservers--;
+		scoreEvent += ob;
+		numObservers++;
+		Debug.Log ("there are " + numObservers + " observers in the queue"); //debugger
 	}
 	public void removeObserver (GameObjectNotify ob)
 	{
@@ -184,6 +190,11 @@ public class Subject : MonoBehaviour {
 		gMEvent -= ob;
 		numObservers--;
 	}
+	public void removeObserver (scoreTrackerNotify ob)
+	{
+		scoreEvent -= ob;
+		numObservers--;
+	} 
 
 		
 		 
