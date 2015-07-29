@@ -101,7 +101,7 @@ public class ScoreTracker : Observer {
 		s.addScore(e.signaler.GetComponent<StimulusScript>().returnIsCorrect());
 		s.addTime(reference.questionTime);				
 	}
-	public override void onNotify (EventInstance<GameManagerScript> e)
+	public override void onNotify (EventInstance<GameManagerScript> e) //synchronize this or atomize variables
 	{
 		Debug.Log ("eType: " + e.type);
 		if (e.type == eType.Timeout) {
@@ -176,4 +176,9 @@ public class ScoreTracker : Observer {
 		scoreList.Add(s);
 		s = new Score(reference.questionNumber);		
 	}
+
+
+
+
+
 }
