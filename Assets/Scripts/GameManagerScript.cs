@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public enum Category {ReceptiveVocabulary, 
+public enum Category {Customization,
+	                  ReceptiveVocabulary, 
 				      LetterNameRecognition, 
 				      LetterSoundMatching, 
 					  CVCWordIdentification, 
