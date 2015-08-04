@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 529336600, guid: 289bab7cc27a12745b5df9b71d7b06c4, type: 3}
+  m_Name: HostHead
+  m_EditorClassIdentifier: 
+  material: {fileID: 2100000, guid: 8efd49fed5ea94cb9b99d0f65b55769e, type: 2}
+  uvs:
+  - serializedVersion: 2
+    x: 0
+    y: 0
+    width: .314453125
+    height: .392578125
+  - serializedVersion: 2
+    x: .314941406
+    y: 0
+    width: .311523438
+    height: .389160156
+  - serializedVersion: 2
+    x: .626953125
+    y: 0
+    width: .3046875
+    height: .241699219
+  - serializedVersion: 2
+    x: .626953125
+    y: .2421875
+    width: .3046875
+    height: .23046875
+  textureGUIDs:
+  - 43431427b80754be8bf4635c5fd7d4fc
+  - b82bc3a1da2294973b1d1f93ca7ec95b
+  - 7f9e8bf0c77834a41a41b94cdbaf2fa9
+  - a6c901a55d11442e6b44f69b43abb15c
+  textureSizes:
+  - {x: 644, y: 804}
+  - {x: 638, y: 797}
+  - {x: 624, y: 495}
+  - {x: 624, y: 472}
+  defaultPivotOffsets:
+  - {x: -.0535714291, y: -.065476194}
+  - {x: 0, y: 0}
+  - {x: -.0267857127, y: -.0589285716}
+  - {x: 0, y: 0}
+  textureNames:
+  - HappyFace1
+  - AngryFace1
+  - HappyFace2
+  - NeutralFace1
+  texturePaths:
+  - Assets/Resources/Textures/HappyFace1.png
+  - Assets/Resources/Textures/AngryFace1.png
+  - Assets/Resources/Textures/HappyFace2.png
+  - Assets/Resources/Textures/NeutralFace1.png
+  lastBuildID: 20150803103540191
+  needsRebuilt: 0
+  dataVersion: 4
+  maxAtlasSize: 2048
+  padding: 1
+  forceSquare: 1

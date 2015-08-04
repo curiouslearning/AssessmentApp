@@ -12,12 +12,15 @@ public enum Difficulty {Easy, Medium, Hard};
 public class StimulusScript : MonoBehaviour{
 
 	private bool isCorrect; //bool for indicating the correct stimulus response in a question
+	private bool option;
 	private bool isBeingDragged; 
 	private bool isDraggable;
 	private Difficulty difficulty;
 	private Vector3 homePos; //snapback functionality
 	private Vector3 startScale; //scaling functionality
 	public Selectable touchInput;
+	private int optionBodyPart;
+	string textureName;	
 
 	void Start ()
 	{
@@ -42,6 +45,11 @@ public class StimulusScript : MonoBehaviour{
 		return isDraggable;
 	}
 
+	public int getBodyPart ()
+	{
+		return optionBodyPart;
+	}
+
 	public Vector3 returnHomePos() {
 		return homePos;  
 	}
@@ -49,8 +57,16 @@ public class StimulusScript : MonoBehaviour{
 	public Difficulty returnDifficulty() {
 		return difficulty;
 	}
+	
+	public string getTextureName()
+	{
+		return textureName;
+	}
 
-
+	public bool isOption ()
+	{
+		return option;
+	}
 //*******************
 // Setter functions *
 //*******************
@@ -96,6 +112,17 @@ public class StimulusScript : MonoBehaviour{
 		this.difficulty = input.difficulty;
 		this.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Art/" + input.sprite);
 		this.GetComponent<AudioSource>().clip = Resources.Load<AudioClip>("Audio/" + input.audio);
+		this.option = false;
+	}
+	public void setOptions (serCustomizationOption input)
+	{
+		Texture2D texture = Resources.Load<Texture2D>("Textures/" + input.texture);
+		Sprite textureSprite = Sprite.Create(texture, new Rect(0,0, texture.width, texture.height), new Vector2 (0.5f, 0.5f));
+		this.isDraggable = input.isDraggable;
+		this.GetComponent<SpriteRenderer>().sprite = textureSprite;
+		this.textureName = input.texture; 
+		this.optionBodyPart = input.bodyPart;
+		this.option = true;
 	}
 	
 	public void onSelect (touchInstance t)

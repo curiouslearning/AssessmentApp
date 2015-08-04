@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 529336600, guid: 289bab7cc27a12745b5df9b71d7b06c4, type: 3}
+  m_Name: HostBody
+  m_EditorClassIdentifier: 
+  material: {fileID: 2100000, guid: 2b9d91019181348c2921a2c70692e4f2, type: 2}
+  uvs:
+  - serializedVersion: 2
+    x: .312011719
+    y: 0
+    width: .0947265625
+    height: .153808594
+  - serializedVersion: 2
+    x: 0
+    y: 0
+    width: .311523438
+    height: .487792969
+  - serializedVersion: 2
+    x: 0
+    y: .48828125
+    width: .325195312
+    height: .0571289062
+  - serializedVersion: 2
+    x: .407226562
+    y: 0
+    width: .064453125
+    height: .115722656
+  - serializedVersion: 2
+    x: 0
+    y: .545898438
+    width: .325195312
+    height: .0571289062
+  - serializedVersion: 2
+    x: .312011719
+    y: .154296875
+    width: .064453125
+    height: .115722656
+  textureGUIDs:
+  - 756fbf146eb604d77bd49a3b50d7a8d5
+  - d5f3572a45eec4d48be3d019ec561c58
+  - e666c98c432ac4164aa3aeed4d98781e
+  - 9c07f3db865da4078bb06c95b924ae26
+  - 6caf8cc930ce44370844008c50a472ab
+  - e8cdb766913cf449d8285891c56823d8
+  textureSizes:
+  - {x: 194, y: 315}
+  - {x: 638, y: 999}
+  - {x: 666, y: 117}
+  - {x: 132, y: 237}
+  - {x: 666, y: 117}
+  - {x: 132, y: 237}
+  defaultPivotOffsets:
+  - {x: -.160714284, y: -.487499982}
+  - {x: 0, y: 0}
+  - {x: -.482142836, y: .171428561}
+  - {x: -.363095224, y: .485119045}
+  - {x: .487499982, y: .128571421}
+  - {x: .386904776, y: .494047612}
+  textureNames:
+  - TestBody__antenna
+  - TestBody__body
+  - TestBody__l_arm
+  - TestBody__l_leg
+  - TestBody__r_arm
+  - TestBody__r_leg
+  texturePaths:
+  - Assets/Resources/Textures/TestBody__antenna.png
+  - Assets/Resources/Textures/TestBody__body.png
+  - Assets/Resources/Textures/TestBody__l_arm.png
+  - Assets/Resources/Textures/TestBody__l_leg.png
+  - Assets/Resources/Textures/TestBody__r_arm.png
+  - Assets/Resources/Textures/TestBody__r_leg.png
+  lastBuildID: 2015080310381585
+  needsRebuilt: 0
+  dataVersion: 4
+  maxAtlasSize: 2048
+  padding: 1
+  forceSquare: 1
