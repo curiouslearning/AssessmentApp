@@ -75,6 +75,16 @@ public class TouchSummary {
 			Debug.Log("\t\t\tselection: " + touchList[i].getName());
 		}
 	}
+	public string printListString() {
+		string str = "";
+		str = (str + "\n\t\t\ttouchList: ");
+		for (int i = 0; i < touchList.Count; i++)
+		{
+			str = (str + "\n\t\t\ttype: " + touchList[i].getType() + "\n\t\t\ttime: " + touchList[i].getTime());
+			str = (str + "\n\t\t\tselection: " + touchList[i].getName());
+		}
+		return str;
+	}
 }
 /* TouchProcessor
  * InputWrapper for touch based input
