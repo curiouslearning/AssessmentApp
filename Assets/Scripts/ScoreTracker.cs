@@ -10,6 +10,8 @@ public class Score {
 	bool timedOut;
 	TouchSummary touches;
 	float timeTaken;
+	Difficulty difficulty;
+	Category category;
 	//question Type implementation
 	public Score (int qNum)
 	{
@@ -38,6 +40,14 @@ public class Score {
 	{
 		timedOut = b;
 	}
+	public void setDifficulty(Difficulty d)
+	{
+		difficulty = d;
+	}
+	public void setCategory(Category c)
+	{
+		category = c;
+	}
 //****************
 //GetterFunctions*
 //****************
@@ -54,6 +64,13 @@ public class Score {
 		Debug.Log("\tTouches: " + "\n\t\ttouch count: " + touches.touchCount + "\n\t\tdrag count: " + touches.dragCount + "\n\t\tselection count: " +touches.selectionCount);
 		touches.printList();
 	}
+	public string printTouchesString()
+	{
+		string str = "";
+		str = (str + ("\n\tTouches: " + "\n\t\ttouch count: " + touches.touchCount + "\n\t\tdrag count: " + touches.dragCount + "\n\t\tselection count: " +touches.selectionCount));
+		str = (str + touches.printListString ());
+		return str;
+	}
 	public bool isCorrect()
 	{
 		return answeredCorrectly;
@@ -61,6 +78,14 @@ public class Score {
 	public bool returnTimedOut()
 	{
 		return timedOut;
+	}
+	public Difficulty returnDifficulty() 
+	{
+		return difficulty;
+	}
+	public Category returnCategory()
+	{
+		return category;
 	}
 	
 }
@@ -87,7 +112,9 @@ public class ScoreTracker : Observer {
 
 	void Start () {
 		s = new Score(reference.questionNumber);	
-		s.setTimedOut (true);
+		s.setTimedOut (false);
+		s.setDifficulty (Difficulty.Easy);
+		s.setCategory (Category.Customization);
 		scoreList = new List<Score>();
 		gMObserver = new Subject.gameManagerNotify (this.onNotify);
 		gOObserver = new Subject.GameObjectNotify (this.onNotify);
@@ -107,15 +134,31 @@ public class ScoreTracker : Observer {
 		if (e.type == eType.Timeout) {
 			reference.GetComponent<Subject>().removeObserver(gOObserver);
 			s.setTimedOut(true);
-			//s.addScore(false);
-			//s.addTime(reference.questionTime);
 			Debug.Log ("recieved a Timeout notification from Game Manager");
 			Debug.Log ("timedOut: " + s.returnTimedOut());
 			return;
 		}
 
-		//if(e.type ==eType.EndGame)
-			//printList (); //debugger
+		if (e.type == eType.EndGame) {
+
+			Debug.Log(printListString()); //debugger
+
+			// *************************************************************************
+			// Code for sending broadcasts containing the data collected by ScoreTracker
+			// *************************************************************************
+
+			AndroidJavaClass intentClass = new AndroidJavaClass ("android.content.Intent");  
+			AndroidJavaObject intentObject = new AndroidJavaObject ("android.content.Intent");
+
+			intentObject.Call<AndroidJavaObject>("setAction", intentClass.GetStatic<string> ("ACTION_SEND")); 
+			intentObject.Call<AndroidJavaObject>("setType", "text/plain");
+			intentObject.Call<AndroidJavaObject>("putExtra", intentClass.GetStatic<string>("EXTRA_TEXT"), printListString());
+			AndroidJavaClass unity = new AndroidJavaClass ("com.unity3d.player.UnityPlayer");
+			AndroidJavaObject currentActivity = unity.GetStatic<AndroidJavaObject> ("currentActivity");
+			currentActivity.Call("sendBroadcast", intentObject);    
+			}
+
+		    
 	}
 
 	public void addTouch (TouchSummary t)
@@ -126,7 +169,7 @@ public class ScoreTracker : Observer {
 	}
 	void printList () //debugger
 	{
-		Debug.Log("total score: " + totalScore);
+		Debug.Log("TOTAL SCORE: " + totalScore);
 		for(int i = 0; i < scoreList.Count; i++)
 		{
 			Debug.Log( "Question: " + scoreList[i].getNum());
@@ -136,6 +179,74 @@ public class ScoreTracker : Observer {
 			scoreList[i].printTouches();
 		}	
 	}
+
+	DifficultyData retrieveStruct(DifficultyData[] ddarray, Category cat) {
+		DifficultyData answer;
+		int length = ddarray.Length;
+		for (int i = 0; i < length; i++) {
+			if (ddarray[i].categoryMatch(cat)) 
+			    answer = ddarray[i];
+				break;
+		}
+		return answer;
+	}
+
+	string averagesBreakdown() {
+
+		DifficultyData Customization = new DifficultyData (Category.Customization);
+		DifficultyData ReceptiveVocabulary = new DifficultyData (Category.ReceptiveVocabulary);
+		DifficultyData LetterNameRecognition = new DifficultyData (Category.LetterNameRecognition);
+		DifficultyData LetterSoundMatching = new DifficultyData (Category.LetterSoundMatching);
+		DifficultyData CVCWordIdentification = new DifficultyData (Category.CVCWordIdentification);
+		DifficultyData SightWordIdentification = new DifficultyData (Category.SightWordIdentification);
+		DifficultyData RhymingWordMatching = new DifficultyData (Category.RhymingWordMatching);
+		DifficultyData BlendingWordIdentification = new DifficultyData (Category.BlendingWordIdentification);
+		DifficultyData PseudoWordMatching = new DifficultyData (Category.PseudowordMatching);
+		
+		DifficultyData[] ddarray = {Customization, ReceptiveVocabulary, LetterNameRecognition, LetterSoundMatching,
+			                        CVCWordIdentification, SightWordIdentification, RhymingWordMatching, BlendingWordIdentification,
+			                        PseudoWordMatching};
+		string answer = "";
+
+		for (int i = 0; i < scoreList.Count; i++) {
+			Score currentScore = scoreList[i];
+			retrieveStruct(ddarray,currentScore.returnCategory ()).addScore (currentScore);
+		}
+
+		for (int a = 0; a < ddarray.Length; a++) {
+			answer = (answer + ddarray[i].toString ());
+		}
+	}
+
+	string averageTime() {
+		float timeSum = 0f;
+		int numQuestions = 0;
+		for (int i = 0; i < scoreList.Count; i++) {
+			timeSum = timeSum + scoreList[i].getTime();
+			numQuestions++;
+		}
+		return ("average question time across all categories and difficulties: " + timeSum / numQuestions);
+	}
+
+	string printListString () //for broadcasts
+	{
+		string st = "";
+		st = (st + "TOTAL SCORE: " + totalScore + "\n\n");
+		st = (st + averagesBreakdown ());
+		st = (st + averageTime());
+		st = (st + "\n\n");
+		for(int i = 0; i < scoreList.Count; i++)
+		{
+			st = (st + "\nQuestion: " + scoreList[i].getNum());
+			st = (st + "\nCorrect?: " + scoreList[i].isCorrect());
+			st = (st + "\ntime taken: " + scoreList[i].getTime());
+			st = (st + "\ntimed out: " + scoreList[i].returnTimedOut());
+			st = (st + "\nCategory: " + scoreList[i].returnCategory());
+			st = (st + "\nDifficulty: " + scoreList[i].returnDifficulty() + "\n");
+			st = (st + scoreList[i].printTouchesString() + "\n\n");
+		}	
+		return st;
+    }
 	
 	// Update is called once per frame
 	void changeQuestion () {
@@ -149,6 +260,7 @@ public class ScoreTracker : Observer {
 		}
 		Debug.Log ("numRight " + numCorrect);
 		Debug.Log ("numWrong " + numWrong);
+
 		Debug.Log ("totalScore " + totalScore);
 		Debug.Log ("numAnswered " + numAnswered); 
 		if (numCorrect >= 3) {
@@ -158,6 +270,11 @@ public class ScoreTracker : Observer {
 			e.setEvent (eType.ChangeDifficulty, this);
 			eventHandler.notify (e);
 			Debug.Log ("sent ChangeDifficulty notification");
+			if (s.returnDifficulty().Equals(Difficulty.Easy) || s.returnCategory().Equals (Difficulty.Medium)) {
+				Difficulty diff = s.returnDifficulty();
+				s.setDifficulty (diff++); 
+			} else
+				s.setDifficulty (Difficulty.Hard);
 		} else if (numWrong >= 4) {
 			numWrong = 0;
 			EventInstance<ScoreTracker> e;
@@ -165,6 +282,8 @@ public class ScoreTracker : Observer {
 			e.setEvent (eType.ChangeCategory, this);
 			eventHandler.notify (e);
 			Debug.Log ("sent ChangeCategory notification");
+			Category cat = s.returnCategory();
+			s.setCategory (cat++);
 		} else if (numAnswered >= 20) {
 			numAnswered = 0;
 			EventInstance<ScoreTracker> e;
@@ -172,13 +291,101 @@ public class ScoreTracker : Observer {
 			e.setEvent (eType.ChangeCategory, this);
 			eventHandler.notify (e);
 			Debug.Log ("sent ChangeCategory notification");
+			Category cat = s.returnCategory();
+			s.setCategory(cat++);
 		}
 		scoreList.Add(s);
 		s = new Score(reference.questionNumber);		
+	}
+
+}
+
+// Public class for concatenating various average scores and times to be used
+// in broadcast intent
+public class DifficultyData {
+
+	int easyScore;
+	int mediumScore;
+	int hardScore;
+
+	float easyTime;
+	float mediumTime;
+	float hardTime;
+
+	int numEasy;
+	int numMedium;
+    int numHard;
+
+	int easyScoreAverage = easyScore / numEasy;
+	int mediumScoreAverage = mediumScore / numMedium;
+	int hardScoreAverage = hardScore / numHard;
+
+	int totalScoreAverage = (easyScore + mediumScore + hardScore) / (numEasy + numMedium + numHard);
+
+	float easyTimeAverage = easyTime / numEasy;
+	float mediumTimeAverage = mediumTime / numMedium;
+	float hardTimeaverage = hardTime / numHard; 
+
+	float totalTimeAverage = (easyTime + mediumTime + hardTime) / (numEasy + numMedium + numHard);
+
+	Category cat; 
+
+	public DifficultyData(Category category) {
+		easyScore = 0;
+		mediumScore = 0;
+		hardScore = 0;
+		easyTime = 0f;
+		mediumTime = 0f;
+		hardTime = 0f;
+		numEasy = 0;
+		numMedium = 0;
+		numHard = 0;
+		this.cat = category;
+	}
+
+	public void addScore (Score s) {
+		Difficulty diff = s.returnDifficulty();
+		float time = s.getTime();
+		int score;
+		if (s.isCorrect ())
+			score = 1;
+		else
+			score = -1;
+		if (diff.Equals (Difficulty.Easy)) {
+			easyScore += score; 
+			easyTime += time;
+			numEasy++;
+		} else if (diff.Equals (Difficulty.Medium)) {
+			mediumScore += score;
+			mediumTime += time;
+			numMedium++;
+		} else {
+			hardScore += score;
+			hardTime += time;
+			numHard++;
+		}
+	}
+
+	public bool categoryMatch(Category category) {
+		return (cat.Equals (category));
+	}
+
+	public string toString() {
+		string str = "";
+		str = (str + "\nAverage score for Category " + cat + ": " + totalScoreAverage);
+		str = (str + "\nAverage time for Category " + cat + ": " + totalTimeAverage);
+		str = (str + "\n\nAverage score for easy questions in " + cat + ": " + easyScoreAverage);
+		str = (str + "\nAverage score for medium questions in " + cat + ": " + mediumScoreAverage);
+		str = (str + "\nAverage score for hard questions in " + cat + ": " + hardScoreAverage);
+		str = (str + "\n\nAverage time for easy questions in" + cat + ": " + easyTimeAverage);
+		str = (str + "\nAverage time for medium questions in" + cat + ": " + mediumTimeAverage);
+		str = (str + "\nAverage time for hard questions in" + cat + ": " + hardTimeaverage);
+	}
+
 	}
 
 
 
 
 
-}
+
