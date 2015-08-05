@@ -16,6 +16,11 @@ public class serStim{
 	public bool isDraggable;
 	public Difficulty difficulty; 
 }
+public class serCustomizationOption{
+	public string texture;
+	public bool isDraggable;
+	public int bodyPart;
+}	
 
 /* Question : Scriptable Object
  * A class to hold information about each question in the assessment
@@ -30,32 +35,53 @@ public class Question : ScriptableObject {
 
 	int questionNumber;
 	List<serStim> stimuli;
-	serStim temp;
+	List<serCustomizationOption> options;
+	serCustomizationOption tempOption;
+	serStim tempStim;
 	serStim prompt;
+	Category questionCat;
  
 	
 	void Awake ()
 	{
 		stimuli = new List<serStim>();
+		options = new List<serCustomizationOption>();
 	}
 
-	public void init (int num, string [] sprites, string [] sounds, int correct)
+	public void init (int num, string [] sprites, string [] sounds, int correct, Category cat)
 	{
 		questionNumber = num;
+		questionCat = cat;
 		for (int i = 0; i<4; i++)
 		{
-			temp = new serStim();
-			temp.audio = sounds [i];
-			temp.sprite = sprites[i];
+			tempStim = new serStim();
+			tempStim.audio = sounds [i];
+			tempStim.sprite = sprites[i];
 			if(i == correct) 
-				temp.isCorrect = true;
+				tempStim.isCorrect = true;
 			else
-				temp.isCorrect = false;
-			temp.isDraggable = true;
-			stimuli.Add(temp);
+				tempStim.isCorrect = false;
+			tempStim.isDraggable = true;
+			stimuli.Add(tempStim);
+		}
+		 
+	}
+		public void init (int num, string [] textures, int bodyPart, Category cat)
+	{
+		questionNumber = num;
+		questionCat = cat;
+		for (int i = 0; i<4; i++)
+		{
+			tempOption = new serCustomizationOption();
+			tempOption.texture = textures[i];
+			tempOption.isDraggable = true;
+			tempOption.bodyPart = bodyPart;
+			options.Add(tempOption);
 		}
 		 
 	}
 	public serStim getStim (int index) {return stimuli[index];}
+	public serCustomizationOption getOption (int index) {return options[index];}
 	public int getNumber () {return questionNumber;}
+	public Category getCategory () {return questionCat;}
 }

@@ -86,6 +86,7 @@ public class TouchSummary {
 		return str;
 	}
 }
+
 /* TouchProcessor
  * InputWrapper for touch based input
  * Contains functionality for dragging, tapping, stimulus snap-back

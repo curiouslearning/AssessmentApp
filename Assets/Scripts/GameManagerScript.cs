@@ -58,25 +58,30 @@ int eTester; //debugger
 		questionNumber = 0;
 		questionTime = 0f;
 		startTime = Time.time;
+		currentCategory = Category.Customization;
 		initQList ();
 		startQuestion(); 
 		currentDifficulty = Difficulty.Easy;
-		currentCategory = Category.ReceptiveVocabulary;
 		Debug.Log ("Current category/difficulty is " + currentCategory + "/" + currentDifficulty); 
 	}
 
 //Gets queue of Questions from FileWrapper
 	void initQList ()
 	{ // SUPER HACK, YOU MUST GO  BACK TO THIS
+		string [] textures = new string[] {"AngryFace1", "HappyFace1", "NeutralFace1", "HappyFace2"};
 		string [] sprites1 = new string [] {"sprite0", "sprite1", "sprite2", "sprite3"};
 		string [] sprites2 = new string [] {"sprite4", "sprite5", "sprite6", "sprite7"};
 		string [] sounds = new string[] {"","","",""};
 		qList = new Queue<Question>();
 		Question temp = Question.CreateInstance<Question>();
-		temp.init(0,sprites1, sounds, 1);
+		temp.init(0,textures, 2, currentCategory);
+		qList.Enqueue(temp);
+		currentCategory = Category.ReceptiveVocabulary;
+		temp = Question.CreateInstance<Question>();
+		temp.init(1,sprites1, sounds, 1, currentCategory);
 		qList.Enqueue(temp);
 		temp = Question.CreateInstance<Question>();
-		temp.init (1, sprites2, sounds, 2);
+		temp.init (2, sprites2, sounds, 2, currentCategory);
 		qList.Enqueue(temp);
 	}
 	public override void onNotify (EventInstance<GameObject> e)
@@ -109,10 +114,11 @@ int eTester; //debugger
 				currentCategory++;
 				currentDifficulty = Difficulty.Easy;
 				return;
-			} else 
+			} else{ 
 				currentDifficulty++;
 			    Debug.Log ("current Category is " + currentCategory + " and current difficulty is " + currentDifficulty); // debugger
 			    return;
+			}
 		} else if (e.type == eType.ChangeCategory) {
 			Debug.Log ("got a ChangeCategory event from " + e.signaler.name); // debugger
 			currentCategory++;
@@ -158,7 +164,14 @@ int eTester; //debugger
 	}
 
 	
-//Observer/Event handling functions
+	public Category getCurrentCategory ()
+	{
+		return currentCategory;
+	}
+	public Difficulty getCurrentDifficulty ()
+	{
+		return currentDifficulty;
+	}
 
 //Data handling functions
 	void Save ()

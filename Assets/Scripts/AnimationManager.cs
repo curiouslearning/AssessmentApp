@@ -1,16 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
+using SmoothMoves;
 
 public class AnimationManager : Observer {
 	Animator animator;
 	public GameObject[] subjects;
 	public GameObject[] bodyParts;
-	public Material newTexture;
+	GameManagerScript gmHolder;
 
 	// Use this for initialization
 	void Start () {
 		animator = GetComponent<Animator>();
 		addSelfToSubjects();
+		gmHolder = GameObject.Find ("Main Camera").GetComponent<GameManagerScript>();
 	
 	}
 	void addSelfToSubjects()
@@ -26,12 +28,22 @@ public class AnimationManager : Observer {
 
 	public override void onNotify (EventInstance<GameObject> e)
 	{
-		animator.SetTrigger("Success");
+		if(e.type == eType.Selected && e.signaler.GetComponent<StimulusScript>().isOption())
+		{
+			int bodyPart = e.signaler.GetComponent<StimulusScript>().getBodyPart();
+			Texture2D newTexture = Resources.Load<Texture2D>("Textures/" + e.signaler.GetComponent<StimulusScript>().getTextureName());
+			changeBodyPart( bodyPart, newTexture);
+			//grab texture info and send it to swapper	
+		}
+		else if (e.type == eType.Selected && !e.signaler.GetComponent<StimulusScript>().isOption())
+		{
+			animator.SetTrigger("Success");
+		}
 	}
-	void changeBodyPart (int part, Material newMat)
+	void changeBodyPart (int part, Texture2D newTexture)
 	{
 		GameObject temp = bodyParts[part];
-		temp.GetComponent<SkinnedMeshRenderer>().material = newMat;
+		temp.GetComponent<SkinnedMeshRenderer>().material.mainTexture = newTexture;
 	}
 	
 	// Update is called once per frame

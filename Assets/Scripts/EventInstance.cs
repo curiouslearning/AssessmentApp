@@ -21,5 +21,5 @@ public class EventInstance <T>
 		type = input;
 		signaler = param; 
 	}
-
+	
 }

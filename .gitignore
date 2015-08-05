@@ -23,6 +23,9 @@ sysinfo.txt
 # editor build settings
 EditorBuildSettings.asset
 
+#smoothMoves editor
+/SmoothMoves_Editor.dll*
+
 # ============ #
 # OS generated #
 # ============ #

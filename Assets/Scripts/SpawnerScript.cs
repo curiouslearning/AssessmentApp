@@ -28,6 +28,7 @@ public class SpawnerScript : MonoBehaviour {
 	//to do: split SOO and stimuli into layers
 	public GameObject spawnNext (Question q)
 	{
+		Debug.Log("question cat is: " + q.getCategory());
 		newSoo = Instantiate(sooPrefab) as GameObject;
 		SOOScript holder = newSoo.GetComponent<SOOScript>();
 		newSoo.transform.position = transform.position;
@@ -53,7 +54,16 @@ public class SpawnerScript : MonoBehaviour {
 					break;
 			};
 			positions[i] = transform.position;
-			newStims[i].GetComponent<StimulusScript>().setStim(q.getStim(i));  
+			if(q.getCategory() == Category.Customization)
+			{
+				Debug.Log("pulling from options");
+				newStims[i].GetComponent<StimulusScript>().setOptions(q.getOption(i));  
+			}
+			else
+			{
+				Debug.Log("pulling from stimuli");
+				newStims[i].GetComponent<StimulusScript>().setStim(q.getStim(i));  
+			}
 		}
 		//add stims, stim positions, and SOO destinations to SOO instance
 		holder.setSoo(newStims, q.getNumber()); 
