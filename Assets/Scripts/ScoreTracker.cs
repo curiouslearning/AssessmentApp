@@ -184,9 +184,10 @@ public class ScoreTracker : Observer {
 		DifficultyData answer;
 		int length = ddarray.Length;
 		for (int i = 0; i < length; i++) {
-			if (ddarray[i].categoryMatch(cat)) 
+			if (ddarray[i].categoryMatch(cat)) { 
 			    answer = ddarray[i];
 				break;
+			}
 		}
 		return answer;
 	}
@@ -214,8 +215,9 @@ public class ScoreTracker : Observer {
 		}
 
 		for (int a = 0; a < ddarray.Length; a++) {
-			answer = (answer + ddarray[i].toString ());
+			answer = (answer + ddarray[a].toString ());
 		}
+		return answer;
 	}
 
 	string averageTime() {
