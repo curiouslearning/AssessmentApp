@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-/* SpawnerScript
- * Class used to initialize Stimulus Organization Object (SOO) and stimuli
- * for each new question
- * Gets question information from Question Queue
- * Gets SOO and stimulus positioning info from Editor
- */
+
+/// <summary>
+/// SpawnerScript
+/// Class used to initialize Stimulus Organization Object (SOO) and stimuli for each new question.
+/// </summary>
+// Gets question information from Question Queue.
+// Gets SOO and stimulus positioning info from Editor.
 public class SpawnerScript : MonoBehaviour {
 	GameObject newSoo;
 	GameObject[] newStims;
@@ -26,6 +27,11 @@ public class SpawnerScript : MonoBehaviour {
 		positions = new Vector3[4]; 
 	}
 	//to do: split SOO and stimuli into layers
+	/// <summary>
+	/// Create a new SOO and stimuli with Question Data
+	/// </summary>
+	/// <returns>Reference to initialized SOO</returns>
+	/// <param name="q">Question data </param>
 	public GameObject spawnNext (Question q)
 	{
 		Debug.Log("question cat is: " + q.getCategory());

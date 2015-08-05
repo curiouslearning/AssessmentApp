@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-//class to store information about a given touch instance
+/// <summary>
+/// Class to store information about a given touch instance.
+/// </summary>
 public class touchInstance{
 	eType type;
 	float duration;
@@ -16,9 +18,17 @@ public class touchInstance{
 //******************
 // Getter Functions*
 //******************
+	
+	/// <returns> duration of the touch instance.</returns>
 	public float getTime () {return duration;}
+	/// <returns> the name of the selected object (empty string if no selection)</returns>
 	public string getName () {return selectionName;}
+	/// <returns>The touch type (enum eType).</returns>
 	public eType getType() {return type;}
+	/// <summary>
+	/// checks to see if touch type has been modified since initialization
+	/// </summary>
+	/// <returns><c>true</c>, if type was not modified, <c>false</c> otherwise.</returns>
 	public bool isInit()
 	{
 		return (type == eType.Init);
@@ -26,22 +36,36 @@ public class touchInstance{
 //******************
 // Setter Functions*
 //******************
+	/// <summary>
+	/// Increments duration by the given amount 
+	/// </summary>
+	/// <param name="time">elapsed time</param>
 	public void addTime(float time )
 	{
 		duration += time;
 	}
+	/// <summary>
+	/// Stores the selected object name.
+	/// </summary>
+	/// <param name="selected">Selected object name.</param>
 	public void storeSelection (string selected)
 	{
 		selectionName = selected;
 	}
+	/// <summary>
+	/// sets the instance to the type of touch event.
+	/// </summary>
+	/// <param name="t"> touch type</param>
 	public void setTouch (eType t)
 	{
 		type = t;
 	}
 }
 
-//Information wrapper containing all information for a given question 
-//wrapped up in an event and sent to the Game Manager/score handler
+
+/// <summary>
+/// Information wrapper containing all information for a given question. Used for packaging touch data into an Event.
+/// </summary>
 public class TouchSummary {
 	public List<touchInstance> touchList;
 	public int touchCount;
@@ -53,6 +77,10 @@ public class TouchSummary {
 		dragCount = 0;
 		selectionCount = 0;
 	}
+	/// <summary>
+	/// Adds a TouchInstance to the question's list of discrete touches
+	/// </summary>
+	/// <param name="t"></param>
 	public void addTouch (touchInstance t)
 	{
 		if(t.getType() == eType.Drag)
@@ -87,12 +115,16 @@ public class TouchSummary {
 	}
 }
 
-/* TouchProcessor
- * InputWrapper for touch based input
- * Contains functionality for dragging, tapping, stimulus snap-back
- * contains a Subject component for touch event functionality
- * Directly coupled with ScoreTracker
- * Observes: 		(Update this list with each new addition to an Observer list
+
+/// <summary>
+/// TouchProcessor
+/// InputWrapper for touch based input
+/// Contains functionality for dragging, tapping, stimulus snap-back
+/// contains a Subject component for touch event functionality
+/// Directly coupled with ScoreTracker
+/// </summary>
+
+/* Observes: 		(Update this list with each new addition to an Observer list
  * 			GameManagerScript
  */
 public class TouchProcessor : Observer {

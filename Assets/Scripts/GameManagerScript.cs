@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// Enum used to represent the current category of question being asked.
+/// </summary>
 public enum Category {Customization,
 	                  ReceptiveVocabulary, 
 				      LetterNameRecognition, 
@@ -12,18 +15,17 @@ public enum Category {Customization,
 	                  BlendingWordIdentification, 
 	                  PseudowordMatching};   
 
-/* GameManager Class
- * Centralized data storage and functionality for Question iteration
- * Contains a queue of Questions, pointers to the spawner, Garbage Collector
- * and current Stimulus Organizational Object
- */
+
+/// <summary>
+/// GameManager Class, extends Observer.
+/// Centralized data storage and functionality for Question iteration
+/// Contains a queue of Questions, pointers to the spawner, Garbage Collector
+/// and current Stimulus Organizational Object
+/// </summary>
 public class GameManagerScript : Observer {
 /* Component instances
  * Instances to create/add:
- * Animation Handler
- * Character Customizer
  * File Wrapper
- * Scoring system
  */
 //timekeeping variables
 public int questionNumber;
@@ -58,7 +60,7 @@ int eTester; //debugger
 		questionNumber = 0;
 		questionTime = 0f;
 		startTime = Time.time;
-		currentCategory = Category.Customization;
+		currentCategory = Category.ReceptiveVocabulary;
 		initQList ();
 		startQuestion(); 
 		currentDifficulty = Difficulty.Easy;
@@ -74,9 +76,8 @@ int eTester; //debugger
 		string [] sounds = new string[] {"","","",""};
 		qList = new Queue<Question>();
 		Question temp = Question.CreateInstance<Question>();
-		temp.init(0,textures, 2, currentCategory);
+		temp.init(0,textures, 2);
 		qList.Enqueue(temp);
-		currentCategory = Category.ReceptiveVocabulary;
 		temp = Question.CreateInstance<Question>();
 		temp.init(1,sprites1, sounds, 1, currentCategory);
 		qList.Enqueue(temp);
@@ -84,6 +85,8 @@ int eTester; //debugger
 		temp.init (2, sprites2, sounds, 2, currentCategory);
 		qList.Enqueue(temp);
 	}
+
+
 	public override void onNotify (EventInstance<GameObject> e)
 	{
 		Debug.Log("this is call " + eTester++); //debugger
@@ -163,11 +166,18 @@ int eTester; //debugger
 		eventHandler.notify(e);
 	}
 
-	
+	/// <summary>
+	/// Gets the current category.
+	/// </summary>
+	/// <returns>The current category.</returns>
 	public Category getCurrentCategory ()
 	{
 		return currentCategory;
 	}
+	/// <summary>
+	/// Gets the current difficulty.
+	/// </summary>
+	/// <returns>The current difficulty.</returns>
 	public Difficulty getCurrentDifficulty ()
 	{
 		return currentDifficulty;
