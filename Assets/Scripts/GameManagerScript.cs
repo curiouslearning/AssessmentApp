@@ -1,7 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+ 
+// Category is an enum that holds all possible kinds of
+// questions that the app may ask a student.  Customization
+// is included as a category so the character customization
+// at the beginning of gameplay will be recognized as its
+// own kind of activity;
 public enum Category {Customization,
 	                  ReceptiveVocabulary, 
 				      LetterNameRecognition, 
@@ -107,8 +112,14 @@ int eTester; //debugger
 	}
 
     public override void onNotify (EventInstance<ScoreTracker> e) {
+		// this onNotify handles event notifications sent from ScoreTracker and changes 
+		// the currentDifficulty and currentCategory vasriables accordingly
 		Debug.Log ("this is call " + eTester++);
 		if (e.type == eType.ChangeDifficulty) {
+			// ChangeDifficulty events are sent when the student has answered three
+			// questions correctly in a row.  If the current difficulty is "hard",
+			// the game moves on to a new category of question and the difficulty is
+			// reset to "easy" in the new category
 			Debug.Log ("got a ChangeDifficulty event from " + e.signaler.name); // debugger
 			if (currentDifficulty == Difficulty.Hard) {
 				currentCategory++;
@@ -120,6 +131,9 @@ int eTester; //debugger
 			    return;
 			}
 		} else if (e.type == eType.ChangeCategory) {
+			// ChangeCategory events are sent when the student gets four consecutive
+			// questions wrong or maxes out the number of questions per category (20).
+			// When the category is incremented, difficulty is reset to easy.
 			Debug.Log ("got a ChangeCategory event from " + e.signaler.name); // debugger
 			currentCategory++;
 			currentDifficulty = Difficulty.Easy;
@@ -182,8 +196,14 @@ int eTester; //debugger
 	}
 	
 	void Update () {
+		// questionTime keeps track of the elapsed time since the
+		// start of the current question.  It must be updated
+		// frequently, which is why it is placed in Update().
 		questionTime = Time.time - startTime;
-		//Debug.Log ("questionTime: " + questionTime);
+		// if questionTime goes over 15 seconds it sends a
+		// TimeOut (which will be picked up in ScoreTracker)
+		// event and moves on to the next question, calling
+		// move(1) on sooHolder
 		if (questionTime >= 15.0f) {
 			startTime = Time.time;
 			EventInstance<GameManagerScript> e;
