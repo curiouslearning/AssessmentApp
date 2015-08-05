@@ -26,12 +26,27 @@ public class SpawnerScript : MonoBehaviour {
 		newStims = new GameObject[4];
 		positions = new Vector3[4]; 
 	}
-	//to do: split SOO and stimuli into layers
+
+	/// <summary>
+	/// Randomly create a question or customization event based on the category and current difficulty level
+	///</summary>	
+	///<returns>Reference to Initialized SOO</returns>
+	///<param name="cat">Category of Question</param>
+	///<param name="difLevel">Difficulty level of stimuli </param>
+	/*public GameObject spawnNext (Category cat, Difficulty difLevel)
+	{
+		//if Category.Customization, call findCustomizationOptions
+			//need a way to track which body parts have been customized
+		//else call findStimuli
+		//pass resulting question into spawnSoo and return the result
+	}*/
 	/// <summary>
 	/// Create a new SOO and stimuli with Question Data
 	/// </summary>
 	/// <returns>Reference to initialized SOO</returns>
 	/// <param name="q">Question data </param>
+
+	//IMPORTANT: RENAME WHEN spawnNext ABOVE IS COMPLETED
 	public GameObject spawnNext (Question q)
 	{
 		Debug.Log("question cat is: " + q.getCategory());
