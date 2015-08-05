@@ -316,17 +316,17 @@ public class DifficultyData {
 	int numMedium;
 	int numHard;
 	
-	int easyScoreAverage = easyScore / numEasy;
-	int mediumScoreAverage = mediumScore / numMedium;
-	int hardScoreAverage = hardScore / numHard;
+	int easyScoreAverage;
+	int mediumScoreAverage;
+	int hardScoreAverage;
 	
-	int totalScoreAverage = (easyScore + mediumScore + hardScore) / (numEasy + numMedium + numHard);
+	int totalScoreAverage;
 	
-	float easyTimeAverage = easyTime / numEasy;
-	float mediumTimeAverage = mediumTime / numMedium;
-	float hardTimeaverage = hardTime / numHard; 
+	float easyTimeAverage;
+	float mediumTimeAverage;
+	float hardTimeaverage; 
 	
-	float totalTimeAverage = (easyTime + mediumTime + hardTime) / (numEasy + numMedium + numHard);
+	float totalTimeAverage;
 	
 	Category cat; 
 	
@@ -371,6 +371,18 @@ public class DifficultyData {
 	}
 	
 	public string toString() {
+		easyScoreAverage = easyScore / numEasy;
+		mediumScoreAverage = mediumScore / numMedium;
+		hardScoreAverage = hardScore / numHard;
+		
+		totalScoreAverage = (easyScore + mediumScore + hardScore) / (numEasy + numMedium + numHard);
+		
+		easyTimeAverage = easyTime / numEasy;
+		mediumTimeAverage = mediumTime / numMedium;
+		hardTimeaverage = hardTime / numHard; 
+		
+		totalTimeAverage = (easyTime + mediumTime + hardTime) / (numEasy + numMedium + numHard);
+		
 		string str = "";
 		str = (str + "\nAverage score for Category " + cat + ": " + totalScoreAverage);
 		str = (str + "\nAverage time for Category " + cat + ": " + totalTimeAverage);
