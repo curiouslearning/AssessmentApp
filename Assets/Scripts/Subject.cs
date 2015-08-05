@@ -2,12 +2,10 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-/*
- * ObsNode
- * node class for the observer list
- * contains next and prev ObsNode pointers
- * and a data pointer to an instance of an observer class
- */
+/// <summary>
+/// Obs node.
+/// Node class for the observer list. Contains next and prev ObsNode pointers and a data pointer to an instance of an observer class.
+/// </summary>
 public class ObsNode {
 	ObsNode next;
 	ObsNode prev;
@@ -46,8 +44,9 @@ public class ObsNode {
 	{
 		return prev;
 	}
-
-//remove node from Subject's Observer list	
+/// <summary>
+/// Removes this ObsNode from the Observer list.
+/// </summary>
 	public void removeSelf ()
 	{
 		next.setPrev(prev);
@@ -57,13 +56,14 @@ public class ObsNode {
 	}
 }
 
-/* Subject
- * Notifier class for the Obeserver Design Pattern.
- * Add an instance of this class as a component to any class that requires Subject functionality
- * Contains a doubly linked list of ObsNode pointers that Observers can add themselves to
- * Notifies Observers with notify (eType, EventInstance<GameObject>)
- */
 
+/// <summary>
+/// Subject
+/// Notifier class for the Obeserver Design Pattern.
+/// Add an instance of this class as a component to any class that requires Subject functionality.
+/// Contains a doubly linked list of ObsNode pointers that Observers can add themselves to.
+/// Notifies Observers with notify (eType, EventInstance<GameObject>).
+/// </summary>
 public class Subject : MonoBehaviour {
 	
 	private int numObservers;
@@ -88,7 +88,11 @@ public class Subject : MonoBehaviour {
 	}
 
 
-	//overridden functions for notifying using multiple types
+	/// <summary>
+	/// calls the onNotify() methods of all Observers in the Event list.
+	/// Overriddent to accept multiple types of Delegates.
+	/// </summary>
+	/// <param name="e">An EventInstance containing the Subject and the event type enum.</param>
 	public void notify(EventInstance<GameObject> e)
 	{
 		Debug.Log("in go notify");
@@ -123,6 +127,11 @@ public class Subject : MonoBehaviour {
 			temp = temp.forward();
 		}		
 	}*/
+/// <summary>
+/// Adds the observer to the Event list.
+/// Overriddent to accept multiple types of Delegates
+/// </summary>
+/// <param name="observer">The delegate method to be called by notify.</param>
 	public void addObserver (GameObjectNotify observer)
 	{
 		gameObjectEvent += observer;
@@ -166,6 +175,11 @@ public class Subject : MonoBehaviour {
 		numObservers++;
 		Debug.Log ("there are " + numObservers + " observers in the queue"); //debugger
 	}
+/// <summary>
+/// Removes the observer from the Event List.
+/// Overridden to accept multiple Delegate types.
+/// </summary>
+/// <param name="ob">The observer to be removed.</param>
 	public void removeObserver (GameObjectNotify ob)
 	{
 		gameObjectEvent -= ob; 

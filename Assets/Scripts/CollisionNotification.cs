@@ -2,8 +2,12 @@
 using System.Collections;
 
 
-// Attached to the Host's Receptacle and garbage collector. Destroys selected stimulus 
-// and sends an EventInstance with the stimulus and respective eType ("Selected" or "Trashed") to the observer list
+
+/// <summary>
+/// Collision notification.
+/// Attached to the Host's Receptacle and garbage collector. 
+/// Destroys selected stimulus and sends an EventInstance with the stimulus and respective eType ("Selected" or "Trashed") to the observer list.
+/// </summary>
 public class CollisionNotification : MonoBehaviour {
 	public Subject sub;
 	public eType type;

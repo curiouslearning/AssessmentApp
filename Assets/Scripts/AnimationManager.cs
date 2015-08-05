@@ -2,19 +2,27 @@
 using System.Collections;
 using SmoothMoves;
 
+/// <summary>
+/// Animation manager
+/// A component for GameObjects that contain animations. Monitors the event
+// system and organizes the firing of animations and changing of customizable options.
+// Extends Observer.
+/// </summary>
 public class AnimationManager : Observer {
 	Animator animator;
 	public GameObject[] subjects;
 	public GameObject[] bodyParts;
-	GameManagerScript gmHolder;
 
 	// Use this for initialization
 	void Start () {
 		animator = GetComponent<Animator>();
 		addSelfToSubjects();
-		gmHolder = GameObject.Find ("Main Camera").GetComponent<GameManagerScript>();
 	
 	}
+	/// <summary>
+	/// Function for initializing the Observer design pattern.
+	//  NOTE: ANY NEW SUBJECT MUST BE MANUALLY INSERTED INTO THE ARRAY EITHER IN THE EDITOR OR IN START()
+	/// </summary>
 	void addSelfToSubjects()
 	{
 		GameObject temp;
@@ -25,7 +33,10 @@ public class AnimationManager : Observer {
 			
 		}
 	}
-
+	/// <summary>
+	/// Overridden method for handling events this class is listening for
+	/// </summary>
+	/// <param name="e">E.</param>
 	public override void onNotify (EventInstance<GameObject> e)
 	{
 		if(e.type == eType.Selected && e.signaler.GetComponent<StimulusScript>().isOption())
@@ -40,6 +51,11 @@ public class AnimationManager : Observer {
 			animator.SetTrigger("Success");
 		}
 	}
+	/// <summary>
+	/// Changes the body part.
+	/// </summary>
+	/// <param name="part">Index of the bone to be changed in bodyParts.</param>
+	/// <param name="newTexture"> Replacement Texture.</param>
 	void changeBodyPart (int part, Texture2D newTexture)
 	{
 		GameObject temp = bodyParts[part];

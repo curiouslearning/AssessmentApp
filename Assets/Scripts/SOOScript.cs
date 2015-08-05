@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 /* SOOScript : Observer
- * class that contains functionality for the Stimulus Organizational Object
- * the wrapper object for a question's four stimuli
+
  * Inherits from Observer so it can listen for and respond to events
  */
+/// <summary>
+/// SOO script. Extends Observer.
+/// Class that contains functionality for the Stimulus Organizational Object, the wrapper object for a question's four selectable objects.
+/// </summary>
 public class SOOScript : Observer {
 
 	private GameObject[] stimArray = new GameObject[4];
@@ -80,14 +83,18 @@ public class SOOScript : Observer {
 		//releaseStim(e.signaler);
 	}
 	
-//move the SOO to the next destination (center of screen or Garbage Collector)
-
+/// <summary>
+/// Move the SOO to the next destination (center of screen or Garbage Collector)
+/// </summary>
+/// <param name="dest">The next Destination.</param>
 	public void move(int dest)
 	{
 		moving = true;
 		curDest = destArray[dest];
 	}
-//tell the stimuli to update homePos to their current position, for snap-back functionality
+/// <summary>
+/// Tell the stimuli to update homePos to their current position, for snap-back functionality
+/// </summary>
 	void updatePos()
 	{
 		for (int i = 0; i < stimArray.Length; i++)
@@ -97,7 +104,11 @@ public class SOOScript : Observer {
 		}
 	}
 	
-//initialization function
+/// <summary>
+/// Sets the soo.
+/// </summary>
+/// <param name="array">Array of selectable objects (stimuli or customization options).</param>
+/// <param name="qNum">Question number.</param>
 	public void setSoo (GameObject[] array, int qNum) {
 		stimArray = array;
 		questionNumber = qNum;

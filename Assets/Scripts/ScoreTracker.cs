@@ -126,7 +126,6 @@ public class ScoreTracker : Observer {
 	
 	public override void onNotify (EventInstance<GameObject> e)
 	{
-		GameObject answer = e.signaler;
 		s.addScore(e.signaler.GetComponent<StimulusScript>().returnIsCorrect());
 		s.addTime(reference.questionTime);				
 	}
