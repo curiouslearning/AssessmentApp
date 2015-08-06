@@ -3,21 +3,35 @@ using System.Collections;
 using SmoothMoves;
 
 /// <summary>
-/// Animation manager
+/// Animation manager Extends Observer.
 /// A component for GameObjects that contain animations. Monitors the event
-// system and organizes the firing of animations and changing of customizable options.
-// Extends Observer.
+/// system and organizes the firing of animations and changing of customizable options.
 /// </summary>
 public class AnimationManager : Observer {
 	Animator animator;
 	public GameObject[] subjects;
+	public TextAsset optionsList;
 	public GameObject[] bodyParts;
+	public Texture2D[][] textures;
+	Texture2D[] atlases;
+	Texture2D atlas;
+	Rect[][] texturePositions;
+	public int defaultPos; //standard index for the default texture for each body part
+	public int atlasDimensions;
+	public int padding;
+	public int atlasSize;
+	
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		animator = GetComponent<Animator>();
-		addSelfToSubjects();
+		initTextures();
+		//init atlases here
 	
+	}
+	void Start()
+	{	
+		addSelfToSubjects();	
 	}
 	/// <summary>
 	/// Function for initializing the Observer design pattern.
@@ -34,9 +48,9 @@ public class AnimationManager : Observer {
 		}
 	}
 	/// <summary>
-	/// Overridden method for handling events this class is listening for
+	/// Overloaded method for handling events this class is listening for
 	/// </summary>
-	/// <param name="e">E.</param>
+	/// <param name="e">Event Instance.</param>
 	public override void onNotify (EventInstance<GameObject> e)
 	{
 		if(e.type == eType.Selected && e.signaler.GetComponent<StimulusScript>().isOption())
@@ -50,6 +64,23 @@ public class AnimationManager : Observer {
 		{
 			animator.SetTrigger("Success");
 		}
+	}
+
+	void initTextures ()
+	{
+		for (int i =0; i< bodyParts.Length; i++)
+		{
+			//pack textures for body part into an atlas, store dimensions in a Rect
+			SkinnedMeshRenderer bodyPart = bodyParts[i].GetComponent<SkinnedMeshRenderer>();
+			atlas = new Texture2D(atlasDimensions, atlasDimensions);
+			texturePositions[i] = atlas.PackTextures(textures[i], padding, atlasSize);
+			atlases[i] = atlas;
+			//set bodyPart texture to the default texture in the atlas
+			bodyPart.material.mainTexture=atlas;
+			bodyPart.material.mainTextureScale = new Vector2 (texturePositions[i][defaultPos].x, texturePositions[i][defaultPos].y);
+			
+		}
+
 	}
 	/// <summary>
 	/// Changes the body part.

@@ -511,6 +511,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   subjects:
   - {fileID: 1523307913}
+  optionsList: {fileID: 4900000, guid: 97cca580a92084e4bade0df31b92344f, type: 3}
   bodyParts:
   - {fileID: 1350267672}
   - {fileID: 1350267675}
@@ -519,6 +520,10 @@ MonoBehaviour:
   - {fileID: 1350267671}
   - {fileID: 1350267677}
   - {fileID: 1350267678}
+  defaultPos: 0
+  atlasDimensions: 0
+  padding: 0
+  atlasSize: 0
 --- !u!1 &1523307913
 GameObject:
   m_ObjectHideFlags: 0
