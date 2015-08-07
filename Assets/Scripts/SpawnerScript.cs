@@ -21,6 +21,7 @@ public class SpawnerScript : MonoBehaviour {
 	//variables for the SOO to hold onto
 	public Vector3[] destinations;
 	Vector3[] positions;
+	public AnimationManager host;
 	// Use this for initialization
 	void Awake () {
 		newStims = new GameObject[4];
@@ -36,7 +37,10 @@ public class SpawnerScript : MonoBehaviour {
 	/*public GameObject spawnNext (Category cat, Difficulty difLevel)
 	{
 		//if Category.Customization, call findCustomizationOptions
-			//need a way to track which body parts have been customized
+		if(cat == Category.Customization)
+		{
+			
+		}
 		//else call findStimuli
 		//pass resulting question into spawnSoo and return the result
 	}*/
