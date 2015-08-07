@@ -356,9 +356,9 @@ public class ScoreTracker : Observer {
 public class DifficultyData {
 
 	// ints for holding combined scores for each level of difficulty 
-	int easyScore;
-	int mediumScore;
-	int hardScore;
+	float easyScore;
+	float mediumScore;
+	float hardScore;
 
 	// floats for holding combined times for each level of difficulty
 	float easyTime;
@@ -371,11 +371,11 @@ public class DifficultyData {
 	int numHard;
 
 	// ints and floats for holding calculated averages
-	int easyScoreAverage;
-	int mediumScoreAverage;
-	int hardScoreAverage;
+	float easyScoreAverage;
+	float mediumScoreAverage;
+	float hardScoreAverage;
 	
-	int totalScoreAverage;
+	float totalScoreAverage;
 	
 	float easyTimeAverage;
 	float mediumTimeAverage;
@@ -388,9 +388,9 @@ public class DifficultyData {
 	// Constructor takes an instance of the Category enum so that instances
 	// of DifficultyData are tagged with their corresponding Category
 	public DifficultyData(Category category) {
-		easyScore = 0;
-		mediumScore = 0;
-		hardScore = 0;
+		easyScore = 0f;
+		mediumScore = 0f;
+		hardScore = 0f;
 		easyTime = 0f;
 		mediumTime = 0f;
 		hardTime = 0f;
