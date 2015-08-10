@@ -27,6 +27,7 @@ public class AnimationManager : Observer {
 		for(int i = 0; i < NUMBODYPARTS; i++)
 		{
 			bodyPartCustomized[i] = false;
+			optionTextures[i] = new Texture2D[NUMOPTIONS];
 		}		
 		animator = GetComponent<Animator>();
 		initTextures();
@@ -64,7 +65,8 @@ public class AnimationManager : Observer {
 			string[] values = sourceLines[i].Split(',');
 			int bodyPart = int.Parse(values[1]);			
 			int texturePosition = int.Parse(values[2]);
-			optionTextures[bodyPart][texturePosition] = Resources.Load<Texture2D>("Textures/" + values[0]);
+			Texture2D t =  Resources.Load<Texture2D>("Textures/" + values[0]);
+			optionTextures[bodyPart][texturePosition] = t;
 
 		}
 	}
@@ -143,8 +145,11 @@ public class AnimationManager : Observer {
 		Texture2D[] textures = optionTextures[curBodyPart];
 		for(int j = 0; j < textures.Length; j++)  //convert and package options
 		{
-			Sprite s = Sprite.Create(textures[curBodyPart], new Rect(0,0, textures[curBodyPart].width, textures[curBodyPart].height), new Vector2 (0.5f, 0.5f));
-			options.Add(s); 
+			if(textures[j] != null)
+			{
+				Sprite s = Sprite.Create(textures[j], new Rect(0,0, textures[j].width, textures[j].height), new Vector2 (0.5f, 0.5f));
+				options.Add(s); 
+			}
 		}
 		bodyPartCustomized[curBodyPart] = true;
 		return options;

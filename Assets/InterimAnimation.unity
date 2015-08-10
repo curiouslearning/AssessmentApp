@@ -323,7 +323,7 @@ MonoBehaviour:
   destinations:
   - {x: 0, y: 1.53999996, z: 0}
   - {x: -21, y: 1.53999996, z: 0}
-  host: {fileID: 0}
+  host: {fileID: 1350267679}
 --- !u!4 &955094561
 Transform:
   m_ObjectHideFlags: 0
@@ -514,16 +514,14 @@ MonoBehaviour:
   - {fileID: 1523307913}
   optionsList: {fileID: 4900000, guid: 97cca580a92084e4bade0df31b92344f, type: 3}
   bodyParts:
-  - {fileID: 1350267672}
-  - {fileID: 1350267675}
   - {fileID: 1350267674}
+  - {fileID: 1350267675}
+  - {fileID: 1350267672}
   - {fileID: 1350267676}
   - {fileID: 1350267671}
   - {fileID: 1350267677}
   - {fileID: 1350267678}
   defaultPos: 0
-  atlasDimensions: 4096
-  padding: 2
 --- !u!1 &1523307913
 GameObject:
   m_ObjectHideFlags: 0

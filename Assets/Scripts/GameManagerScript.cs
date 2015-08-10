@@ -65,7 +65,7 @@ int eTester; //debugger
 		startTime = Time.time;
 		currentCategory = Category.Customization;
 		currentDifficulty = Difficulty.Easy;
-		initQList (); // delete this
+		//initQList (); // delete this
 		startQuestion(); 
 		Debug.Log ("Current category/difficulty is " + currentCategory + "/" + currentDifficulty); 
 	}
@@ -143,7 +143,7 @@ int eTester; //debugger
 	}
 
 //Dequeue the next question and initialize the question period
-	void startQuestion () // delete this method
+	/*void startQuestion () // delete this method
 	{
 		if(qList.Count == 0){ 
 				endGame();
@@ -153,18 +153,16 @@ int eTester; //debugger
 	Debug.Log("got new SOO"); //debugger
 	sooHolder = stimOrgOb.GetComponent<SOOScript>();
 	sooHolder.move(0);
-	}
+	}*/
 
-	/* add this method
-	 * void startQuestion ()
-     * {
-	 *    stimOrgOb = spawnHolder.spawnNext(currentCategory, currentDifficulty);
-	 *    Debug.Log("got a new SOO");
-	 *    sooHolder = stimOrgOb.GetComponent<SOOScript>();
-	 *    sooHolder.move(0);
-	 * }
-	 */ 
-
+	// add this method
+	  void startQuestion ()
+      {
+	     stimOrgOb = spawnHolder.spawnNext(currentCategory, currentDifficulty, questionNumber);
+	     Debug.Log("got a new SOO");
+	     sooHolder = stimOrgOb.GetComponent<SOOScript>();
+	     sooHolder.move(0);
+	  }
 
 	void changeQuestion ()
 	{
