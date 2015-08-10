@@ -45,8 +45,8 @@ GameObject stimOrgOb;
 SOOScript sooHolder;
 Difficulty currentDifficulty; 
 Category currentCategory;
-
-Queue<Question> qList;
+	 
+Queue<Question> qList; // delete this list
 //Event variables
 public Subject eventHandler;
 int eTester; //debugger
