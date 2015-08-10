@@ -15,9 +15,11 @@ public enum Difficulty {Easy, Medium, Hard};
 public class StimulusScript : MonoBehaviour{
 
 	private bool isCorrect; //bool for indicating the correct stimulus response in a question
+	private bool hasBeenTarget;
 	private bool option;
 	private bool isBeingDragged; 
 	private bool isDraggable;
+	private string stimType;
 	private Difficulty difficulty;
 	private Vector3 homePos; //snapback functionality
 	private Vector3 startScale; //scaling functionality
@@ -35,9 +37,14 @@ public class StimulusScript : MonoBehaviour{
 //*******************
 // Getter functions *
 //*******************
-
+	public string returnStimType (){
+		return stimType;
+	}
 	public bool returnIsCorrect() {
 		return isCorrect;
+	}
+	public bool returnHasBeenTarget(){
+		return hasBeenTarget;
 	}
 
 	public bool returnIsBeingDragged() {
