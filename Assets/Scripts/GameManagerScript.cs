@@ -45,8 +45,8 @@ GameObject stimOrgOb;
 SOOScript sooHolder;
 Difficulty currentDifficulty; 
 Category currentCategory;
-
-Queue<Question> qList;
+	 
+Queue<Question> qList; // delete this list
 //Event variables
 public Subject eventHandler;
 int eTester; //debugger
@@ -64,14 +64,14 @@ int eTester; //debugger
 		questionTime = 0f;
 		startTime = Time.time;
 		currentCategory = Category.Customization;
-		initQList ();
-		startQuestion(); 
 		currentDifficulty = Difficulty.Easy;
+		initQList (); // delete this
+		startQuestion(); 
 		Debug.Log ("Current category/difficulty is " + currentCategory + "/" + currentDifficulty); 
 	}
 
 //Gets queue of Questions from FileWrapper
-	void initQList ()
+	void initQList () // delete this method
 	{ // SUPER HACK, YOU MUST GO  BACK TO THIS
 		string [] textures = new string[] {"AngryFace1", "HappyFace1", "NeutralFace1", "HappyFace2"};
 		string [] sprites1 = new string [] {"sprite0", "sprite1", "sprite2", "sprite3"};
@@ -143,7 +143,7 @@ int eTester; //debugger
 	}
 
 //Dequeue the next question and initialize the question period
-	void startQuestion ()
+	void startQuestion () // delete this method
 	{
 		if(qList.Count == 0){ 
 				endGame();
@@ -154,6 +154,16 @@ int eTester; //debugger
 	sooHolder = stimOrgOb.GetComponent<SOOScript>();
 	sooHolder.move(0);
 	}
+
+	/* add this method
+	 * void startQuestion ()
+     * {
+	 *    stimOrgOb = spawnHolder.spawnNext(currentCategory, currentDifficulty);
+	 *    Debug.Log("got a new SOO");
+	 *    sooHolder = stimOrgOb.GetComponent<SOOScript>();
+	 *    sooHolder.move(0);
+	 * }
+	 */ 
 
 
 	void changeQuestion ()
@@ -169,6 +179,8 @@ int eTester; //debugger
 		eventHandler.notify(e);
 		//Update the various gamecounts like time between touches (for idle triggering purposes)
 	}
+
+
 	void endGame ()
 	{
 		EventInstance<GameManagerScript> e;
