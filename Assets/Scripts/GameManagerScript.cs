@@ -79,7 +79,7 @@ int eTester; //debugger
 		string [] sounds = new string[] {"","","",""};
 		qList = new Queue<Question>();
 		Question temp = Question.CreateInstance<Question>();
-		temp.init(0,textures, 2);
+		//temp.init(currentCategory,currentDifficulty, );
 		qList.Enqueue(temp);
 		currentCategory = Category.ReceptiveVocabulary;
 		temp = Question.CreateInstance<Question>();

@@ -20,7 +20,7 @@ public class serStim{
 /// Serializable class to store customization event data for question data persistance
 /// </summary>
 public class serCustomizationOption{
-	public string texture;
+	public Sprite texture;
 	public bool isDraggable;
 	public int bodyPart;
 }	
@@ -47,11 +47,12 @@ public class Question : ScriptableObject {
 	serCustomizationOption tempOption;
 	serStim tempStim;
 	serStim prompt;
-	Category questionCat;
+	bool customizationEvent;
  
 	
 	void Awake ()
 	{
+		customizationEvent = false;
 		stimuli = new List<serStim>();
 		options = new List<serCustomizationOption>();
 	}
@@ -67,7 +68,7 @@ public class Question : ScriptableObject {
 	public void init (int qNum, string [] sprites, string [] sounds, int target, Category cat)
 	{
 		questionNumber = qNum;
-		questionCat = cat;
+		customizationEvent = false;
 		for (int i = 0; i<4; i++)
 		{
 			tempStim = new serStim();
@@ -88,10 +89,10 @@ public class Question : ScriptableObject {
 	/// <param name="num"> Question Number.</param>
 	/// <param name="textures">Option Textures.</param>
 	/// <param name="bodyPart">Index of body part being customized.</param>
-	public void init (int qNum, string [] textures, int bodyPart)
+	public void init (int qNum, List<Sprite> textures, int bodyPart)
 	{
 		questionNumber = qNum;
-		questionCat = Category.Customization;
+		customizationEvent = true;
 		for (int i = 0; i<4; i++)
 		{
 			tempOption = new serCustomizationOption();
@@ -123,5 +124,5 @@ public class Question : ScriptableObject {
 	/// Gets the question category.
 	/// </summary>
 	/// <returns>Category enum.</returns>
-	public Category getCategory () {return questionCat;}
+	public bool isCustomizationEvent () {return customizationEvent;}
 }

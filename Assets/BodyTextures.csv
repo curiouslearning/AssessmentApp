@@ -3,10 +3,10 @@ HappyFace1,2,1
 HappyFace2,2,2
 NeutralFace1,2,3
 AngryFace1,2,4
-TestBody_antenna,0,0
-TestBody_body,1,0
-TestBody_head,2,0
-TestBody_l_arm,3,0
-TestBody_r_arm,5,0
-TestBody_l_leg,4,0
-TestBody_r_leg,6,0
+TestBody__antenna,0,0
+TestBody__body,1,0
+TestBody__head,2,0
+TestBody__l_arm,3,0
+TestBody__r_arm,5,0
+TestBody__l_leg,4,0
+TestBody__r_leg,6,0

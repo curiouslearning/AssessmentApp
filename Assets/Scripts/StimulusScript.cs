@@ -134,6 +134,11 @@ public class StimulusScript : MonoBehaviour{
 		transform.localScale = startScale;
 	}
 
+	
+
+//***************************
+// Initialization Functions *
+//***************************
 	/// <summary>
 	/// Initialization function for stimuli.
 	/// </summary>
@@ -146,17 +151,17 @@ public class StimulusScript : MonoBehaviour{
 		this.GetComponent<AudioSource>().clip = Resources.Load<AudioClip>("Audio/" + input.audio);
 		this.option = false;
 	}
+
 	/// <summary>
 	/// Initialization for customization options
 	/// </summary>
 	/// <param name="input">customization data</param>
 	public void setOptions (serCustomizationOption input)
 	{
-		Texture2D texture = Resources.Load<Texture2D>("Textures/" + input.texture);
-		Sprite textureSprite = Sprite.Create(texture, new Rect(0,0, texture.width, texture.height), new Vector2 (0.5f, 0.5f));
+		Sprite textureSprite = input.texture;
 		this.isDraggable = input.isDraggable;
 		this.GetComponent<SpriteRenderer>().sprite = textureSprite;
-		this.textureName = input.texture; 
+		this.textureName = input.texture.ToString(); 
 		this.optionBodyPart = input.bodyPart;
 		this.option = true;
 	}

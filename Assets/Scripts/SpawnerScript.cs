@@ -11,6 +11,7 @@ using System.Collections;
 public class SpawnerScript : MonoBehaviour {
 	GameObject newSoo;
 	GameObject[] newStims;
+	Sprite[] newOptions;
 	public GameObject sooPrefab;
 	public GameObject stimPrefab;
 	//placement modifiers for stimulus positions
@@ -34,16 +35,23 @@ public class SpawnerScript : MonoBehaviour {
 	///<returns>Reference to Initialized SOO</returns>
 	///<param name="cat">Category of Question</param>
 	///<param name="difLevel">Difficulty level of stimuli </param>
-	/*public GameObject spawnNext (Category cat, Difficulty difLevel)
+	public GameObject spawnNext (Category cat, Difficulty difLevel, int questionNumber)
 	{
+		Question q =  Question.CreateInstance<Question>();
 		//if Category.Customization, call findCustomizationOptions
-		if(cat == Category.Customization)
-		{
-			
-		}
+		//if(cat == Category.Customization)
+		//{
+			q.init(questionNumber, host.getOptions(), host.getBodyPart());
+			return spawnNext(q);
+		//}
+		//else {
+		//	q.init (questionNumber, findSprites(), findSounds(), target, cat
+		//}
 		//else call findStimuli
 		//pass resulting question into spawnSoo and return the result
-	}*/
+	}
+
+	
 	/// <summary>
 	/// Create a new SOO and stimuli with Question Data
 	/// </summary>
@@ -53,7 +61,6 @@ public class SpawnerScript : MonoBehaviour {
 	//IMPORTANT: RENAME WHEN spawnNext ABOVE IS COMPLETED
 	public GameObject spawnNext (Question q)
 	{
-		Debug.Log("question cat is: " + q.getCategory());
 		newSoo = Instantiate(sooPrefab) as GameObject;
 		SOOScript holder = newSoo.GetComponent<SOOScript>();
 		newSoo.transform.position = transform.position;
@@ -79,7 +86,7 @@ public class SpawnerScript : MonoBehaviour {
 					break;
 			};
 			positions[i] = transform.position;
-			if(q.getCategory() == Category.Customization)
+			if(q.isCustomizationEvent())
 			{
 				Debug.Log("pulling from options");
 				newStims[i].GetComponent<StimulusScript>().setOptions(q.getOption(i));  

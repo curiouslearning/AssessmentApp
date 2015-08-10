@@ -15,28 +15,18 @@ public class AnimationManager : Observer {
 	const int NUMOPTIONS = 10;
 	public GameObject[] bodyParts;
 	public Texture2D[][] optionTextures;
-	Texture2D[] atlases;
-	Texture2D atlas;
-	Rect[][] texturePositions;
 	public int defaultPos; //standard index for the default texture for each body part
-	public int atlasDimensions;
-	public int padding;
-	int atlasSize;
 	string[] sourceLines;
 	bool[] bodyPartCustomized; //tracks which options have been customized
 	
 
 	// Use this for initialization
 	void Awake () {
-		atlasSize = (atlasDimensions+padding)^2;
 		bodyPartCustomized = new bool[NUMBODYPARTS];
 		optionTextures = new Texture2D[NUMBODYPARTS][];
-		atlases = new Texture2D[NUMBODYPARTS];
-		texturePositions = new Rect[NUMBODYPARTS][];
 		for(int i = 0; i < NUMBODYPARTS; i++)
 		{
 			bodyPartCustomized[i] = false;
-			optionTextures[i] = new Texture2D[NUMOPTIONS];	
 		}		
 		animator = GetComponent<Animator>();
 		initTextures();
@@ -88,19 +78,15 @@ public class AnimationManager : Observer {
 		{
 			//pack textures for body part into an atlas, store dimensions in a Rect
 			SkinnedMeshRenderer bodyPart = bodyParts[i].GetComponent<SkinnedMeshRenderer>();
-			atlas = new Texture2D(atlasDimensions, atlasDimensions);
+			bodyPart.material.mainTexture = optionTextures[i][defaultPos];
+			/*atlas = new Texture2D(atlasDimensions, atlasDimensions);
 			texturePositions[i] = atlas.PackTextures(optionTextures[i], padding, atlasSize);
 			atlases[i] = atlas;
 			//set bodyPart texture to the default texture in the atlas
-//			bodyPart.material.mainTexture=atlas;
-//			bodyPart.material.mainTextureScale = new Vector2 (texturePositions[i][defaultPos].x, texturePositions[i][defaultPos].y);
+			bodyPart.material.mainTexture=atlas;
+			bodyPart.material.mainTextureScale = new Vector2 (texturePositions[i][defaultPos].x, texturePositions[i][defaultPos].y);*/
 			
-		}
-		bodyParts[2].GetComponent<SkinnedMeshRenderer>().material.mainTexture = atlases[2];
-		bodyParts[2].GetComponent<SkinnedMeshRenderer>().material.mainTextureScale = new Vector2 (texturePositions[2][defaultPos].width, texturePositions[2][defaultPos].height);
-		bodyParts[2].GetComponent<SkinnedMeshRenderer>().material.mainTextureOffset = new Vector2 (texturePositions[2][defaultPos].x, texturePositions[2][defaultPos].y);
-
-		
+		}		
 	}
 
 
@@ -110,10 +96,20 @@ public class AnimationManager : Observer {
 	/// <param name="e">Event Instance.</param>
 	public override void onNotify (EventInstance<GameObject> e)
 	{
+		int newTexture = 0;
 		if(e.type == eType.Selected && e.signaler.GetComponent<StimulusScript>().isOption())
 		{
 			int bodyPart = e.signaler.GetComponent<StimulusScript>().getBodyPart();
-			Texture2D newTexture = Resources.Load<Texture2D>("Textures/" + e.signaler.GetComponent<StimulusScript>().getTextureName());
+			for (int i = 0; i< sourceLines.Length; i++)
+			{
+				string[] vals = sourceLines[i].Split(',');
+				if(vals[0] == e.signaler.GetComponent<StimulusScript>().getTextureName())
+				{
+					newTexture = int.Parse(vals[2]);
+					break;
+				}
+			}
+			
 			changeBodyPart( bodyPart, newTexture);
 			//grab texture info and send it to swapper	
 		}
@@ -129,10 +125,10 @@ public class AnimationManager : Observer {
 	/// </summary>
 	/// <param name="part">Index of the bone to be changed in bodyParts.</param>
 	/// <param name="newTexture"> Replacement Texture.</param>
-	void changeBodyPart (int part, Texture2D newTexture)
+	void changeBodyPart (int part, int newTexture)
 	{
 		GameObject temp = bodyParts[part];
-		temp.GetComponent<SkinnedMeshRenderer>().material.mainTexture = newTexture;
+		temp.GetComponent<SkinnedMeshRenderer>().material.mainTexture = optionTextures[part] [newTexture];
 	}
 
 	/// <summary>
@@ -143,18 +139,26 @@ public class AnimationManager : Observer {
 	{
 		List<Sprite> options;
 		options = new List<Sprite>();
-		int i = 0;
-		while(bodyPartCustomized[i] != true){i++;} //find the first non-customized body part
-		Texture2D[] textures = optionTextures[i];
+		int curBodyPart = getBodyPart();
+		Texture2D[] textures = optionTextures[curBodyPart];
 		for(int j = 0; j < textures.Length; j++)  //convert and package options
 		{
-			Sprite s = Sprite.Create(textures[i], new Rect(0,0, textures[i].width, textures[i].height), new Vector2 (0.5f, 0.5f));
+			Sprite s = Sprite.Create(textures[curBodyPart], new Rect(0,0, textures[curBodyPart].width, textures[curBodyPart].height), new Vector2 (0.5f, 0.5f));
 			options.Add(s); 
 		}
-		bodyPartCustomized[i] = true;
+		bodyPartCustomized[curBodyPart] = true;
 		return options;
 	}
-	
+	/// <summary>
+	/// Returns the index of the first not-yet-customized body part.
+	/// </summary>
+	/// <returns>Body part index.</returns>
+	public int getBodyPart ()
+	{
+		int i =0;
+		while (bodyPartCustomized[i] == true) {i++;}
+		return i;
+	}
 	// Update is called once per frame
 	void Update () {
 
