@@ -27,6 +27,11 @@ public class SpawnerScript : MonoBehaviour {
 	void Awake () {
 		newStims = new GameObject[4];
 		positions = new Vector3[4]; 
+		parseData();
+	}
+
+	void parseData()
+	{
 	}
 
 	/// <summary>
