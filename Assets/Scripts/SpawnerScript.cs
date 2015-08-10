@@ -39,16 +39,16 @@ public class SpawnerScript : MonoBehaviour {
 		parseData();
 	}
 
-	public IList<StimulusScript> findStim (Category cat, Difficulty diffLevel) {
-		IList<StimulusScript> answer = new IList<StimulusScript>();
+	List<serStim> findStim (Category cat, Difficulty diffLevel) {
+		List<serStim> answer = new List<serStim>();
 		int counter = 0;
 		string type = "";
 		if (cat.Equals (Category.ReceptiveVocabulary)) {
 			type = "visual";
 		} else 
 			type = "audio";
-		for (int i = 0; i < mainList.length; i++) {
-			if (mainList[i].hasBeenTarget() || counter > 0) {
+		for (int i = 0; i < stimPool.Count; i++) {
+			if (stimPool[i].hasBeenTarget || counter > 0) {
 
 			}
 		}
