@@ -10,6 +10,8 @@ using System.IO;
 /// </summary>
 [Serializable]
 public class serStim{
+	public bool isTarget;
+	public bool hasBeenTarget;
 	public string audio;
 	public string sprite;
 	public bool isCorrect;

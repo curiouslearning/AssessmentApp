@@ -15,6 +15,7 @@ public enum Difficulty {Easy, Medium, Hard};
 public class StimulusScript : MonoBehaviour{
 
 	private bool isCorrect; //bool for indicating the correct stimulus response in a question
+	private bool isTarget;
 	private bool hasBeenTarget;
 	private bool option;
 	private bool isBeingDragged; 
@@ -46,7 +47,9 @@ public class StimulusScript : MonoBehaviour{
 	public bool returnHasBeenTarget(){
 		return hasBeenTarget;
 	}
-
+	public bool returnIsTarget() {
+		return isTarget;
+	}
 	public bool returnIsBeingDragged() {
 		return isBeingDragged;
 	}
@@ -118,6 +121,17 @@ public class StimulusScript : MonoBehaviour{
 	/// <param name="newDiff">difficulty level</param>
 	public void setDifficulty(Difficulty newDiff) {
 		difficulty = newDiff;
+	}
+
+	public void setIsTarget(bool b) {
+		isTarget = b;
+	}
+
+	public void setHasBeenTarget(bool b) {
+		hasBeenTarget = b;
+		if (isTarget) {
+			isTarget = false;
+		}
 	}
 
 //********************
