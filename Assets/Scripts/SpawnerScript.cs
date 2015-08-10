@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 
 /// <summary>
@@ -12,6 +13,9 @@ public class SpawnerScript : MonoBehaviour {
 	GameObject newSoo;
 	GameObject[] newStims;
 	Sprite[] newOptions;
+	Dictionary<string, Difficulty> diffParser;
+	List<serStim> stimPool;
+	public TextAsset stimList;
 	public GameObject sooPrefab;
 	public GameObject stimPrefab;
 	//placement modifiers for stimulus positions
@@ -25,13 +29,29 @@ public class SpawnerScript : MonoBehaviour {
 	public AnimationManager host;
 	// Use this for initialization
 	void Awake () {
+		diffParser = new Dictionary<string, Difficulty>();
+		diffParser.Add ("Easy", Difficulty.Easy);
+		diffParser.Add ("Medium", Difficulty.Medium);
+		diffParser.Add ("Hard", Difficulty.Hard);
 		newStims = new GameObject[4];
 		positions = new Vector3[4]; 
+		stimPool = new List<serStim>();
 		parseData();
 	}
 
 	void parseData()
-	{
+	{ 
+		string[] sourceLines = stimList.text.Split('\n');
+		for(int i = 1; i < sourceLines.Length; i++)
+		{
+			serStim data = new serStim();
+			string [] vals = sourceLines[i].Split(',');
+			data.sprite = vals[1]; 
+			data.stimType = vals[2];
+			data.difficulty = diffParser[vals[3].TrimEnd('\r')];
+			data.hasBeenTarget = false;
+			stimPool.Add(data);
+		}
 	}
 
 	/// <summary>

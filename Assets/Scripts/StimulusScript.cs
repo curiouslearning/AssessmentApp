@@ -20,6 +20,7 @@ public class StimulusScript : MonoBehaviour{
 	private bool isBeingDragged; 
 	private bool isDraggable;
 	private string stimType;
+	private string visStim;
 	private Difficulty difficulty;
 	private Vector3 homePos; //snapback functionality
 	private Vector3 startScale; //scaling functionality
@@ -151,14 +152,19 @@ public class StimulusScript : MonoBehaviour{
 	/// </summary>
 	/// <param name="input">stimulus data.</param>
 	public	void setStim (serStim input) {
-		this.isCorrect = input.isCorrect;
+		this.hasBeenTarget = false;
 		this.isDraggable = input.isDraggable;
 		this.difficulty = input.difficulty;
-		this.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Art/" + input.sprite);
-		this.GetComponent<AudioSource>().clip = Resources.Load<AudioClip>("Audio/" + input.audio);
+		if(input.stimType == "Visual")
+			this.visStim  = input.sprite;
+		else if(input.stimType == "Audio")
+			this.GetComponent<AudioSource>().clip = Resources.Load<AudioClip>("Audio/" + input.audio);
 		this.option = false;
 	}
-
+	public void initSprite()
+	{
+		this.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Art/" + visStim);
+	}
 	/// <summary>
 	/// Initialization for customization options
 	/// </summary>

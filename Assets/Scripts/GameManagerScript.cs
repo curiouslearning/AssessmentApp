@@ -23,13 +23,7 @@ public enum Category {Customization,
  * and current Stimulus Organizational Object
  */
 public class GameManagerScript : Observer {
-/* Component instances
- * Instances to create/add:
- * Animation Handler
- * Character Customizer
- * File Wrapper
- * Scoring system
- */
+
 //timekeeping variables
 public int questionNumber;
 public float questionTime;
@@ -51,7 +45,7 @@ Queue<Question> qList; // delete this list
 public Subject eventHandler;
 int eTester; //debugger
 	// Use this for initialization
-	void Start () {
+	void Start () {	
 		eTester = 0; //debugger
 		CollisionNotification trashHolder;
 		spawnHolder = spawner.GetComponent<SpawnerScript>();
