@@ -37,8 +37,6 @@ public GameObject gCollector;
 public ScoreTracker scoreHolder;
 GameObject stimOrgOb;
 SOOScript sooHolder;
-Difficulty currentDifficulty; 
-Category currentCategory;
 	 
 Queue<Question> qList; // delete this list
 //Event variables
@@ -57,11 +55,9 @@ int eTester; //debugger
 		questionNumber = 0;
 		questionTime = 0f;
 		startTime = Time.time;
-		currentCategory = Category.Customization;
-		currentDifficulty = Difficulty.Easy;
 		//initQList (); // delete this
 		startQuestion(); 
-		Debug.Log ("Current category/difficulty is " + currentCategory + "/" + currentDifficulty); 
+		//Debug.Log ("Current category/difficulty is " + currentCategory + "/" + currentDifficulty); 
 	}
 
 //Gets queue of Questions from FileWrapper
@@ -105,36 +101,39 @@ int eTester; //debugger
 		}
 	}
 
-    public override void onNotify (EventInstance<ScoreTracker> e) {
-		// this onNotify handles event notifications sent from ScoreTracker and changes 
-		// the currentDifficulty and currentCategory vasriables accordingly
-		Debug.Log ("this is call " + eTester++);
-		if (e.type == eType.ChangeDifficulty) {
-			// ChangeDifficulty events are sent when the student has answered three
-			// questions correctly in a row.  If the current difficulty is "hard",
-			// the game moves on to a new category of question and the difficulty is
-			// reset to "easy" in the new category
-			Debug.Log ("got a ChangeDifficulty event from " + e.signaler.name); // debugger
-			if (currentDifficulty == Difficulty.Hard) {
-				currentCategory++;
-				currentDifficulty = Difficulty.Easy;
-				return;
-			} else{ 
-				currentDifficulty++;
-			    Debug.Log ("current Category is " + currentCategory + " and current difficulty is " + currentDifficulty); // debugger
-			    return;
-			}
-		} else if (e.type == eType.ChangeCategory) {
-			// ChangeCategory events are sent when the student gets four consecutive
-			// questions wrong or maxes out the number of questions per category (20).
-			// When the category is incremented, difficulty is reset to easy.
-			Debug.Log ("got a ChangeCategory event from " + e.signaler.name); // debugger
-			currentCategory++;
-			currentDifficulty = Difficulty.Easy;
-			Debug.Log ("current Category is " + currentCategory + " and current difficulty is " + currentDifficulty); // debugger
-			return;
-		}
-	}
+   /* public override void onNotify (EventInstance<ScoreTracker> e) {
+	*	// this onNotify handles event notifications sent from ScoreTracker and changes 
+	*	// the currentDifficulty and currentCategory vasriables accordingly
+	*	Debug.Log ("this is call " + eTester++);
+	*	if (e.type == eType.ChangeDifficulty) {
+	*		// ChangeDifficulty events are sent when the student has answered three
+	*		// questions correctly in a row.  If the current difficulty is "hard",
+	*		// the game moves on to a new category of question and the difficulty is
+	*		// reset to "easy" in the new category
+	*		Debug.Log ("got a ChangeDifficulty event from " + e.signaler.name); // debugger
+	*		if (currentDifficulty == Difficulty.Hard) {
+	*			currentCategory++;
+	*			currentDifficulty = Difficulty.Easy;
+	*			return;
+	*		} else{ 
+	*			currentDifficulty++;
+	*		    Debug.Log ("current Category is " + currentCategory + " and current difficulty is " + currentDifficulty); // debugger
+	*		    return;
+	*		}
+	*	} else if (e.type == eType.ChangeCategory) {
+	*		// ChangeCategory events are sent when the student gets four consecutive
+	*		// questions wrong or maxes out the number of questions per category (20).
+	*		// When the category is incremented, difficulty is reset to easy.
+	*		Debug.Log ("got a ChangeCategory event from " + e.signaler.name); // debugger
+	*		currentCategory++;
+	*		currentDifficulty = Difficulty.Easy;
+	*		Debug.Log ("current Category is " + currentCategory + " and current difficulty is " + currentDifficulty); // debugger
+	*		return;
+	*	}
+    * }
+    *
+    */
+
 
 //Dequeue the next question and initialize the question period
 	/*void startQuestion () // delete this method
@@ -152,7 +151,9 @@ int eTester; //debugger
 	// add this method
 	  void startQuestion ()
       {
-	     stimOrgOb = spawnHolder.spawnNext(currentCategory, currentDifficulty, questionNumber);
+		 Category cat = scoreHolder.returnCurrentScore ().returnCategory ();
+		 Difficulty diff = scoreHolder.returnCurrentScore ().returnDifficulty ();
+	     stimOrgOb = spawnHolder.spawnNext(cat,diff,questionNumber);
 	     Debug.Log("got a new SOO");
 	     sooHolder = stimOrgOb.GetComponent<SOOScript>();
 	     sooHolder.move(0);
@@ -161,7 +162,7 @@ int eTester; //debugger
 	void changeQuestion ()
 	{
 		Debug.Log("we're in changeQuestion!");
-		Debug.Log ("current Category is " + currentCategory + " and current difficulty is " + currentDifficulty);
+		//Debug.Log ("current Category is " + currentCategory + " and current difficulty is " + currentDifficulty);
 		questionTime = 0;
 		startTime = Time.time;
 		questionNumber++;
@@ -182,14 +183,14 @@ int eTester; //debugger
 	}
 
 	
-	public Category getCurrentCategory ()
+	/*public Category getCurrentCategory ()
 	{
 		return currentCategory;
 	}
 	public Difficulty getCurrentDifficulty ()
 	{
 		return currentDifficulty;
-	}
+	}*/
 
 //Data handling functions
 	void Save ()
