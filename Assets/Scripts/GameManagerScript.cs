@@ -88,6 +88,7 @@ int eTester; //debugger
 			//don't end the world
 			
 			Debug.Log("going through the next question"); //debugger
+			//figure out how to make this happen after score tracker updates category
 			changeQuestion();
 			startQuestion();
 			return; //prevent repeated action on same event
