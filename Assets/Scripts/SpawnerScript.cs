@@ -38,6 +38,15 @@ public class SpawnerScript : MonoBehaviour {
 		stimPool = new List<serStim>();
 		parseData();
 	}
+	
+
+	/// <summary>
+	/// Returns a list of four semi-randomly generated serStims, one of which is
+	/// tagged as the correct answer
+	/// </summary>
+	/// <returns>List of 4 serStims</returns>
+	/// <param name="cat">current Category in game</param>
+	/// <param name="diffLevel">current Difficulty in game</param>
 
 	List<serStim> findStim (Category cat, Difficulty diffLevel) {
 		List<serStim> answer = new List<serStim>();
@@ -51,10 +60,10 @@ public class SpawnerScript : MonoBehaviour {
 		} else 
 			type = "Audio";
 		for (int i = 0; i < stimPool.Count; i++) {
-			// when a list of 4 serStims is assembled, findStim returns
+			// when a list of 4 serStims is assembled, findStim returns answer
 			if (counter >= 4) {
 				break;
-			} else if (stimPool[i].stimType.Equals (type)) {
+			} else if (stimPool[i].stimType.Equals (type) && stimPool[i].difficulty.Equals (diffLevel)) {
 				// this block of code handles generating non-target
 				// stimuli
 			    if (stimPool[i].hasBeenTarget || counter > 0) {
@@ -104,17 +113,20 @@ public class SpawnerScript : MonoBehaviour {
 	public GameObject spawnNext (Category cat, Difficulty difLevel, int questionNumber)
 	{
 		Question q =  Question.CreateInstance<Question>();
-		//if Category.Customization, call findCustomizationOptions
-		//if(cat == Category.Customization)
-		//{
+		if (cat == Category.Customization)
+		{
 			q.init(questionNumber, host.getOptions(), host.getBodyPart());
-			return spawnNext(q);
-		//}
-		//else {
-		//	q.init (questionNumber, findSprites(), findSounds(), target, cat
-		//}
+			return spawnSOO(q);
+		}
+		else {
+			List<serStim> foundStimList = findStim (cat,difLevel);
+			int target = 0; 
+			q.init (questionNumber, findStim(cat,difLevel), target, cat);
+		}
 		//else call findStimuli
 		//pass resulting question into spawnSoo and return the result
+	    GameObject g = spawnSOO (q);
+		return g;
 	}
 
 	
@@ -125,7 +137,7 @@ public class SpawnerScript : MonoBehaviour {
 	/// <param name="q">Question data </param>
 
 	//IMPORTANT: RENAME WHEN spawnNext ABOVE IS COMPLETED
-	public GameObject spawnNext (Question q)
+	public GameObject spawnSOO (Question q)
 	{
 		newSoo = Instantiate(sooPrefab) as GameObject;
 		SOOScript holder = newSoo.GetComponent<SOOScript>();

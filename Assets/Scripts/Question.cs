@@ -67,15 +67,15 @@ public class Question : ScriptableObject {
 	/// <param name="sounds">Auditory stimuli</param>
 	/// <param name="correct">Target stimulus</param>
 	/// <param name="cat">Question category</param>
-	public void init (int qNum, string [] sprites, string [] sounds, int target, Category cat)
+	public void init (int qNum, List<serStim> stimList, int target, Category cat)
 	{
 		questionNumber = qNum;
 		customizationEvent = false;
 		for (int i = 0; i<4; i++)
 		{
 			tempStim = new serStim();
-			tempStim.audio = sounds [i];
-			tempStim.sprite = sprites[i];
+			tempStim.audio = stimList[i].audio;
+			tempStim.sprite = stimList[i].sprite; 
 			if(i == target) 
 				tempStim.isCorrect = true;
 			else
