@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -111,6 +111,10 @@ public class ScoreTracker : Observer {
 	Subject.GameObjectNotify gOObserver;
 	Score s;	
 	public Subject eventHandler;
+
+	public Score returnCurrentScore() {
+		return s;
+	}
 	
 	void Start () {
 		s = new Score(reference.questionNumber);	
