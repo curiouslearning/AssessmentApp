@@ -151,8 +151,9 @@ int eTester; //debugger
 	// add this method
 	  void startQuestion ()
       {
-		 Category cat = scoreHolder.returnCurrentScore ().returnCategory ();
-		 Difficulty diff = scoreHolder.returnCurrentScore ().returnDifficulty ();
+		 Score s = scoreHolder.returnCurrentScore ();
+		 Category cat = s.returnCategory ();
+		 Difficulty diff = s.returnDifficulty ();
 	     stimOrgOb = spawnHolder.spawnNext(cat,diff,questionNumber);
 	     Debug.Log("got a new SOO");
 	     sooHolder = stimOrgOb.GetComponent<SOOScript>();
