@@ -65,7 +65,7 @@ int eTester; //debugger
 	}
 
 //Gets queue of Questions from FileWrapper
-	void initQList () // delete this method
+	/*void initQList () // delete this method
 	{ // SUPER HACK, YOU MUST GO  BACK TO THIS
 		string [] textures = new string[] {"AngryFace1", "HappyFace1", "NeutralFace1", "HappyFace2"};
 		string [] sprites1 = new string [] {"sprite0", "sprite1", "sprite2", "sprite3"};
@@ -77,12 +77,12 @@ int eTester; //debugger
 		qList.Enqueue(temp);
 		currentCategory = Category.ReceptiveVocabulary;
 		temp = Question.CreateInstance<Question>();
-		temp.init(1,sprites1, sounds, 1, currentCategory);
+//		temp.init(1,sprites1, sounds, 1, currentCategory);
 		qList.Enqueue(temp);
 		temp = Question.CreateInstance<Question>();
-		temp.init (2, sprites2, sounds, 2, currentCategory);
+//		temp.init (2, sprites2, sounds, 2, currentCategory);
 		qList.Enqueue(temp);
-	}
+	}*/
 	public override void onNotify (EventInstance<GameObject> e)
 	{
 		Debug.Log("this is call " + eTester++); //debugger

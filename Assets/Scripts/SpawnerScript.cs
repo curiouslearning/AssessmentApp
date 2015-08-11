@@ -119,7 +119,6 @@ public class SpawnerScript : MonoBehaviour {
 			return spawnSOO(q);
 		}
 		else {
-			List<serStim> foundStimList = findStim (cat,difLevel);
 			int target = 0; 
 			q.init (questionNumber, findStim(cat,difLevel), target, cat);
 		}

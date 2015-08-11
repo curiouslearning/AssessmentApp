@@ -277,7 +277,6 @@ public class ScoreTracker : Observer {
 		return st;
 	}
 	
-	// Update is called once per frame
 	void changeQuestion () {
 		numAnswered++;
 		if (s.isCorrect ()) {

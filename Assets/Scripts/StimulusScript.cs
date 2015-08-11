@@ -173,6 +173,7 @@ public class StimulusScript : MonoBehaviour{
 			this.visStim  = input.sprite;
 		else if(input.stimType == "Audio")
 			this.GetComponent<AudioSource>().clip = Resources.Load<AudioClip>("Audio/" + input.audio);
+		this.stimType = input.stimType;
 		this.option = false;
 	}
 	public void initSprite()
