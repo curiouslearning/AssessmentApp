@@ -116,13 +116,19 @@ public class ScoreTracker : Observer {
 	public Score returnCurrentScore() {
 		return s;
 	}
-	
-	void Start () {
+
+	void Awake ()
+	{
 		s = new Score(reference.questionNumber);	
 		s.setTimedOut (false);
 		s.setDifficulty (Difficulty.Easy);
 		s.setCategory (Category.Customization);
+<<<<<<< HEAD
 		currentCategory = s.returnCategory ();
+=======
+	}	
+	void Start () {	
+>>>>>>> origin/stimpooling
 		scoreList = new List<Score>();
 		gMObserver = new Subject.gameManagerNotify (this.onNotify);
 		gOObserver = new Subject.GameObjectNotify (this.onNotify);
