@@ -110,6 +110,7 @@ public class ScoreTracker : Observer {
 	Subject.gameManagerNotify gMObserver;
 	Subject.GameObjectNotify gOObserver;
 	Score s;	
+	Category currentCategory;
 	public Subject eventHandler;
 
 	public Score returnCurrentScore() {
@@ -121,6 +122,7 @@ public class ScoreTracker : Observer {
 		s.setTimedOut (false);
 		s.setDifficulty (Difficulty.Easy);
 		s.setCategory (Category.Customization);
+		currentCategory = s.returnCategory ();
 		scoreList = new List<Score>();
 		gMObserver = new Subject.gameManagerNotify (this.onNotify);
 		gOObserver = new Subject.GameObjectNotify (this.onNotify);
@@ -331,8 +333,9 @@ public class ScoreTracker : Observer {
 			numCorrect = 0;
 			numWrong = 0;
 			numAnswered = 0;
-			Category cat = s.returnCategory();
-			s.setCategory (cat++);
+			currentCategory++;
+			s.setCategory (currentCategory);
+			s.setDifficulty(Difficulty.Easy);
 		} else if (numWrong >= 4) {
 			// if the player answers four consecutive questions wrong, a ChangeCategory
 			// notification is sent out, category and difficulty variables in the current
