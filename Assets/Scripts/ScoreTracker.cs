@@ -317,30 +317,39 @@ public class ScoreTracker : Observer {
 				s.setDifficulty (diff++); 
 			} else
 				s.setDifficulty (Difficulty.Hard);
+		} else if (s.returnCategory().Equals(Category.Customization)) { 
+			// One question is answered in Customization, then the game moves on
+			// to the next category and the three control variables are reset.
+			EventInstance<ScoreTracker> e;
+			e = new EventInstance<ScoreTracker> ();
+			e.setEvent (eType.ChangeCategory, this);
+			eventHandler.notify (e);
+			Debug.Log ("sent ChangeCategory notification");
+			numCorrect = 0;
+			numWrong = 0;
+			numAnswered = 0;
+			Category cat = s.returnCategory();
+			s.setCategory (cat++);
 		} else if (numWrong >= 4) {
 			// if the player answers four consecutive questions wrong, a ChangeCategory
 			// notification is sent out, category and difficulty variables in the current
 			// score variable are adjusted.
-			numWrong = 0;
 			EventInstance<ScoreTracker> e;
 			e = new EventInstance<ScoreTracker> ();
 			e.setEvent (eType.ChangeCategory, this);
 			eventHandler.notify (e);
-			Debug.Log ("sent ChangeCategory notification");
-			Category cat = s.returnCategory();
-			s.setCategory (cat++);
+			Debug.Log ("sent ChangeCategory notification");;
+			s.setCategory (Category.Customization);
 		} else if (numAnswered >= 20) {
 			// if twenty questions in one category are answered, a ChangeCategory
 			// notification is sent out, category and difficulty variables in the current
 			// score variable are adjusted.
-			numAnswered = 0;
 			EventInstance<ScoreTracker> e;
 			e = new EventInstance<ScoreTracker> ();
 			e.setEvent (eType.ChangeCategory, this);
 			eventHandler.notify (e);
 			Debug.Log ("sent ChangeCategory notification");
-			Category cat = s.returnCategory();
-			s.setCategory(cat++);
+			s.setCategory(Category.Customization);
 		}
 		scoreList.Add(s);
 		s = new Score(reference.questionNumber);		
