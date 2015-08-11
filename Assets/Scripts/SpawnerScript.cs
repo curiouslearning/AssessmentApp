@@ -42,15 +42,40 @@ public class SpawnerScript : MonoBehaviour {
 	List<serStim> findStim (Category cat, Difficulty diffLevel) {
 		List<serStim> answer = new List<serStim>();
 		int counter = 0;
-		string type = "";
+		string type;
+		// the variable type, which is used to determine whether findStim
+		// is looking for audio or visual stimulus, is assigned based
+		// on the current category
 		if (cat.Equals (Category.ReceptiveVocabulary)) {
-			type = "visual";
+			type = "Visual";
 		} else 
-			type = "audio";
+			type = "Audio";
 		for (int i = 0; i < stimPool.Count; i++) {
-			if (stimPool[i].hasBeenTarget || counter > 0) {
-
+			// when a list of 4 serStims is assembled, findStim returns
+			if (counter >= 4) {
+				break;
+			} else if (stimPool[i].stimType.Equals (type)) {
+				// this block of code handles generating non-target
+				// stimuli
+			    if (stimPool[i].hasBeenTarget || counter > 0) {
+				    float f = Random.Range (0.0f,4.0f);
+					if (f < 1.0) {
+						serStim s = stimPool[i];
+						answer.Add (s);
+					}
+				} else  {
+					// this block of code handles retrieving a
+					// stimulus to be the target
+					float f = Random.Range (0.0f,4.0f);
+					if (f < 1.0) {
+						stimPool[i].hasBeenTarget = true;
+						serStim s = stimPool[i];
+						s.isCorrect = true;
+						answer.Add(s);
+					}
+				}
 			}
+			counter++;
 		}
 		return answer;
 	}
