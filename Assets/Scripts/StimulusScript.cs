@@ -3,11 +3,6 @@ using System.Collections;
 
 
 /// <summary>
-/// Inidicator for question difficulty.
-/// </summary>
-public enum Difficulty {Easy, Medium, Hard};
-
-/// <summary>
 /// StimulusScript
 /// Class containg data and functionality for individual stimuli initialized by the SpawnerScript using Question instances.
 /// Attached to the SOO instance as child objects.

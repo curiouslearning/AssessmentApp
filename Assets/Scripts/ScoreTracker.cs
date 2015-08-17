@@ -92,6 +92,27 @@ public class Score {
 	
 }
 
+// Category is an enum that holds all possible kinds of
+// questions that the app may ask a student.  Customization
+// is included as a category so the character customization
+// at the beginning of gameplay will be recognized as its
+// own kind of activity;
+
+public enum Category {Customization,
+	ReceptiveVocabulary, 
+	LetterNameRecognition, 
+	LetterSoundMatching, 
+	CVCWordIdentification, 
+	SightWordIdentification, 
+	RhymingWordMatching,
+	BlendingWordIdentification, 
+	PseudowordMatching};
+
+/// <summary>
+/// Inidicator for question difficulty.
+/// </summary>
+public enum Difficulty {Easy, Medium, Hard};
+
 
 //Class that organizes and collects all information regarding performance on questions. Individual question data is stored in instances of
 //the score class, all of which are stored in the List<Score> contained within the class.
@@ -100,18 +121,39 @@ public class Score {
 //			GameManagerScript
 //			Receptacle
 public class ScoreTracker : Observer {
-	public GameManagerScript reference;
-	public CollisionNotification receptacle;
+
+	//timekeeping variables
+	public int questionNumber;
+	public float questionTime;
+	float startTime;
+	
+	//component variables
+	public GameObject spawner;
+	SpawnerScript spawnHolder;
+	public GameObject receptacle; 
+	public GameObject gCollector;
+	GameObject stimOrgOb;
+	SOOScript sooHolder;
+
+	//Event variables
+	public Subject eventHandler;
+	int eTester; //debugger
+
+	// List of questions scores
 	public List<Score> scoreList;
+
+	bool gameOver;
+
+	// scorekeeping variables
 	int totalScore;
 	int numCorrect;
 	int numWrong;
 	int numAnswered;
-	Subject.gameManagerNotify gMObserver;
-	Subject.GameObjectNotify gOObserver;
-	Score s;	
 	Category currentCategory;
-	public Subject eventHandler;
+	Score s;	
+	
+	Subject.GameObjectNotify gOObserver;
+	
 
 	public Score returnCurrentScore() {
 		return s;
@@ -119,74 +161,83 @@ public class ScoreTracker : Observer {
 
 	void Awake ()
 	{
-		s = new Score(reference.questionNumber);	
+        s = new Score(questionNumber);	
 		s.setTimedOut (false);
 		s.setDifficulty (Difficulty.Easy);
 		s.setCategory (Category.Customization);
 		currentCategory = s.returnCategory ();
-
 	}	
 	void Start () {	
+		gameOver = false;
 		scoreList = new List<Score>();
-		gMObserver = new Subject.gameManagerNotify (this.onNotify);
 		gOObserver = new Subject.GameObjectNotify (this.onNotify);
-		reference.GetComponent<Subject>().addObserver(gMObserver); 
 		receptacle.GetComponent<Subject> ().addObserver (gOObserver); 
+		eTester = 0; //debugger
+		CollisionNotification trashHolder;
+		spawnHolder = spawner.GetComponent<SpawnerScript>();
+		trashHolder = receptacle.GetComponent<CollisionNotification>();
+		trashHolder.sub.addObserver(new Subject.GameObjectNotify(this.onNotify));
+		trashHolder = gCollector.GetComponent<CollisionNotification>();	
+		trashHolder.sub.addObserver(new Subject.GameObjectNotify(this.onNotify));
+		questionNumber = 0;
+		questionTime = 0f;
+		startTime = Time.time;
 	}
 	
 	public override void onNotify (EventInstance<GameObject> e)
 	{
 		s.addScore(e.signaler.GetComponent<StimulusScript>().returnIsCorrect());
-		s.addTime(reference.questionTime);				
-	}
-	public override void onNotify (EventInstance<GameManagerScript> e) //synchronize this or atomize variables
-	{
-		// ScoreTracker observes notifications sent from GameManager.  If
-		// the event is of type Timeout, the bool timedOut of the current
-		// Score variable s is set to true.
-		Debug.Log ("eType: " + e.type);
-		if (e.type == eType.Timeout) {
-			reference.GetComponent<Subject>().removeObserver(gOObserver);
-			s.setTimedOut(true);
-			Debug.Log ("recieved a Timeout notification from Game Manager");
-			Debug.Log ("timedOut: " + s.returnTimedOut());
+		s.addTime(questionTime);	
+		Debug.Log("this is call " + eTester++); //debugger
+		if (e.type == eType.Trashed)
+		{
+			Destroy(e.signaler);
+			//don't end the world
+			
+			Debug.Log("going through the next question"); //debugger
+			//figure out how to make this happen after score tracker updates category
+			changeQuestion();
+			return; //prevent repeated action on same event
+		}
+		else if (e.type == eType.Selected)
+		{
+			Debug.Log("got event from: " + e.signaler.name); //debugger
+			e.signaler.gameObject.SetActive(false);
+			sooHolder.move(1);
 			return;
 		}
+	}
 
-		// if the GameManager notification is of type EndGame, the app sends
-		// out a broadcast containing all the data collected by ScoreTracker.
-		
-		if (e.type == eType.EndGame) {
-			
-			Debug.Log(printListString()); //debugger - printListString() is used in the broadcast.
-			                              //Printing it to the debug log allows us to see the entire
-			                              //string that will be sent in the broadcast, which contains
-			                              //all the data collected from the latest game.
-			
-			// *************************************************************************
-			// Code for sending broadcasts containing the data collected by ScoreTracker
-			// *************************************************************************
+	void endGame ()
+	{
+		sendEvent (eType.EndGame);
 
-			// Instantiate the class Intent
-			AndroidJavaClass intentClass = new AndroidJavaClass ("android.content.Intent");  
-			// Instantiate the object Intent
-			AndroidJavaObject intentObject = new AndroidJavaObject ("android.content.Intent");
-			// Call setAction on the Intent object with "ACTION_SEND" as a parameter
-			intentObject.Call<AndroidJavaObject>("setAction", intentClass.GetStatic<string> ("ACTION_SEND")); 
-			// Set the type of the Intent to plain text by calling setType
-			intentObject.Call<AndroidJavaObject>("setType", "text/plain");
-			// call putExtra on intentObject and set printListString() as a parameter in order
-			// to broadcast the data collected by ScoreTracker over the course of the game
-			intentObject.Call<AndroidJavaObject>("putExtra", intentClass.GetStatic<string>("EXTRA_TEXT"), printListString());
-			// Instantiate the class UnityPlayer
-			AndroidJavaClass unity = new AndroidJavaClass ("com.unity3d.player.UnityPlayer");
-			// Instantiate the object currentActivity
-			AndroidJavaObject currentActivity = unity.GetStatic<AndroidJavaObject> ("currentActivity");
-			// Call the activity with our intent
-			currentActivity.Call("sendBroadcast", intentObject);    
-		}
+		Debug.Log(printListString()); //debugger - printListString() is used in the broadcast.
+		//Printing it to the debug log allows us to see the entire
+		//string that will be sent in the broadcast, which contains
+		//all the data collected from the latest game.
 		
+		// *************************************************************************
+		// Code for sending broadcasts containing the data collected by ScoreTracker
+		// *************************************************************************
 		
+		// Instantiate the class Intent
+		AndroidJavaClass intentClass = new AndroidJavaClass ("android.content.Intent");  
+		// Instantiate the object Intent
+		AndroidJavaObject intentObject = new AndroidJavaObject ("android.content.Intent");
+		// Call setAction on the Intent object with "ACTION_SEND" as a parameter
+		intentObject.Call<AndroidJavaObject>("setAction", intentClass.GetStatic<string> ("ACTION_SEND")); 
+		// Set the type of the Intent to plain text by calling setType
+		intentObject.Call<AndroidJavaObject>("setType", "text/plain");
+		// call putExtra on intentObject and set printListString() as a parameter in order
+		// to broadcast the data collected by ScoreTracker over the course of the game
+		intentObject.Call<AndroidJavaObject>("putExtra", intentClass.GetStatic<string>("EXTRA_TEXT"), printListString());
+		// Instantiate the class UnityPlayer
+		AndroidJavaClass unity = new AndroidJavaClass ("com.unity3d.player.UnityPlayer");
+		// Instantiate the object currentActivity
+		AndroidJavaObject currentActivity = unity.GetStatic<AndroidJavaObject> ("currentActivity");
+		// Call the activity with our intent
+		currentActivity.Call("sendBroadcast", intentObject);
 	}
 	
 	public void addTouch (TouchSummary t)
@@ -207,6 +258,11 @@ public class ScoreTracker : Observer {
 			scoreList[i].printTouches();
 		}	
 	}
+
+	// ******************************************************************
+	// Methods for organizing data collected by ScoreTracker and
+	// placing it into strings
+	// ******************************************************************
 
 	// retrieveStruct is a method needed for averagesBreakdown() to work.  It
 	// retrieves a given DifficultyData instance from an array based on the
@@ -287,6 +343,10 @@ public class ScoreTracker : Observer {
 		return st;
 	}
 
+	// *************************************************************
+	// Methods for incrementing variables and changing the question
+	// *************************************************************
+
 		
 	void checkAnswer()
 	{
@@ -318,51 +378,86 @@ public class ScoreTracker : Observer {
 
 	
 	void changeQuestion () {
+		Debug.Log("we're in changeQuestion!");
+		//Debug.Log ("current Category is " + currentCategory + " and current difficulty is " + currentDifficulty);
+		questionTime = 0;
+		startTime = Time.time;
+		questionNumber++;
 		numAnswered++;
-		checkAnswer();		
+
+		sendEvent (eType.NewQuestion);
+
+		stimOrgOb = spawnHolder.spawnNext(s.returnCategory(),s.returnDifficulty(),questionNumber);
+		Debug.Log("got a new SOO");
+		sooHolder = stimOrgOb.GetComponent<SOOScript>();
+		sooHolder.move(0);
+
+		checkAnswer();	
+
 		Debug.Log ("numRight " + numCorrect);
 		Debug.Log ("numWrong " + numWrong);
-		
 		Debug.Log ("totalScore " + totalScore);
 		Debug.Log ("numAnswered " + numAnswered); 
+
 		if (numCorrect >= 3) {
+			// If this case is true, the player has exhausted all available categories and difficulties
+			if (s.returnCategory() == Category.PseudowordMatching && s.returnDifficulty() == Difficulty.Hard) {
+				gameOver = true;
+			} else {
 			// if the player answers three consecutive questions correctly, numCorrect is
 			// reset and an event notification of type ChangeDifficulty is sent out, which
 			// will be picked up by GameManager.
 			numCorrect = 0;
-			sendEvent(eType.ChangeDifficulty);
-			Debug.Log ("sent ChangeDifficulty notification");
 			// the difficulty and category variables in the current score variable
 			// must also be adjusted appropriately.
 			updateDifficulty();
-			
+			}	
 		} 
 		else {
-			sendEvent(eType.ChangeCategory);
 			setCategory();
 		}
 		 
 		scoreList.Add(s);
-		s = new Score(reference.questionNumber);		
+		s = new Score(questionNumber);		
 	}
 
 	void setCategory()
 	{
 		if (s.returnCategory().Equals(Category.Customization)) {//only ever spend one question in customization 	
-			Debug.Log ("sent ChangeCategory notification");
 			numCorrect = 0;
 			numWrong = 0;
 			numAnswered = 0;
 			currentCategory++;
 			s.setDifficulty(Difficulty.Easy);
 		} else if (numWrong >= 4) { //change category and drop difficulty level after 4 wrong answers	
-			Debug.Log ("sent ChangeCategory notification");
 			s.setCategory (Category.Customization);
 		} else if (numAnswered >= 20) { //only ever spend 20 questions max in one category
-			Debug.Log ("sent ChangeCategory notification");
 			s.setCategory(Category.Customization);
 		}	
 	}
+
+	void Update() 
+	{
+		// questionTime keeps track of the elapsed time since the
+		// start of the current question.  It must be updated
+		// frequently, which is why it is placed in Update().
+		questionTime = Time.time - startTime;
+		// if questionTime goes over 15 seconds it sends a
+		// TimeOut (which will be picked up in ScoreTracker)
+		// event and moves on to the next question, calling
+		// move(1) on sooHolder
+		if (questionTime >= 15.0f) {
+			startTime = Time.time;
+			sooHolder.move (1);
+		}
+		//if scene is changing do not process input
+		//otherwise generate input commands and pass them to the proper objects
+		// if 
+		if (gameOver) {
+			endGame ();
+		}
+	}
+
 	
 }
 
