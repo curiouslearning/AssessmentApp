@@ -153,11 +153,6 @@ public class ScoreTracker : Observer {
 	Score s;	
 	
 	Subject.GameObjectNotify gOObserver;
-	
-
-	public Score returnCurrentScore() {
-		return s;
-	}
 
 	void Awake ()
 	{
@@ -240,7 +235,7 @@ public class ScoreTracker : Observer {
 		currentActivity.Call("sendBroadcast", intentObject);
 	}
 	
-	public void addTouch (TouchSummary t)
+	public void addTouch (TouchSummary t) //directly coupled to TouchProcessor
 	{
 		s.addTouch(t);
 		t = null;
@@ -448,6 +443,13 @@ public class ScoreTracker : Observer {
 		// move(1) on sooHolder
 		if (questionTime >= 15.0f) {
 			startTime = Time.time;
+
+			s.setTimedOut(true);
+			s.addTime (15.0f);
+			s.addScore (false);
+
+			sendEvent (eType.TimedOut); // temporary fix here
+
 			sooHolder.move (1);
 		}
 		//if scene is changing do not process input

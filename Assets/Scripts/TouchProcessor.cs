@@ -155,6 +155,8 @@ public class TouchProcessor : Observer {
 	{
 		if (e.type == eType.EndGame) {
 			return;
+		} else if (e.type == eType.TimedOut) {
+			scoring.addTouch (touchSum);
 		} else if (e.type == eType.NewQuestion) {
 			Debug.Log ("adding a question"); //debugger
 			scoring.addTouch (touchSum);
