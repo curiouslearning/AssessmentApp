@@ -27,7 +27,7 @@ public class EventInstance <T>
 	public void setEvent <T> (eType input, T param) where T : class
 	{
 		type = input;
-		signaler = param; 
+		signaler = param;  
 	}
 	
 }

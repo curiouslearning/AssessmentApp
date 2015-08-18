@@ -153,6 +153,10 @@ public class ScoreTracker : Observer {
 	
 	Subject.GameObjectNotify gOObserver;
 
+	// ***********************************************
+	// Initialization - Awake and Start
+	// ***********************************************
+
 	void Awake ()
 	{
         s = new Score(questionNumber);	
@@ -178,6 +182,10 @@ public class ScoreTracker : Observer {
 		startTime = Time.time;
 		startQuestion ();
 	}
+
+	// ********************************************************
+	// onNotify and endGame
+	// ********************************************************
 	
 	public override void onNotify (EventInstance<GameObject> e)
 	{
@@ -239,7 +247,7 @@ public class ScoreTracker : Observer {
 	{
 		s.addTouch(t);
 		t = null;
-		changeQuestion();
+		//changeQuestion();
 	}
 	void printList () //debugger
 	{
@@ -339,7 +347,7 @@ public class ScoreTracker : Observer {
 	}
 
 	// *************************************************************
-	// Methods for incrementing variables and changing the question
+	// Helper functions for startQuestion, changeQuestion, and Update
 	// *************************************************************
 
 		
@@ -371,10 +379,28 @@ public class ScoreTracker : Observer {
 		eventHandler.notify (e);	
 	}
 
+	void setCategory()
+	{
+		if (s.returnCategory().Equals(Category.Customization)) {//only ever spend one question in customization 	
+			numCorrect = 0;
+			numWrong = 0;
+			numAnswered = 0;
+			currentCategory++;
+			s.setDifficulty(Difficulty.Easy);
+		} else if (numWrong >= 4) { //change category and drop difficulty level after 4 wrong answers	
+			s.setCategory (Category.Customization);
+		} else if (numAnswered >= 20) { //only ever spend 20 questions max in one category
+			s.setCategory(Category.Customization);
+		}	
+	}
+	// *******************************************************
+	// startQuestion, changeQuestion, Update
+	// *******************************************************
+
 	// for use at the beginning of the game
 	void startQuestion() {
 		Debug.Log ("we're in start question");
-		sendEvent (eType.NewQuestion);
+		//sendEvent (eType.NewQuestion);
 		stimOrgOb = spawnHolder.spawnNext(currentCategory,s.returnDifficulty(),questionNumber);
 		Debug.Log("got a new SOO");
 		sooHolder = stimOrgOb.GetComponent<SOOScript>();
@@ -424,21 +450,7 @@ public class ScoreTracker : Observer {
 		scoreList.Add(s);
 		s = new Score(questionNumber);		
 	}
-
-	void setCategory()
-	{
-		if (s.returnCategory().Equals(Category.Customization)) {//only ever spend one question in customization 	
-			numCorrect = 0;
-			numWrong = 0;
-			numAnswered = 0;
-			currentCategory++;
-			s.setDifficulty(Difficulty.Easy);
-		} else if (numWrong >= 4) { //change category and drop difficulty level after 4 wrong answers	
-			s.setCategory (Category.Customization);
-		} else if (numAnswered >= 20) { //only ever spend 20 questions max in one category
-			s.setCategory(Category.Customization);
-		}	
-	}
+	
 
 	void Update() 
 	{
@@ -457,7 +469,7 @@ public class ScoreTracker : Observer {
 			s.addTime (15.0f);
 			s.addScore (false);
 
-			sendEvent (eType.TimedOut); // temporary fix here
+			//sendEvent (eType.TimedOut); // temporary fix here
 
 			sooHolder.move (1);
 		}
