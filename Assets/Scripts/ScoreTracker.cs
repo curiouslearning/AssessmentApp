@@ -141,10 +141,9 @@ public class ScoreTracker : Observer {
 
 	// List of questions scores
 	public List<Score> scoreList;
-
-	bool gameOver;
-
+	
 	// scorekeeping variables
+	bool gameOver;
 	int totalScore;
 	int numCorrect;
 	int numWrong;
