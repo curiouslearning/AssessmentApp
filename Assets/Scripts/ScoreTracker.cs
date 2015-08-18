@@ -176,6 +176,7 @@ public class ScoreTracker : Observer {
 		questionNumber = 0;
 		questionTime = 0f;
 		startTime = Time.time;
+		startQuestion ();
 	}
 	
 	public override void onNotify (EventInstance<GameObject> e)
@@ -370,6 +371,15 @@ public class ScoreTracker : Observer {
 		eventHandler.notify (e);	
 	}
 
+	// for use at the beginning of the game
+	void startQuestion() {
+		Debug.Log ("we're in start question");
+		sendEvent (eType.NewQuestion);
+		stimOrgOb = spawnHolder.spawnNext(currentCategory,s.returnDifficulty(),questionNumber);
+		Debug.Log("got a new SOO");
+		sooHolder = stimOrgOb.GetComponent<SOOScript>();
+		sooHolder.move(0);
+	}
 	
 	void changeQuestion () {
 		Debug.Log("we're in changeQuestion!");
@@ -381,7 +391,7 @@ public class ScoreTracker : Observer {
 
 		sendEvent (eType.NewQuestion);
 
-		stimOrgOb = spawnHolder.spawnNext(s.returnCategory(),s.returnDifficulty(),questionNumber);
+		stimOrgOb = spawnHolder.spawnNext(currentCategory,s.returnDifficulty(),questionNumber);
 		Debug.Log("got a new SOO");
 		sooHolder = stimOrgOb.GetComponent<SOOScript>();
 		sooHolder.move(0);

@@ -56,35 +56,36 @@ public class SpawnerScript : MonoBehaviour {
 		// is looking for audio or visual stimulus, is assigned based
 		// on the current category
 		if (cat.Equals (Category.ReceptiveVocabulary)) {
-			type = "Visual";
+			type = "visual";
 		} else 
-			type = "Audio";
+			type = "audio";
 		for (int i = 0; i < stimPool.Count; i++) {
 			// when a list of 4 serStims is assembled, findStim returns answer
 			if (counter >= 4) {
 				break;
-			} else if (stimPool[i].stimType.Equals (type) && stimPool[i].difficulty.Equals (diffLevel)) {
+			} else if (stimPool[i].stimType.Equals (type) && stimPool[i].difficulty.Equals (diffLevel)) { 
 				// this block of code handles generating non-target
 				// stimuli
 			    if (stimPool[i].hasBeenTarget || counter > 0) {
 				    float f = Random.Range (0.0f,4.0f);
-					if (f < 1.0) {
+					if (f < 1.0f) {
 						serStim s = stimPool[i];
-						answer.Add (s);
+						answer.Add(s);
+						counter++;
 					}
 				} else  {
 					// this block of code handles retrieving a
 					// stimulus to be the target
 					float f = Random.Range (0.0f,4.0f);
-					if (f < 1.0) {
+					if (f < 1.0f) {
 						stimPool[i].hasBeenTarget = true;
 						serStim s = stimPool[i];
 						s.isCorrect = true;
 						answer.Add(s);
+						counter++;
 					}
 				}
 			}
-			counter++;
 		}
 		return answer;
 	}

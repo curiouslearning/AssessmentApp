@@ -217,7 +217,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: .0219999999
-  m_StereoMirrorMode: 0
 --- !u!4 &829527124
 Transform:
   m_ObjectHideFlags: 0
@@ -284,8 +283,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dea2102b0880e4eef81849bd8dedacb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reference: {fileID: 829527125}
-  receptacle: {fileID: 1523307915}
+  questionNumber: 0
+  questionTime: 0
+  spawner: {fileID: 955094559}
+  receptacle: {fileID: 1523307913}
+  gCollector: {fileID: 1331431048}
   eventHandler: {fileID: 829527127}
 --- !u!1 &955094559
 GameObject:
@@ -408,7 +410,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
 --- !u!50 &1331431053
 Rigidbody2D:
-  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
@@ -417,11 +418,11 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: .0500000007
   m_GravityScale: 1
+  m_FixedAngle: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!1001 &1350267670
 Prefab:
   m_ObjectHideFlags: 0
@@ -622,7 +623,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
 --- !u!50 &1523307919
 Rigidbody2D:
-  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
@@ -631,8 +631,8 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: .0500000007
   m_GravityScale: 1
+  m_FixedAngle: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
