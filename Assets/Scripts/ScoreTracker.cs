@@ -189,11 +189,13 @@ public class ScoreTracker : Observer {
 	
 	public override void onNotify (EventInstance<GameObject> e)
 	{
-		s.addScore(e.signaler.GetComponent<StimulusScript>().returnIsCorrect());
-		s.addTime(questionTime);	
+		//s.addScore(e.signaler.GetComponent<StimulusScript>().returnIsCorrect());
+		//s.addTime(questionTime);	
 		Debug.Log("this is call " + eTester++); //debugger
 		if (e.type == eType.Trashed)
 		{
+			s.addTime(questionTime);
+
 			Destroy(e.signaler);
 			//don't end the world
 			
@@ -204,6 +206,8 @@ public class ScoreTracker : Observer {
 		}
 		else if (e.type == eType.Selected)
 		{
+			s.addScore(e.signaler.GetComponent<StimulusScript>().returnIsCorrect());
+
 			Debug.Log("got event from: " + e.signaler.name); //debugger
 			e.signaler.gameObject.SetActive(false);
 			sooHolder.move(1);
@@ -219,28 +223,8 @@ public class ScoreTracker : Observer {
 		//Printing it to the debug log allows us to see the entire
 		//string that will be sent in the broadcast, which contains
 		//all the data collected from the latest game.
-		
-		// *************************************************************************
-		// Code for sending broadcasts containing the data collected by ScoreTracker
-		// *************************************************************************
-		
-		// Instantiate the class Intent
-		AndroidJavaClass intentClass = new AndroidJavaClass ("android.content.Intent");  
-		// Instantiate the object Intent
-		AndroidJavaObject intentObject = new AndroidJavaObject ("android.content.Intent");
-		// Call setAction on the Intent object with "ACTION_SEND" as a parameter
-		intentObject.Call<AndroidJavaObject>("setAction", intentClass.GetStatic<string> ("ACTION_SEND")); 
-		// Set the type of the Intent to plain text by calling setType
-		intentObject.Call<AndroidJavaObject>("setType", "text/plain");
-		// call putExtra on intentObject and set printListString() as a parameter in order
-		// to broadcast the data collected by ScoreTracker over the course of the game
-		intentObject.Call<AndroidJavaObject>("putExtra", intentClass.GetStatic<string>("EXTRA_TEXT"), printListString());
-		// Instantiate the class UnityPlayer
-		AndroidJavaClass unity = new AndroidJavaClass ("com.unity3d.player.UnityPlayer");
-		// Instantiate the object currentActivity
-		AndroidJavaObject currentActivity = unity.GetStatic<AndroidJavaObject> ("currentActivity");
-		// Call the activity with our intent
-		currentActivity.Call("sendBroadcast", intentObject);
+
+		sendBroadcast (printListString ());
 	}
 	
 	public void addTouch (TouchSummary t) //directly coupled to TouchProcessor
@@ -350,6 +334,31 @@ public class ScoreTracker : Observer {
 	// Helper functions for startQuestion, changeQuestion, and Update
 	// *************************************************************
 
+
+	void sendBroadcast(string message) {
+
+		// *************************************************************************
+		// Code for sending broadcasts containing the data collected by ScoreTracker
+		// *************************************************************************
+	
+		// Instantiate the class Intent
+		AndroidJavaClass intentClass = new AndroidJavaClass ("android.content.Intent");  
+		// Instantiate the object Intent
+		AndroidJavaObject intentObject = new AndroidJavaObject ("android.content.Intent");
+		// Call setAction on the Intent object with "ACTION_SEND" as a parameter
+		intentObject.Call<AndroidJavaObject> ("setAction", intentClass.GetStatic<string> ("ACTION_SEND")); 
+		// Set the type of the Intent to plain text by calling setType
+		intentObject.Call<AndroidJavaObject> ("setType", "text/plain");
+		// call putExtra on intentObject and set printListString() as a parameter in order
+		// to broadcast the data collected by ScoreTracker over the course of the game
+		intentObject.Call<AndroidJavaObject> ("putExtra", intentClass.GetStatic<string> ("EXTRA_TEXT"), message);
+		// Instantiate the class UnityPlayer
+		AndroidJavaClass unity = new AndroidJavaClass ("com.unity3d.player.UnityPlayer");
+		// Instantiate the object currentActivity
+		AndroidJavaObject currentActivity = unity.GetStatic<AndroidJavaObject> ("currentActivity");
+		// Call the activity with our intent
+		currentActivity.Call ("sendBroadcast", intentObject);
+	}
 		
 	void checkAnswer()
 	{
@@ -405,50 +414,64 @@ public class ScoreTracker : Observer {
 		Debug.Log("got a new SOO");
 		sooHolder = stimOrgOb.GetComponent<SOOScript>();
 		sooHolder.move(0);
-	}
+	} 
 	
 	void changeQuestion () {
 		Debug.Log("we're in changeQuestion!");
-		//Debug.Log ("current Category is " + currentCategory + " and current difficulty is " + currentDifficulty);
+
+		// sends a broadcast after each question is completed
+		//string st = "";
+		//st = (st + "\nQuestion: " + s.getNum());
+		//st = (st + "\nCorrect?: " + s.isCorrect());
+		//st = (st + "\ntime taken: " + s.getTime());
+		//st = (st + "\ntimed out: " + s.returnTimedOut());
+		//st = (st + "\nCategory: " + s.returnCategory());
+		//st = (st + "\nDifficulty: " + s.returnDifficulty() + "\n");
+		//st = (st + s.printTouchesString() + "\n\n");
+		//sendBroadcast (st);
+
 		questionTime = 0;
 		startTime = Time.time;
 		questionNumber++;
 		numAnswered++;
 
-		sendEvent (eType.NewQuestion);
-
-		stimOrgOb = spawnHolder.spawnNext(currentCategory,s.returnDifficulty(),questionNumber);
-		Debug.Log("got a new SOO");
-		sooHolder = stimOrgOb.GetComponent<SOOScript>();
-		sooHolder.move(0);
-
 		checkAnswer();	
-
+		
 		Debug.Log ("numRight " + numCorrect);
 		Debug.Log ("numWrong " + numWrong);
 		Debug.Log ("totalScore " + totalScore);
 		Debug.Log ("numAnswered " + numAnswered); 
-
+		
 		if (numCorrect >= 3) {
 			// If this case is true, the player has exhausted all available categories and difficulties
 			if (s.returnCategory() == Category.PseudowordMatching && s.returnDifficulty() == Difficulty.Hard) {
 				gameOver = true;
 			} else {
-			// if the player answers three consecutive questions correctly, numCorrect is
-			// reset and an event notification of type ChangeDifficulty is sent out, which
-			// will be picked up by GameManager.
-			numCorrect = 0;
-			// the difficulty and category variables in the current score variable
-			// must also be adjusted appropriately.
-			updateDifficulty();
+				// if the player answers three consecutive questions correctly, numCorrect is
+				// reset and an event notification of type ChangeDifficulty is sent out, which
+				// will be picked up by GameManager.
+				numCorrect = 0;
+				// the difficulty and category variables in the current score variable
+				// must also be adjusted appropriately.
+				updateDifficulty();
 			}	
 		} 
 		else {
 			setCategory();
 		}
-		 
+
+		Debug.Log ("current Category is " + currentCategory + " and current difficulty is " + s.returnDifficulty ());
+
 		scoreList.Add(s);
-		s = new Score(questionNumber);		
+		s = new Score(questionNumber);
+
+		Debug.Log ("questionNUmber: " + questionNumber);
+		stimOrgOb = spawnHolder.spawnNext(currentCategory,s.returnDifficulty(),questionNumber);
+		Debug.Log("got a new SOO");
+		sooHolder = stimOrgOb.GetComponent<SOOScript>();
+		sooHolder.move(0);
+
+		sendEvent (eType.NewQuestion);
 	}
 	
 

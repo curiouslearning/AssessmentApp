@@ -164,9 +164,9 @@ public class StimulusScript : MonoBehaviour{
 		this.hasBeenTarget = false;
 		this.isDraggable = input.isDraggable;
 		this.difficulty = input.difficulty;
-		if(input.stimType == "Visual")
+		if(input.stimType == "visual")
 			this.visStim  = input.sprite;
-		else if(input.stimType == "Audio")
+		else if(input.stimType == "audio")
 			this.GetComponent<AudioSource>().clip = Resources.Load<AudioClip>("Audio/" + input.audio);
 		this.stimType = input.stimType;
 		this.option = false;
