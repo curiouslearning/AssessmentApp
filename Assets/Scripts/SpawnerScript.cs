@@ -59,34 +59,37 @@ public class SpawnerScript : MonoBehaviour {
 			type = "visual";
 		} else 
 			type = "audio";
-		for (int i = 0; i < stimPool.Count; i++) {
+		Debug.Log ("type: " + type);
+		while (answer.Count < 4) {
+			if (counter == stimPool.Count)
+				counter = 0;
 			// when a list of 4 serStims is assembled, findStim returns answer
-			if (counter >= 4) {
-				break;
-			} else if (stimPool[i].stimType.Equals (type) && stimPool[i].difficulty.Equals (diffLevel)) { 
+			 if (stimPool[counter].stimType.Equals (type) && 
+			    stimPool[counter].difficulty.Equals (diffLevel) &&
+			    !answer.Contains(stimPool[counter])) { 
 				// this block of code handles generating non-target
 				// stimuli
-			    if (stimPool[i].hasBeenTarget || counter > 0) {
+			    if (stimPool[counter].hasBeenTarget || counter > 0) {
 				    float f = Random.Range (0.0f,4.0f);
 					if (f < 1.0f) {
-						serStim s = stimPool[i];
+						serStim s = stimPool[counter];
 						answer.Add(s);
-						counter++;
 					}
 				} else  {
 					// this block of code handles retrieving a
 					// stimulus to be the target
 					float f = Random.Range (0.0f,4.0f);
 					if (f < 1.0f) {
-						stimPool[i].hasBeenTarget = true;
-						serStim s = stimPool[i];
+						stimPool[counter].hasBeenTarget = true;
+						serStim s = stimPool[counter];
 						s.isCorrect = true;
 						answer.Add(s);
-						counter++;
 					}
 				}
 			}
+			counter++;
 		}
+		Debug.Log ("findStim completed, answer length: " + answer.Count);
 		return answer;
 	}
 
@@ -162,7 +165,7 @@ public class SpawnerScript : MonoBehaviour {
 				case 3: 
 					newStims[i].transform.position = newSoo.transform.position + new Vector3 (right, up, 0);
 					break;
-			};
+			}
 			positions[i] = transform.position;
 			if(q.isCustomizationEvent())
 			{
@@ -172,7 +175,8 @@ public class SpawnerScript : MonoBehaviour {
 			else
 			{
 				Debug.Log("pulling from stimuli");
-				newStims[i].GetComponent<StimulusScript>().setStim(q.getStim(i));  
+				newStims[i].GetComponent<StimulusScript>().setStim(q.getStim(i));
+				newStims[i].GetComponent<StimulusScript>().initSprite();
 			}
 		}
 		//add stims, stim positions, and SOO destinations to SOO instance

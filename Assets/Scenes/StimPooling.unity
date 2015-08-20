@@ -240,13 +240,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fcf45963fe75410fbb10133f50b2881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  questionNumber: 0
-  questionTime: 0
-  spawner: {fileID: 955094559}
-  receptacle: {fileID: 1523307913}
-  gCollector: {fileID: 1331431048}
-  scoreHolder: {fileID: 829527128}
-  eventHandler: {fileID: 829527127}
 --- !u!114 &829527126
 MonoBehaviour:
   m_ObjectHideFlags: 0
