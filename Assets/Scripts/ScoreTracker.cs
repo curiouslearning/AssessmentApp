@@ -1,6 +1,8 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityTest;
 
 //data class used to store all data on the user's performance from a given question
 //gets information from GameManagerScript, Receptacle, and TouchProcessor
@@ -97,7 +99,9 @@ public class Score {
 // is included as a category so the character customization
 // at the beginning of gameplay will be recognized as its
 // own kind of activity;
-
+/// <summary>
+/// Enum containing all possible kinds of questions that the app may ask a student.
+/// </summary>
 public enum Category {Customization,
 	ReceptiveVocabulary, 
 	LetterNameRecognition, 
@@ -137,7 +141,6 @@ public class ScoreTracker : Observer {
 
 	//Event variables
 	public Subject eventHandler;
-	int eTester; //debugger
 
 	// List of questions scores
 	public List<Score> scoreList;
@@ -149,6 +152,7 @@ public class ScoreTracker : Observer {
 	int numWrong;
 	int numAnswered;
 	Category currentCategory;
+	Category lastCategory;
 	Score s;	
 	
 	Subject.GameObjectNotify gOObserver;
@@ -164,13 +168,13 @@ public class ScoreTracker : Observer {
 		s.setDifficulty (Difficulty.Easy);
 		s.setCategory (Category.Customization);
 		currentCategory = s.returnCategory ();
+		lastCategory = currentCategory;
 	}	
 	void Start () {	
 		gameOver = false;
 		scoreList = new List<Score>();
 		gOObserver = new Subject.GameObjectNotify (this.onNotify);
 		receptacle.GetComponent<Subject> ().addObserver (gOObserver); 
-		eTester = 0; //debugger
 		CollisionNotification trashHolder;
 		spawnHolder = spawner.GetComponent<SpawnerScript>();
 		trashHolder = receptacle.GetComponent<CollisionNotification>();
@@ -189,9 +193,7 @@ public class ScoreTracker : Observer {
 	
 	public override void onNotify (EventInstance<GameObject> e)
 	{
-		//s.addScore(e.signaler.GetComponent<StimulusScript>().returnIsCorrect());
 		//s.addTime(questionTime);	
-		Debug.Log("this is call " + eTester++); //debugger
 		if (e.type == eType.Trashed)
 		{
 			s.addTime(questionTime);
@@ -233,132 +235,7 @@ public class ScoreTracker : Observer {
 		t = null;
 		//changeQuestion();
 	}
-	void printList () //debugger
-	{
-		Debug.Log("TOTAL SCORE: " + totalScore);
-		for(int i = 0; i < scoreList.Count; i++)
-		{
-			Debug.Log( "Question: " + scoreList[i].getNum());
-			Debug.Log( "\tisCorrect is: " + scoreList[i].isCorrect());
-			Debug.Log("\ttime taken: " + scoreList[i].getTime());
-			Debug.Log ("\ttimed out: " + scoreList[i].returnTimedOut());
-			scoreList[i].printTouches();
-		}	
-	}
-
-	// ******************************************************************
-	// Methods for organizing data collected by ScoreTracker and
-	// placing it into strings
-	// ******************************************************************
-
-	// retrieveStruct is a method needed for averagesBreakdown() to work.  It
-	// retrieves a given DifficultyData instance from an array based on the
-	// input Category. *Note: retrieveStruct assumes that each DifficultyData 
-	// instance in the array is tagged with a unique Category
-	DifficultyData retrieveStruct(DifficultyData[] ddarray, Category cat) {
-		int length = ddarray.Length;
-		for (int i = 0; i < length; i++) {
-			if (ddarray[i].categoryMatch(cat)) { 
-				return ddarray[i];
-			}
-		}
-		throw new System.ArgumentException ("Variable of type Category not found in ddarray");
-	}
-
-	// averagesBreakdown creates an array of DifficultyData variables, one for each
-	// category in the Category enum.  It then adds each score in scoreList to the 
-	// apropriate DifficultyData variable, using retrieveStruct to select the correct
-	// variable from the DifficultyData array.  It then prints out a string containing
-	// all the data that has been added to each DifficultyData variable.
-	string averagesBreakdown() {
-		
-		DifficultyData Customization = new DifficultyData (Category.Customization);
-		DifficultyData ReceptiveVocabulary = new DifficultyData (Category.ReceptiveVocabulary);
-		DifficultyData LetterNameRecognition = new DifficultyData (Category.LetterNameRecognition);
-		DifficultyData LetterSoundMatching = new DifficultyData (Category.LetterSoundMatching);
-		DifficultyData CVCWordIdentification = new DifficultyData (Category.CVCWordIdentification);
-		DifficultyData SightWordIdentification = new DifficultyData (Category.SightWordIdentification);
-		DifficultyData RhymingWordMatching = new DifficultyData (Category.RhymingWordMatching);
-		DifficultyData BlendingWordIdentification = new DifficultyData (Category.BlendingWordIdentification);
-		DifficultyData PseudoWordMatching = new DifficultyData (Category.PseudowordMatching);
-		
-		DifficultyData[] ddarray = {Customization, ReceptiveVocabulary, LetterNameRecognition, LetterSoundMatching,
-			CVCWordIdentification, SightWordIdentification, RhymingWordMatching, BlendingWordIdentification,
-			PseudoWordMatching};
-		string answer = "";
-		
-		for (int i = 0; i < scoreList.Count; i++) {
-			Score currentScore = scoreList[i];
-			retrieveStruct(ddarray,currentScore.returnCategory()).addScore(currentScore);
-		}
-		
-		for (int a = 0; a < ddarray.Length; a++) {
-			answer = (answer + ddarray[a].toString ());
-		}
-		return answer;
-	}
-
-	// averageTime prints out the average time taken per question across all
-	// categories and difficulties.
-	string averageTime() {
-		float timeSum = 0f;
-		int numQuestions = 0;
-		for (int i = 0; i < scoreList.Count; i++) {
-			timeSum = timeSum + scoreList[i].getTime();
-			numQuestions++;
-		}
-		return ("average question time across all categories and difficulties: " + timeSum / numQuestions);
-	}
 	
-	string printListString () //for broadcasts
-	{
-		string st = "";
-		st = (st + "TOTAL SCORE: " + totalScore + "\n\n");
-		st = (st + averageTime());
-		st = (st + averagesBreakdown ());
-		st = (st + "\n\n");
-		for(int i = 0; i < scoreList.Count; i++)
-		{
-			st = (st + "\nQuestion: " + scoreList[i].getNum());
-			st = (st + "\nCorrect?: " + scoreList[i].isCorrect());
-			st = (st + "\ntime taken: " + scoreList[i].getTime());
-			st = (st + "\ntimed out: " + scoreList[i].returnTimedOut());
-			st = (st + "\nCategory: " + scoreList[i].returnCategory());
-			st = (st + "\nDifficulty: " + scoreList[i].returnDifficulty() + "\n");
-			st = (st + scoreList[i].printTouchesString() + "\n\n");
-		}	
-		return st;
-	}
-
-	// *************************************************************
-	// Helper functions for startQuestion, changeQuestion, and Update
-	// *************************************************************
-
-
-	void sendBroadcast(string message) {
-
-		// *************************************************************************
-		// Code for sending broadcasts containing the data collected by ScoreTracker
-		// *************************************************************************
-	
-		// Instantiate the class Intent
-		AndroidJavaClass intentClass = new AndroidJavaClass ("android.content.Intent");  
-		// Instantiate the object Intent
-		AndroidJavaObject intentObject = new AndroidJavaObject ("android.content.Intent");
-		// Call setAction on the Intent object with "ACTION_SEND" as a parameter
-		intentObject.Call<AndroidJavaObject> ("setAction", intentClass.GetStatic<string> ("ACTION_SEND")); 
-		// Set the type of the Intent to plain text by calling setType
-		intentObject.Call<AndroidJavaObject> ("setType", "text/plain");
-		// call putExtra on intentObject and set printListString() as a parameter in order
-		// to broadcast the data collected by ScoreTracker over the course of the game
-		intentObject.Call<AndroidJavaObject> ("putExtra", intentClass.GetStatic<string> ("EXTRA_TEXT"), message);
-		// Instantiate the class UnityPlayer
-		AndroidJavaClass unity = new AndroidJavaClass ("com.unity3d.player.UnityPlayer");
-		// Instantiate the object currentActivity
-		AndroidJavaObject currentActivity = unity.GetStatic<AndroidJavaObject> ("currentActivity");
-		// Call the activity with our intent
-		currentActivity.Call ("sendBroadcast", intentObject);
-	}
 		
 	void checkAnswer()
 	{
@@ -394,13 +271,46 @@ public class ScoreTracker : Observer {
 			numCorrect = 0;
 			numWrong = 0;
 			numAnswered = 0;
-			currentCategory++;
+			currentCategory = getNextCategory();
 			s.setDifficulty(Difficulty.Easy);
-		} else if (numWrong >= 4) { //change category and drop difficulty level after 4 wrong answers	
+		} else if (numWrong >= 4 || numAnswered  >= 20) { //change category and drop difficulty level after 4 wrong answers	
+			lastCategory = currentCategory;
 			s.setCategory (Category.Customization);
-		} else if (numAnswered >= 20) { //only ever spend 20 questions max in one category
-			s.setCategory(Category.Customization);
-		}	
+			currentCategory = Category.Customization;
+		}
+
+	}
+
+	Category getNextCategory ()
+	{
+		switch (lastCategory)
+		{
+			case Category.ReceptiveVocabulary:
+				return Category.LetterNameRecognition;	
+
+			case Category.LetterNameRecognition:
+				return Category.LetterSoundMatching;
+			
+			case Category.LetterSoundMatching:
+				return Category.CVCWordIdentification;
+	
+			case Category.CVCWordIdentification:
+				return Category.SightWordIdentification;
+
+			case Category.SightWordIdentification:
+				return Category.RhymingWordMatching;
+
+			case Category.RhymingWordMatching:
+				return Category.BlendingWordIdentification;
+
+			case Category.BlendingWordIdentification:
+				return Category.PseudowordMatching;
+	
+			case Category.PseudowordMatching:
+				endGame();
+				return Category.PseudowordMatching;
+		}
+		return Category.Customization;	
 	}
 	// *******************************************************
 	// startQuestion, changeQuestion, Update
@@ -435,8 +345,11 @@ public class ScoreTracker : Observer {
 		questionNumber++;
 		numAnswered++;
 
-		checkAnswer();	
-		
+		if(!s.returnTimedOut())
+		{
+			checkAnswer();	
+		}
+
 		Debug.Log ("numRight " + numCorrect);
 		Debug.Log ("numWrong " + numWrong);
 		Debug.Log ("totalScore " + totalScore);
@@ -502,6 +415,133 @@ public class ScoreTracker : Observer {
 		if (gameOver) {
 			endGame ();
 		}
+	}
+
+	void printList () //debugger
+	{
+		Debug.Log("TOTAL SCORE: " + totalScore);
+		for(int i = 0; i < scoreList.Count; i++)
+		{
+			Debug.Log( "Question: " + scoreList[i].getNum());
+			Debug.Log( "\tisCorrect is: " + scoreList[i].isCorrect());
+			Debug.Log("\ttime taken: " + scoreList[i].getTime());
+			Debug.Log ("\ttimed out: " + scoreList[i].returnTimedOut());
+			scoreList[i].printTouches();
+		}	
+	}
+	
+	// ******************************************************************
+	// Methods for organizing data collected by ScoreTracker and
+	// placing it into strings
+	// ******************************************************************
+	
+	// retrieveStruct is a method needed for averagesBreakdown() to work.  It
+	// retrieves a given DifficultyData instance from an array based on the
+	// input Category. *Note: retrieveStruct assumes that each DifficultyData 
+	// instance in the array is tagged with a unique Category
+	DifficultyData retrieveStruct(DifficultyData[] ddarray, Category cat) {
+		int length = ddarray.Length;
+		for (int i = 0; i < length; i++) {
+			if (ddarray[i].categoryMatch(cat)) { 
+				return ddarray[i];
+			}
+		}
+		throw new System.ArgumentException ("Variable of type Category not found in ddarray");
+	}
+	
+	// averagesBreakdown creates an array of DifficultyData variables, one for each
+	// category in the Category enum.  It then adds each score in scoreList to the 
+	// apropriate DifficultyData variable, using retrieveStruct to select the correct
+	// variable from the DifficultyData array.  It then prints out a string containing
+	// all the data that has been added to each DifficultyData variable.
+	string averagesBreakdown() {
+		
+		DifficultyData Customization = new DifficultyData (Category.Customization);
+		DifficultyData ReceptiveVocabulary = new DifficultyData (Category.ReceptiveVocabulary);
+		DifficultyData LetterNameRecognition = new DifficultyData (Category.LetterNameRecognition);
+		DifficultyData LetterSoundMatching = new DifficultyData (Category.LetterSoundMatching);
+		DifficultyData CVCWordIdentification = new DifficultyData (Category.CVCWordIdentification);
+		DifficultyData SightWordIdentification = new DifficultyData (Category.SightWordIdentification);
+		DifficultyData RhymingWordMatching = new DifficultyData (Category.RhymingWordMatching);
+		DifficultyData BlendingWordIdentification = new DifficultyData (Category.BlendingWordIdentification);
+		DifficultyData PseudoWordMatching = new DifficultyData (Category.PseudowordMatching);
+		
+		DifficultyData[] ddarray = {Customization, ReceptiveVocabulary, LetterNameRecognition, LetterSoundMatching,
+			CVCWordIdentification, SightWordIdentification, RhymingWordMatching, BlendingWordIdentification,
+			PseudoWordMatching};
+		string answer = "";
+		
+		for (int i = 0; i < scoreList.Count; i++) {
+			Score currentScore = scoreList[i];
+			retrieveStruct(ddarray,currentScore.returnCategory()).addScore(currentScore);
+		}
+		
+		for (int a = 0; a < ddarray.Length; a++) {
+			answer = (answer + ddarray[a].toString ());
+		}
+		return answer;
+	}
+	
+	// averageTime prints out the average time taken per question across all
+	// categories and difficulties.
+	string averageTime() {
+		float timeSum = 0f;
+		int numQuestions = 0;
+		for (int i = 0; i < scoreList.Count; i++) {
+			timeSum = timeSum + scoreList[i].getTime();
+			numQuestions++;
+		}
+		return ("average question time across all categories and difficulties: " + timeSum / numQuestions);
+	}
+	
+	string printListString () //for broadcasts
+	{
+		string st = "";
+		st = (st + "TOTAL SCORE: " + totalScore + "\n\n");
+		st = (st + averageTime());
+		st = (st + averagesBreakdown ());
+		st = (st + "\n\n");
+		for(int i = 0; i < scoreList.Count; i++)
+		{
+			st = (st + "\nQuestion: " + scoreList[i].getNum());
+			st = (st + "\nCorrect?: " + scoreList[i].isCorrect());
+			st = (st + "\ntime taken: " + scoreList[i].getTime());
+			st = (st + "\ntimed out: " + scoreList[i].returnTimedOut());
+			st = (st + "\nCategory: " + scoreList[i].returnCategory());
+			st = (st + "\nDifficulty: " + scoreList[i].returnDifficulty() + "\n");
+			st = (st + scoreList[i].printTouchesString() + "\n\n");
+		}	
+		return st;
+	}
+	
+	// *************************************************************
+	// Helper functions for startQuestion, changeQuestion, and Update
+	// *************************************************************
+	
+	
+	void sendBroadcast(string message) {
+		
+		// *************************************************************************
+		// Code for sending broadcasts containing the data collected by ScoreTracker
+		// *************************************************************************
+		
+		// Instantiate the class Intent
+		AndroidJavaClass intentClass = new AndroidJavaClass ("android.content.Intent");  
+		// Instantiate the object Intent
+		AndroidJavaObject intentObject = new AndroidJavaObject ("android.content.Intent");
+		// Call setAction on the Intent object with "ACTION_SEND" as a parameter
+		intentObject.Call<AndroidJavaObject> ("setAction", intentClass.GetStatic<string> ("ACTION_SEND")); 
+		// Set the type of the Intent to plain text by calling setType
+		intentObject.Call<AndroidJavaObject> ("setType", "text/plain");
+		// call putExtra on intentObject and set printListString() as a parameter in order
+		// to broadcast the data collected by ScoreTracker over the course of the game
+		intentObject.Call<AndroidJavaObject> ("putExtra", intentClass.GetStatic<string> ("EXTRA_TEXT"), message);
+		// Instantiate the class UnityPlayer
+		AndroidJavaClass unity = new AndroidJavaClass ("com.unity3d.player.UnityPlayer");
+		// Instantiate the object currentActivity
+		AndroidJavaObject currentActivity = unity.GetStatic<AndroidJavaObject> ("currentActivity");
+		// Call the activity with our intent
+		currentActivity.Call ("sendBroadcast", intentObject);
 	}
 
 	

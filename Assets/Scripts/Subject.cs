@@ -63,14 +63,12 @@ public class Subject : MonoBehaviour {
 	{
 		gameObjectEvent += observer;
 		numObservers++;
-		Debug.Log("there are " + numObservers + " observers in the queue"); //debugger
 	}
 
 	public void addObserver (scoreTrackerNotify ob)
 	{
 		scoreEvent += ob;
 		numObservers++;
-		Debug.Log ("there are " + numObservers + " observers in the queue"); //debugger
 	}
 /// <summary>
 /// Removes the observer from the Event List.

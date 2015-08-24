@@ -55,14 +55,19 @@ public class SpawnerScript : MonoBehaviour {
 		// the variable type, which is used to determine whether findStim
 		// is looking for audio or visual stimulus, is assigned based
 		// on the current category
-		if (cat.Equals (Category.ReceptiveVocabulary)) {
+
+		/*if (cat.Equals (Category.ReceptiveVocabulary)) { //this is needed only with mixed stimuli
 			type = "visual";
 		} else 
-			type = "audio";
+			type = "audio";*/
+
+		type = "visual"; //workaround HACK
 		Debug.Log ("type: " + type);
 		while (answer.Count < 4) {
 			if (counter == stimPool.Count)
 				counter = 0;
+			serStim s = stimPool[counter];
+			s.stimType = type;
 			// when a list of 4 serStims is assembled, findStim returns answer
 			 if (stimPool[counter].stimType.Equals (type) && 
 			    stimPool[counter].difficulty.Equals (diffLevel) &&
@@ -72,7 +77,6 @@ public class SpawnerScript : MonoBehaviour {
 			    if (stimPool[counter].hasBeenTarget || counter > 0) {
 				    float f = Random.Range (0.0f,4.0f);
 					if (f < 1.0f) {
-						serStim s = stimPool[counter];
 						answer.Add(s);
 					}
 				} else  {
@@ -81,7 +85,6 @@ public class SpawnerScript : MonoBehaviour {
 					float f = Random.Range (0.0f,4.0f);
 					if (f < 1.0f) {
 						stimPool[counter].hasBeenTarget = true;
-						serStim s = stimPool[counter];
 						s.isCorrect = true;
 						answer.Add(s);
 					}

@@ -78,6 +78,7 @@ public class Question : ScriptableObject {
 			tempStim = new serStim();
 			tempStim.audio = stimList[i].audio;
 			tempStim.sprite = stimList[i].sprite; 
+			tempStim.stimType = stimList[i].stimType;
 			Debug.Log("sprite: " + tempStim.sprite); // debugger
 			if(i == target) 
 				tempStim.isCorrect = true;
