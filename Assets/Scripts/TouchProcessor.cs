@@ -148,10 +148,10 @@ public class TouchProcessor : Observer {
 		screenPoint = 0;
 		touchSum = new TouchSummary();	
 		parentBuffer = null;
-		Camera.main.GetComponent<GameManagerScript>().GetComponent<Subject>().addObserver(new Subject.gameManagerNotify(this.onNotify));
+		Camera.main.GetComponent<ScoreTracker>().GetComponent<Subject>().addObserver(new Subject.scoreTrackerNotify(this.onNotify));
 	}
 
-	public override void onNotify (EventInstance<GameManagerScript> e)
+	public override void onNotify (EventInstance<ScoreTracker> e)
 	{
 		if (e.type == eType.EndGame) {
 			return;

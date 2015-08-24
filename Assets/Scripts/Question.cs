@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -10,9 +10,11 @@ using System.IO;
 /// </summary>
 [Serializable]
 public class serStim{
+	public bool isCorrect;
+	public bool hasBeenTarget;
 	public string audio;
 	public string sprite;
-	public bool isCorrect;
+	public string stimType;
 	public bool isDraggable;
 	public Difficulty difficulty; 
 }
@@ -20,7 +22,7 @@ public class serStim{
 /// Serializable class to store customization event data for question data persistance
 /// </summary>
 public class serCustomizationOption{
-	public string texture;
+	public Sprite texture;
 	public bool isDraggable;
 	public int bodyPart;
 }	
@@ -40,39 +42,44 @@ public class serCustomizationOption{
  * Stored in a GameManagerScript Queue
  */
 public class Question : ScriptableObject {
-
+	
 	int questionNumber;
 	List<serStim> stimuli;
 	List<serCustomizationOption> options;
 	serCustomizationOption tempOption;
 	serStim tempStim;
 	serStim prompt;
-	Category questionCat;
- 
+	bool customizationEvent;
+	
 	
 	void Awake ()
 	{
+		customizationEvent = false;
 		stimuli = new List<serStim>();
 		options = new List<serCustomizationOption>();
 	}
-
-/// <summary>
-/// Init the question for a standard question event.
-/// </summary>
-/// <param name="num">Question Number</param>
-/// <param name="sprites">Visual stimuli</param>
-/// <param name="sounds">Auditory stimuli</param>
-/// <param name="correct">Target stimulus</param>
-/// <param name="cat">Question category</param>
-	public void init (int qNum, string [] sprites, string [] sounds, int target, Category cat)
+	
+	/// <summary>
+	/// Init the question for a standard question event.
+	/// </summary>
+	/// <param name="num">Question Number</param>
+	/// <param name="sprites">Visual stimuli</param>
+	/// <param name="sounds">Auditory stimuli</param>
+	/// <param name="correct">Target stimulus</param>
+	/// <param name="cat">Question category</param>
+	public void init (int qNum, List<serStim> stimList, int target, Category cat)
 	{
+		Debug.Log("stimList.Count: " + stimList.Count);  
 		questionNumber = qNum;
-		questionCat = cat;
+		customizationEvent = false;
 		for (int i = 0; i<4; i++)
 		{
+		  
 			tempStim = new serStim();
-			tempStim.audio = sounds [i];
-			tempStim.sprite = sprites[i];
+			tempStim.audio = stimList[i].audio;
+			tempStim.sprite = stimList[i].sprite; 
+			tempStim.stimType = stimList[i].stimType;
+			Debug.Log("sprite: " + tempStim.sprite); // debugger
 			if(i == target) 
 				tempStim.isCorrect = true;
 			else
@@ -80,7 +87,7 @@ public class Question : ScriptableObject {
 			tempStim.isDraggable = true;
 			stimuli.Add(tempStim);
 		}
-		 
+		
 	}
 	/// <summary>
 	/// Init the question for a customization event
@@ -88,10 +95,10 @@ public class Question : ScriptableObject {
 	/// <param name="num"> Question Number.</param>
 	/// <param name="textures">Option Textures.</param>
 	/// <param name="bodyPart">Index of body part being customized.</param>
-	public void init (int qNum, string [] textures, int bodyPart)
+	public void init (int qNum, List<Sprite> textures, int bodyPart)
 	{
 		questionNumber = qNum;
-		questionCat = Category.Customization;
+		customizationEvent = true;
 		for (int i = 0; i<4; i++)
 		{
 			tempOption = new serCustomizationOption();
@@ -100,7 +107,7 @@ public class Question : ScriptableObject {
 			tempOption.bodyPart = bodyPart;
 			options.Add(tempOption);
 		}
-		 
+		
 	}
 	/// <summary>
 	/// Gets the indicated stimulus
@@ -123,5 +130,5 @@ public class Question : ScriptableObject {
 	/// Gets the question category.
 	/// </summary>
 	/// <returns>Category enum.</returns>
-	public Category getCategory () {return questionCat;}
+	public bool isCustomizationEvent () {return customizationEvent;}
 }

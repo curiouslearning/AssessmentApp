@@ -3,11 +3,6 @@ using System.Collections;
 
 
 /// <summary>
-/// Inidicator for question difficulty.
-/// </summary>
-public enum Difficulty {Easy, Medium, Hard};
-
-/// <summary>
 /// StimulusScript
 /// Class containg data and functionality for individual stimuli initialized by the SpawnerScript using Question instances.
 /// Attached to the SOO instance as child objects.
@@ -15,9 +10,13 @@ public enum Difficulty {Easy, Medium, Hard};
 public class StimulusScript : MonoBehaviour{
 
 	private bool isCorrect; //bool for indicating the correct stimulus response in a question
+	private bool isTarget;
+	private bool hasBeenTarget;
 	private bool option;
 	private bool isBeingDragged; 
 	private bool isDraggable;
+	private string stimType;
+	private string visStim;
 	private Difficulty difficulty;
 	private Vector3 homePos; //snapback functionality
 	private Vector3 startScale; //scaling functionality
@@ -35,11 +34,18 @@ public class StimulusScript : MonoBehaviour{
 //*******************
 // Getter functions *
 //*******************
-
+	public string returnStimType (){
+		return stimType;
+	}
 	public bool returnIsCorrect() {
 		return isCorrect;
 	}
-
+	public bool returnHasBeenTarget(){
+		return hasBeenTarget;
+	}
+	public bool returnIsTarget() {
+		return isTarget;
+	}
 	public bool returnIsBeingDragged() {
 		return isBeingDragged;
 	}
@@ -113,6 +119,17 @@ public class StimulusScript : MonoBehaviour{
 		difficulty = newDiff;
 	}
 
+	public void setIsTarget(bool b) {
+		isTarget = b;
+	}
+
+	public void setHasBeenTarget(bool b) {
+		hasBeenTarget = b;
+		if (isTarget) {
+			isTarget = false;
+		}
+	}
+
 //********************
 // Scaling functions *
 //********************
@@ -134,17 +151,29 @@ public class StimulusScript : MonoBehaviour{
 		transform.localScale = startScale;
 	}
 
+	
+
+//***************************
+// Initialization Functions *
+//***************************
 	/// <summary>
 	/// Initialization function for stimuli.
 	/// </summary>
 	/// <param name="input">stimulus data.</param>
 	public	void setStim (serStim input) {
-		this.isCorrect = input.isCorrect;
+		this.hasBeenTarget = false;
 		this.isDraggable = input.isDraggable;
 		this.difficulty = input.difficulty;
-		this.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Art/" + input.sprite);
-		this.GetComponent<AudioSource>().clip = Resources.Load<AudioClip>("Audio/" + input.audio);
+		if(input.stimType == "visual")
+			this.visStim  = input.sprite;
+		else if(input.stimType == "audio")
+			this.GetComponent<AudioSource>().clip = Resources.Load<AudioClip>("Audio/" + input.audio);
+		this.stimType = input.stimType;
 		this.option = false;
+	}
+	public void initSprite()
+	{
+		this.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Art/" + visStim);
 	}
 	/// <summary>
 	/// Initialization for customization options
@@ -152,11 +181,10 @@ public class StimulusScript : MonoBehaviour{
 	/// <param name="input">customization data</param>
 	public void setOptions (serCustomizationOption input)
 	{
-		Texture2D texture = Resources.Load<Texture2D>("Textures/" + input.texture);
-		Sprite textureSprite = Sprite.Create(texture, new Rect(0,0, texture.width, texture.height), new Vector2 (0.5f, 0.5f));
+		Sprite textureSprite = input.texture;
 		this.isDraggable = input.isDraggable;
 		this.GetComponent<SpriteRenderer>().sprite = textureSprite;
-		this.textureName = input.texture; 
+		this.textureName = input.texture.ToString(); 
 		this.optionBodyPart = input.bodyPart;
 		this.option = true;
 	}

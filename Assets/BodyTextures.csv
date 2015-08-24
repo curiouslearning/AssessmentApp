@@ -1,22 +1,12 @@
-Name,Body Part,Default,,,,,,
-HappyFace1,Head,FALSE,,,,,,
-HappyFace2,Head,FALSE,,,,,,
-NeutralFace1,Head,FALSE,,,,,,
-AngryFace1,Head,FALSE,,,,,,
-TestBody_antenna,Antenna,TRUE,,,,,,
-TestBody_body,Body,TRUE,,,,,,
-TestBody_head,Head,TRUE,,,,,,
-TestBody_l_arm,LArm,TRUE,,,,,,
-TestBody_r_arm,RArm,TRUE,,,,,,
-TestBody_l_leg,LLeg,TRUE,,,,,,
-TestBody_r_leg,RLeg,TRUE,,,,,,
-,,,,,,,,
-,,,,,,,,
-,,,,,,,,
-,,,,,,,,
-,,,,,,,,
-,,,,,,,,
-,,,,,,,,
-,,,,,,,,
-,,,,,,,,
-,,,,,,,,
+Name,Body Part,Index
+HappyFace1,0,1
+HappyFace2,0,2
+NeutralFace1,0,3
+AngryFace1,0,4
+TestBody__antenna,2,0
+TestBody__body,1,0
+TestBody__head,0,0
+TestBody__l_arm,3,0
+TestBody__r_arm,5,0
+TestBody__l_leg,4,0
+TestBody__r_leg,6,0

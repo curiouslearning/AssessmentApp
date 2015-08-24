@@ -4,7 +4,7 @@ using System.Collections;
 /* EventInstance.cs
  * Contains event signaling data types (enum eType, EventInstance <T>)
  */
-public enum eType {Tap, Trashed, Selected, Drag, Init, NewQuestion, EndGame, ChangeDifficulty, ChangeCategory, Timeout}; //basic enum that contains all signalable events
+public enum eType {Tap, Trashed, Selected, Drag, Init, NewQuestion, EndGame, TimedOut}; //basic enum that contains all signalable events
 
 
 /// <summary>
@@ -27,7 +27,7 @@ public class EventInstance <T>
 	public void setEvent <T> (eType input, T param) where T : class
 	{
 		type = input;
-		signaler = param; 
+		signaler = param;  
 	}
 	
 }
