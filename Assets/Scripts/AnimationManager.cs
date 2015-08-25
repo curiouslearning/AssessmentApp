@@ -105,9 +105,12 @@ public class AnimationManager : Observer {
 			for (int i = 0; i< sourceLines.Length; i++)
 			{
 				string[] vals = sourceLines[i].Split(',');
+				Debug.Log("texture name: " + e.signaler.GetComponent<StimulusScript>().getTextureName());
 				if(vals[0] == e.signaler.GetComponent<StimulusScript>().getTextureName())
 				{
+					Debug.Log("Howdy");
 					newTexture = int.Parse(vals[2]);
+					Debug.Log("newTexture:" + newTexture);
 					break;
 				}
 			}
@@ -141,17 +144,17 @@ public class AnimationManager : Observer {
 	{
 		List<Sprite> options;
 		options = new List<Sprite>();
-		int curBodyPart = getBodyPart();
+		int curBodyPart = getBodyPartInternal();
 		Texture2D[] textures = optionTextures[curBodyPart];
 		for(int j = 0; j < textures.Length; j++)  //convert and package options
 		{
 			if(textures[j] != null)
 			{
 				Sprite s = Sprite.Create(textures[j], new Rect(0,0, textures[j].width, textures[j].height), new Vector2 (0.5f, 0.5f));
+				s.name = textures[j].name;
 				options.Add(s); 
 			}
 		}
-		bodyPartCustomized[curBodyPart] = true;
 		return options;
 	}
 	/// <summary>
@@ -162,6 +165,13 @@ public class AnimationManager : Observer {
 	{
 		int i =0;
 		while (bodyPartCustomized[i] == true) {i++;}
+		return i-1;
+	}
+	int getBodyPartInternal()
+	{
+		int i =0;
+		while (bodyPartCustomized[i] == true) {i++;}
+		bodyPartCustomized[i] = true;
 		return i;
 	}
 	// Update is called once per frame

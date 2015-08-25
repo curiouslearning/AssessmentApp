@@ -184,7 +184,7 @@ public class StimulusScript : MonoBehaviour{
 		Sprite textureSprite = input.texture;
 		this.isDraggable = input.isDraggable;
 		this.GetComponent<SpriteRenderer>().sprite = textureSprite;
-		this.textureName = input.texture.ToString(); 
+		this.textureName = input.texture.name;
 		this.optionBodyPart = input.bodyPart;
 		this.option = true;
 	}

@@ -1,8 +1,6 @@
 using UnityEngine;
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityTest;
 
 //data class used to store all data on the user's performance from a given question
 //gets information from GameManagerScript, Receptacle, and TouchProcessor
@@ -285,6 +283,9 @@ public class ScoreTracker : Observer {
 	{
 		switch (lastCategory)
 		{
+			case Category.Customization:
+				return Category.ReceptiveVocabulary;
+
 			case Category.ReceptiveVocabulary:
 				return Category.LetterNameRecognition;	
 
