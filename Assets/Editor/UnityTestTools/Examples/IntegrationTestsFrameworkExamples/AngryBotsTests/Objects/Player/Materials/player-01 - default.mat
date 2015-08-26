@@ -71,6 +71,10 @@ Material:
         second: 47.8373146
       data:
         first:
+          name: _SelfIllumination
+        second: 1.71641791
+      data:
+        first:
           name: _SelfIllumStrength
         second: 1.5
       data:
@@ -81,10 +85,6 @@ Material:
         first:
           name: _EmissionLM
         second: 50
-      data:
-        first:
-          name: _SelfIllumination
-        second: 1.71641791
       data:
         first:
           name: _NonLightmapColorMod
