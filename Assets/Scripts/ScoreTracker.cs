@@ -199,7 +199,6 @@ public class ScoreTracker : Observer {
 			Destroy(e.signaler);
 			//don't end the world
 			
-			Debug.Log("going through the next question"); //debugger
 			//figure out how to make this happen after score tracker updates category
 			changeQuestion();
 			return; //prevent repeated action on same event
@@ -208,7 +207,6 @@ public class ScoreTracker : Observer {
 		{
 			s.addScore(e.signaler.GetComponent<StimulusScript>().returnIsCorrect());
 
-			Debug.Log("got event from: " + e.signaler.name); //debugger
 			e.signaler.gameObject.SetActive(false);
 			sooHolder.move(1);
 			return;
@@ -251,7 +249,7 @@ public class ScoreTracker : Observer {
 	{
 		if (s.returnDifficulty().Equals(Difficulty.Easy) || s.returnCategory().Equals (Difficulty.Medium)) {
 			Difficulty diff = s.returnDifficulty();
-			s.setDifficulty (diff++); 
+			s.setDifficulty (getNextDifficulty(diff)); 
 		} else
 			s.setDifficulty (Difficulty.Hard);
 	}
@@ -269,7 +267,7 @@ public class ScoreTracker : Observer {
 			numCorrect = 0;
 			numWrong = 0;
 			numAnswered = 0;
-			currentCategory = getNextCategory();
+			currentCategory = getNextCategory(lastCategory);
 			s.setDifficulty(Difficulty.Easy);
 		} else if (numWrong >= 4 || numAnswered  >= 20) { //change category and drop difficulty level after 4 wrong answers	
 			lastCategory = currentCategory;
@@ -279,9 +277,9 @@ public class ScoreTracker : Observer {
 
 	}
 
-	Category getNextCategory ()
+	Category getNextCategory (Category last)
 	{
-		switch (lastCategory)
+		switch (last)
 		{
 			case Category.Customization:
 				return Category.ReceptiveVocabulary;
@@ -313,16 +311,28 @@ public class ScoreTracker : Observer {
 		}
 		return Category.Customization;	
 	}
+
+	Difficulty getNextDifficulty(Difficulty curDiff)
+	{
+		switch(curDiff)
+		{
+		case Difficulty.Easy:
+			return Difficulty.Medium;
+		case Difficulty.Medium:
+			return Difficulty.Hard;
+		case Difficulty.Hard:
+			return Difficulty.Hard;
+		}
+		return curDiff;
+	}
 	// *******************************************************
 	// startQuestion, changeQuestion, Update
 	// *******************************************************
 
 	// for use at the beginning of the game
 	void startQuestion() {
-		Debug.Log ("we're in start question");
 		//sendEvent (eType.NewQuestion);
 		stimOrgOb = spawnHolder.spawnNext(currentCategory,s.returnDifficulty(),questionNumber);
-		Debug.Log("got a new SOO");
 		sooHolder = stimOrgOb.GetComponent<SOOScript>();
 		sooHolder.move(0);
 	} 
@@ -346,10 +356,7 @@ public class ScoreTracker : Observer {
 		questionNumber++;
 		numAnswered++;
 
-		if(!s.returnTimedOut())
-		{
-			checkAnswer();	
-		}
+		checkAnswer();	
 
 		Debug.Log ("numRight " + numCorrect);
 		Debug.Log ("numWrong " + numWrong);
@@ -365,20 +372,26 @@ public class ScoreTracker : Observer {
 				// reset and an event notification of type ChangeDifficulty is sent out, which
 				// will be picked up by GameManager.
 				numCorrect = 0;
+				Difficulty temp = s.returnDifficulty();
+				scoreList.Add(s);
+				s = new Score(questionNumber);
+				s.setCategory(currentCategory);
+				s.setDifficulty(temp);
 				// the difficulty and category variables in the current score variable
 				// must also be adjusted appropriately.
 				updateDifficulty();
 			}	
 		} 
 		else {
+			Difficulty temp = s.returnDifficulty();
+			scoreList.Add(s);
+			s = new Score(questionNumber);
+			s.setCategory(currentCategory);
+			s.setDifficulty(temp);
 			setCategory();
 		}
 
 		Debug.Log ("current Category is " + currentCategory + " and current difficulty is " + s.returnDifficulty ());
-
-		scoreList.Add(s);
-		s = new Score(questionNumber);
-
 		Debug.Log ("questionNUmber: " + questionNumber);
 		stimOrgOb = spawnHolder.spawnNext(currentCategory,s.returnDifficulty(),questionNumber);
 		Debug.Log("got a new SOO");
@@ -457,19 +470,13 @@ public class ScoreTracker : Observer {
 	// all the data that has been added to each DifficultyData variable.
 	string averagesBreakdown() {
 		
-		DifficultyData Customization = new DifficultyData (Category.Customization);
-		DifficultyData ReceptiveVocabulary = new DifficultyData (Category.ReceptiveVocabulary);
-		DifficultyData LetterNameRecognition = new DifficultyData (Category.LetterNameRecognition);
-		DifficultyData LetterSoundMatching = new DifficultyData (Category.LetterSoundMatching);
-		DifficultyData CVCWordIdentification = new DifficultyData (Category.CVCWordIdentification);
-		DifficultyData SightWordIdentification = new DifficultyData (Category.SightWordIdentification);
-		DifficultyData RhymingWordMatching = new DifficultyData (Category.RhymingWordMatching);
-		DifficultyData BlendingWordIdentification = new DifficultyData (Category.BlendingWordIdentification);
-		DifficultyData PseudoWordMatching = new DifficultyData (Category.PseudowordMatching);
-		
-		DifficultyData[] ddarray = {Customization, ReceptiveVocabulary, LetterNameRecognition, LetterSoundMatching,
-			CVCWordIdentification, SightWordIdentification, RhymingWordMatching, BlendingWordIdentification,
-			PseudoWordMatching};
+		DifficultyData[] ddarray = new DifficultyData[9];
+		Category cat = Category.Customization;
+		for (int i = 0; i < ddarray.Length; i++)
+		{
+			ddarray[i] = new DifficultyData(cat);
+			cat = getNextCategory(cat);
+		}
 		string answer = "";
 		
 		for (int i = 0; i < scoreList.Count; i++) {
@@ -545,7 +552,7 @@ public class ScoreTracker : Observer {
 		currentActivity.Call ("sendBroadcast", intentObject);
 	}
 
-	
+
 }
 
 // Public class for concatenating various average scores and times to be used

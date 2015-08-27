@@ -69,7 +69,6 @@ public class Question : ScriptableObject {
 	/// <param name="cat">Question category</param>
 	public void init (int qNum, List<serStim> stimList, int target, Category cat)
 	{
-		Debug.Log("stimList.Count: " + stimList.Count);  
 		questionNumber = qNum;
 		customizationEvent = false;
 		for (int i = 0; i<4; i++)
@@ -79,7 +78,6 @@ public class Question : ScriptableObject {
 			tempStim.audio = stimList[i].audio;
 			tempStim.sprite = stimList[i].sprite; 
 			tempStim.stimType = stimList[i].stimType;
-			Debug.Log("sprite: " + tempStim.sprite); // debugger
 			if(i == target) 
 				tempStim.isCorrect = true;
 			else

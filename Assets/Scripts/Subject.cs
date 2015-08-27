@@ -38,18 +38,14 @@ public class Subject : MonoBehaviour {
 	/// <param name="e">An EventInstance containing the Subject and the event type enum.</param>
 	public void notify(EventInstance<GameObject> e)
 	{
-		Debug.Log("in go notify");
 		if (gameObjectEvent != null){
-			Debug.Log("notifying");
 			gameObjectEvent(e);
 		}
 	}
 
 	public void notify(EventInstance<ScoreTracker> e)
 	{
-		Debug.Log ("in go notify");
 		if (scoreEvent != null) {
-			Debug.Log("notifying");
 			scoreEvent(e);
 		}
 	}
