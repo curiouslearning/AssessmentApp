@@ -128,11 +128,8 @@ public class SpawnerScript : MonoBehaviour {
 		else {
 			int target = 0; 
 			q.init (questionNumber, findStim(cat,difLevel), target, cat);
+			return spawnSOO(q);
 		}
-		//else call findStimuli
-		//pass resulting question into spawnSoo and return the result
-	    GameObject g = spawnSOO (q);
-		return g;
 	}
 
 	
