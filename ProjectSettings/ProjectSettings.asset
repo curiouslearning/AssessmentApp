@@ -71,7 +71,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleIdentifier: com.curiouslearning.AssessmentApp
+  bundleIdentifier: org.curiouslearning.AssessmentApp
   bundleVersion: 1.0
   preloadedAssets: []
   metroEnableIndependentInputSource: 1

@@ -132,7 +132,7 @@ public class AnimationManager : Observer {
 	/// <param name="newTexture"> Replacement Texture.</param>
 	void changeBodyPart (int part, int newTexture)
 	{
-		GameObject temp = bodyParts[part];
+		GameObject temp = bodyParts[part];	
 		temp.GetComponent<SkinnedMeshRenderer>().material.mainTexture = optionTextures[part] [newTexture];
 	}
 
@@ -154,9 +154,11 @@ public class AnimationManager : Observer {
 				s.name = textures[j].name;
 				options.Add(s); 
 			}
-		}
+		}	
 		return options;
 	}
+
+	
 	/// <summary>
 	/// Returns the index of the first not-yet-customized body part.
 	/// </summary>

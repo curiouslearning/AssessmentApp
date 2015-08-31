@@ -184,7 +184,11 @@ public class StimulusScript : MonoBehaviour{
 		Sprite textureSprite = input.texture;
 		this.isDraggable = input.isDraggable;
 		this.GetComponent<SpriteRenderer>().sprite = textureSprite;
-		this.textureName = input.texture.name;
+		if(textureSprite != null){	
+			this.textureName = input.texture.name;
+		} else {
+			this.textureName = "blank";
+		}
 		this.optionBodyPart = input.bodyPart;
 		this.option = true;
 	}

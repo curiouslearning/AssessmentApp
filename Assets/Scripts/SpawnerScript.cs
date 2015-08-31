@@ -123,7 +123,7 @@ public class SpawnerScript : MonoBehaviour {
 		if (cat == Category.Customization)
 		{
 			q.init(questionNumber, host.getOptions(), host.getBodyPart());
-			return spawnSOO(q);
+			return spawnSOO(q);	
 		}
 		else {
 			int target = 0; 
@@ -138,9 +138,7 @@ public class SpawnerScript : MonoBehaviour {
 	/// </summary>
 	/// <returns>Reference to initialized SOO</returns>
 	/// <param name="q">Question data </param>
-
-	//IMPORTANT: RENAME WHEN spawnNext ABOVE IS COMPLETED
-	public GameObject spawnSOO (Question q)
+	GameObject spawnSOO (Question q)
 	{
 		newSoo = Instantiate(sooPrefab) as GameObject;
 		SOOScript holder = newSoo.GetComponent<SOOScript>();
@@ -157,13 +155,13 @@ public class SpawnerScript : MonoBehaviour {
 					newStims[i].transform.position = newSoo.transform.position + new Vector3 (left, up, 0);
 					break;
 				case 1: 
-					newStims[i].transform.position = newSoo.transform.position + new Vector3 (left, down, 0);
+					newStims[i].transform.position = newSoo.transform.position + new Vector3 (right, up, 0);
 					break;
 				case 2: 
 					newStims[i].transform.position = newSoo.transform.position + new Vector3 (right, down, 0);
 					break;
 				case 3: 
-					newStims[i].transform.position = newSoo.transform.position + new Vector3 (right, up, 0);
+					newStims[i].transform.position = newSoo.transform.position + new Vector3 (left, down, 0);
 					break;
 			}
 			positions[i] = transform.position;
@@ -188,4 +186,8 @@ public class SpawnerScript : MonoBehaviour {
 		return newSoo;
 		
 	}		
+	GameObject spawnSOO2 (Question q)
+	{
+		return spawnSOO(q);
+	}
 }
