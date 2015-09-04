@@ -39,7 +39,22 @@ public class SpawnerScript : MonoBehaviour {
 		parseData();
 	}
 	
-
+	void parseData()
+	{ 
+		string[] sourceLines = stimList.text.Split('\n');
+		for(int i = 1; i < sourceLines.Length; i++)
+		{
+			serStim data = new serStim();
+			string [] vals = sourceLines[i].Split(',');
+			data.hasBeenTarget = false;
+			data.sprite = vals[1]; 
+			data.stimType = vals[2];
+			data.difficulty = diffParser[vals[3].TrimEnd('\r')];
+			data.hostStim = vals[4];  //what the host shows/says when this stimulus is the target
+			data.hostStimType = vals[5];
+			stimPool.Add(data);
+		}
+	}
 	/// <summary>
 	/// Returns a list of four semi-randomly generated serStims, one of which is
 	/// tagged as the correct answer
@@ -51,6 +66,7 @@ public class SpawnerScript : MonoBehaviour {
 	List<serStim> findStim (Category cat, Difficulty diffLevel) {
 		List<serStim> answer = new List<serStim>();
 		int counter = 0;
+		int targetCount = 0;
 		string type;
 		// the variable type, which is used to determine whether findStim
 		// is looking for audio or visual stimulus, is assigned based
@@ -60,9 +76,42 @@ public class SpawnerScript : MonoBehaviour {
 			type = "visual";
 		} else 
 			type = "audio";*/
+		type = "visual"; //temp fix
 
-		type = "visual"; //workaround HACK
-		Debug.Log ("type: " + type);
+		while (answer.Count == 0)
+		{
+			if (counter == stimPool.Count)
+				counter = 0;
+			serStim s = stimPool[counter];
+			if(s.hasBeenTarget)
+			{
+				Debug.Log(s.sprite + " Has been target");
+				targetCount++;
+				if(targetCount == stimPool.Count)
+				{
+					Debug.LogError("ran out of stims! Counter == " + stimPool.Count);
+					break;
+				}
+				else{
+					counter++;
+					continue;
+				}
+			}
+			s.stimType = type;
+			// this block of code handles retrieving a
+			// stimulus to be the target
+			float f = Random.Range (0.0f,4.0f);
+			if (f < 1.0f) {
+				Debug.Log("found: " + s.sprite + " and marking it true");
+				stimPool[counter].hasBeenTarget = true;
+				s.isCorrect = true;
+				answer.Add(s);
+				host.setHostMedia(s);
+				break;
+			}
+			counter++;
+		}
+		counter = 0;
 		while (answer.Count < 4) {
 			if (counter == stimPool.Count)
 				counter = 0;
@@ -74,42 +123,18 @@ public class SpawnerScript : MonoBehaviour {
 			    !answer.Contains(stimPool[counter])) { 
 				// this block of code handles generating non-target
 				// stimuli
-			    if (stimPool[counter].hasBeenTarget || counter > 0) {
-				    float f = Random.Range (0.0f,4.0f);
-					if (f < 1.0f) {
-						answer.Add(s);
-					}
-				} else  {
-					// this block of code handles retrieving a
-					// stimulus to be the target
-					float f = Random.Range (0.0f,4.0f);
-					if (f < 1.0f) {
-						stimPool[counter].hasBeenTarget = true;
-						s.isCorrect = true;
-						answer.Add(s);
-					}
+			    float f = Random.Range (0.0f,4.0f);
+				if (f < 1.0f) {
+					answer.Add(s);
 				}
+				 
 			}
 			counter++;
 		}
-		Debug.Log ("findStim completed, answer length: " + answer.Count);
 		return answer;
 	}
 
-	void parseData()
-	{ 
-		string[] sourceLines = stimList.text.Split('\n');
-		for(int i = 1; i < sourceLines.Length; i++)
-		{
-			serStim data = new serStim();
-			string [] vals = sourceLines[i].Split(',');
-			data.sprite = vals[1]; 
-			data.stimType = vals[2];
-			data.difficulty = diffParser[vals[3].TrimEnd('\r')];
-			data.hasBeenTarget = false;
-			stimPool.Add(data);
-		}
-	}
+
 
 	/// <summary>
 	/// Randomly create a question or customization event based on the category and current difficulty level
@@ -126,8 +151,8 @@ public class SpawnerScript : MonoBehaviour {
 			return spawnSOO(q);	
 		}
 		else {
-			int target = 0; 
-			q.init (questionNumber, findStim(cat,difLevel), target, cat);
+			List<serStim> temp = findStim(cat, difLevel);
+			q.init (questionNumber, temp, cat);
 			return spawnSOO(q);
 		}
 	}
@@ -167,14 +192,13 @@ public class SpawnerScript : MonoBehaviour {
 			positions[i] = transform.position;
 			if(q.isCustomizationEvent())
 			{
-				Debug.Log("pulling from options");
-				newStims[i].GetComponent<StimulusScript>().setOptions(q.getOption(i));  
+				newStims[i].GetComponent<StimulusScript>().setOptions(q.getOption(i)); 
+				
 			}
 			else
 			{
-				Debug.Log("pulling from stimuli");
 				newStims[i].GetComponent<StimulusScript>().setStim(q.getStim(i));
-				newStims[i].GetComponent<StimulusScript>().initSprite();
+				newStims[i].GetComponent<StimulusScript>().initSprite();	
 			}
 		}
 		//add stims, stim positions, and SOO destinations to SOO instance
@@ -183,6 +207,7 @@ public class SpawnerScript : MonoBehaviour {
 		holder.setDestArray(destinations);
 		//scale size to screen
 		holder.transform.localScale = new Vector3 (0.6f,0.6f,0.6f);
+		host.registerWithSoo(newSoo);
 		return newSoo;
 		
 	}		

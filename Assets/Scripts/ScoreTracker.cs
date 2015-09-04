@@ -8,8 +8,13 @@ public class ScoreTracker : Observer {
 	//timekeeping variables
 	public int questionNumber;
 	public float questionTime;
-	public float timeLimit;
+	public float firstLimit;
+	public float secondLimit;
+	float timeLimit;
 	float startTime;
+	private bool firstTouchHappened;
+	private bool pauseTimer;
+	private bool broadcastSent;
 	
 	//component variables
 	public GameObject spawner;
@@ -33,7 +38,7 @@ public class ScoreTracker : Observer {
 	int numAnswered;
 	Category currentCategory;
 	Category lastCategory;
-	Score s;	
+	Score s;
 	
 	Subject.GameObjectNotify gOObserver;
 
@@ -53,6 +58,19 @@ public class ScoreTracker : Observer {
 	void Start () {	
 		gameOver = false;
 		scoreList = new List<Score>();
+		addSubjects();
+		questionNumber = 0;
+		questionTime = 0f;
+		startTime = Time.time;
+		timeLimit = firstLimit;
+		firstTouchHappened = false;
+		broadcastSent = false;
+		pauseTimer = false;
+		startQuestion ();
+	}
+
+	void addSubjects ()
+	{
 		gOObserver = new Subject.GameObjectNotify (this.onNotify);
 		receptacle.GetComponent<Subject> ().addObserver (gOObserver); 
 		CollisionNotification trashHolder;
@@ -61,10 +79,7 @@ public class ScoreTracker : Observer {
 		trashHolder.sub.addObserver(new Subject.GameObjectNotify(this.onNotify));
 		trashHolder = gCollector.GetComponent<CollisionNotification>();	
 		trashHolder.sub.addObserver(new Subject.GameObjectNotify(this.onNotify));
-		questionNumber = 0;
-		questionTime = 0f;
-		startTime = Time.time;
-		startQuestion ();
+		this.GetComponent<TouchProcessor>().eventWrapper.addObserver(new Subject.GameObjectNotify(this.onNotify));
 	}
 
 	// ********************************************************
@@ -74,7 +89,20 @@ public class ScoreTracker : Observer {
 	public override void onNotify (EventInstance<GameObject> e)
 	{
 		//s.addTime(questionTime);	
-		if (e.type == eType.Trashed)
+		if(e.type == eType.FingerDown|| e.type == eType.Drag)
+		{
+			if(!firstTouchHappened)
+				firstTouchHappened = true;
+		}
+		if(e.type == eType.Grab)
+		{
+			pauseTimer = true;
+		}
+		if(e.type == eType.FingerUp)
+		{
+			pauseTimer = false;
+		}
+		else if (e.type == eType.Trashed)
 		{
 			s.addTime(questionTime);
 
@@ -87,7 +115,12 @@ public class ScoreTracker : Observer {
 		}
 		else if (e.type == eType.Selected)
 		{
-			s.addScore(e.signaler.GetComponent<StimulusScript>().returnIsCorrect());
+			if(e.signaler.GetComponent<StimulusScript>().returnIsTarget())
+			{
+				Debug.Log("Caught a correct stimulus");
+				s.addScore(true);
+			}
+			else{s.addScore(false);}
 
 			e.signaler.gameObject.SetActive(false);
 			sooHolder.move(1);
@@ -97,7 +130,7 @@ public class ScoreTracker : Observer {
 
 	void endGame ()
 	{
-		sendEvent (eType.EndGame);
+		eventHandler.sendEvent (eType.EndGame);
 		AndroidBroadcastIntentHandler.BroadcastJSONData("EndGame", printListString ()); //data recording
 
 		Debug.Log(printListString()); //debugger - printListString() is used in the broadcast.
@@ -119,16 +152,18 @@ public class ScoreTracker : Observer {
 	{
 		string response;
 		string value;
-		if (s.isCorrect ()) {
+		if (s.isCorrect()) {
 			totalScore++;
 			numCorrect++;
 			numWrong = 0; 
 			response = "correct";
+			Debug.Log("correct! NumWrong: " + numWrong);
 		} else {
 			totalScore--;
 			numWrong++; 
 			numCorrect = 0;
 			response = "incorrect";
+			Debug.Log("incorrect! NumWrong: " + numWrong);
 		}
 		//data recording
 		value = ("Question: " + s.getNum().ToString() + ", Result: " + response + ", time: " + s.getTime().ToString() + ", total score: " + totalScore);
@@ -144,13 +179,7 @@ public class ScoreTracker : Observer {
 			s.setDifficulty (Difficulty.Hard);
 			AndroidBroadcastIntentHandler.BroadcastJSONData("Difficulty Change", "Hard");  //data recording
 	}
-	void sendEvent (eType type)
-	{
-		EventInstance<ScoreTracker> e;
-		e = new EventInstance<ScoreTracker> ();
-		e.setEvent (type, this);
-		eventHandler.notify (e);	
-	}
+	
 
 	void setCategory()
 	{
@@ -219,6 +248,7 @@ public class ScoreTracker : Observer {
 		}
 		return curDiff;
 	}
+	
 	// *******************************************************
 	// startQuestion, changeQuestion, Update
 	// *******************************************************
@@ -232,7 +262,7 @@ public class ScoreTracker : Observer {
 	} 
 	
 	void changeQuestion () {
-		Debug.Log("we're in changeQuestion!");
+		timeLimit = firstLimit;
 		questionTime = 0;
 		startTime = Time.time;
 		questionNumber++;
@@ -240,10 +270,6 @@ public class ScoreTracker : Observer {
 
 		checkAnswer();	
 
-		Debug.Log ("numRight " + numCorrect);
-		Debug.Log ("numWrong " + numWrong);
-		Debug.Log ("totalScore " + totalScore);
-		Debug.Log ("numAnswered " + numAnswered); 
 		
 		if (numCorrect >= 3) {
 			// If this case is true, the player has exhausted all available categories and difficulties
@@ -273,15 +299,14 @@ public class ScoreTracker : Observer {
 			setCategory();
 		}
 
-		Debug.Log ("current Category is " + currentCategory + " and current difficulty is " + s.returnDifficulty ());
-		Debug.Log ("questionNUmber: " + questionNumber);
 		stimOrgOb = spawnHolder.spawnNext(currentCategory,s.returnDifficulty(),questionNumber);
-		Debug.Log("got a new SOO");
+		firstTouchHappened = false;
+		broadcastSent = false;
 		sooHolder = stimOrgOb.GetComponent<SOOScript>();
 		sooHolder.move(0);
 
 		//data recording
-		sendEvent (eType.NewQuestion);
+		eventHandler.sendEvent (eType.NewQuestion);
 		string value = "Question Number: " + questionNumber + ", Category: " + currentCategory + ", Difficulty: " + s.returnDifficulty();
 		AndroidBroadcastIntentHandler.BroadcastJSONData("New Question", value);
 	}
@@ -292,12 +317,17 @@ public class ScoreTracker : Observer {
 		// questionTime keeps track of the elapsed time since the
 		// start of the current question.  It must be updated
 		// frequently, which is why it is placed in Update().
+		while(pauseTimer)
+		{
+			timeLimit += Time.deltaTime;
+			return;
+		}
 		questionTime = Time.time - startTime;
 		// if questionTime goes over 15 seconds it sends a
 		// TimeOut (which will be picked up in ScoreTracker)
 		// event and moves on to the next question, calling
 		// move(1) on sooHolder
-		if (questionTime >= timeLimit) {
+		if (questionTime >= timeLimit){
 			startTime = Time.time;
 
 			s.setTimedOut(true);
@@ -305,9 +335,18 @@ public class ScoreTracker : Observer {
 			s.addScore (false);
 		
 			AndroidBroadcastIntentHandler.BroadcastJSONData ("TimeOut", ("Question Number: " + questionNumber.ToString() + ", Category: " + currentCategory.ToString() + ", Difficulty: " + s.returnDifficulty().ToString()));
-			//sendEvent (eType.TimedOut); // temporary fix here
+			eventHandler.sendEvent (eType.TimedOut); // temporary fix here
 
 			sooHolder.move (1);
+		}
+		else if (firstTouchHappened && !broadcastSent)
+		{
+			string value = ("First Touch for Question " + questionNumber.ToString() + " Occurred at " + Time.time.ToString());
+			questionTime = 0;
+			startTime = Time.time;
+			timeLimit = secondLimit;
+			AndroidBroadcastIntentHandler.BroadcastJSONData("First Touch", value);
+			broadcastSent = true;
 		}
 		//if scene is changing do not process input
 		//otherwise generate input commands and pass them to the proper objects

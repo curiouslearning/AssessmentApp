@@ -30,7 +30,17 @@ public class Subject : MonoBehaviour {
 		numObservers = 0;
 	}
 
-
+	/// <summary>
+	/// Packages the event and sends it to the observers.
+	/// </summary>
+	/// <param name="type">Event Type.</param>
+	public void sendEvent (eType type)
+	{
+		EventInstance<GameObject> e;
+		e = new EventInstance<GameObject> ();
+		e.setEvent (type, this);
+		notify (e);	
+	}
 	/// <summary>
 	/// calls the onNotify() methods of all Observers in the Event list.
 	/// Overriddent to accept multiple types of Delegates.

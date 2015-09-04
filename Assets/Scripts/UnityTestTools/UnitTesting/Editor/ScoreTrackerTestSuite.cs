@@ -53,9 +53,9 @@ public class ScoreTrackerTestSuite{
 		}
 	}
 		
-	Category getNextCategory ()
+	Category getNextCategory (Category last)
 	{
-		switch (lastCategory)
+		switch (last)
 		{
 		case Category.Customization:
 			return Category.ReceptiveVocabulary;
@@ -94,12 +94,15 @@ public class ScoreTrackerTestSuite{
 			numCorrect = 0;
 			numWrong = 0;
 			numAnswered = 0;
-			currentCategory = getNextCategory();
+			currentCategory = getNextCategory(lastCategory);
 			s.setDifficulty(Difficulty.Easy);
+			AndroidBroadcastIntentHandler.BroadcastJSONData("Difficulty Change", "Easy");  //data recording
+			AndroidBroadcastIntentHandler.BroadcastJSONData("Category Change", lastCategory.ToString()); //data recording
 		} else if (numWrong >= 4 || numAnswered  >= 20) { //change category and drop difficulty level after 4 wrong answers	
 			lastCategory = currentCategory;
 			s.setCategory (Category.Customization);
 			currentCategory = Category.Customization;
+			AndroidBroadcastIntentHandler.BroadcastJSONData("Category Change", "Customization"); //data recording
 		}
 		
 	}
@@ -289,23 +292,23 @@ public class ScoreTrackerTestSuite{
 	public void testGetNextCategory()
 	{
 		lastCategory = Category.Customization;
-		Assert.That(getNextCategory() == Category.ReceptiveVocabulary);
+		Assert.That(getNextCategory(lastCategory) == Category.ReceptiveVocabulary);
 		lastCategory = Category.ReceptiveVocabulary;
-		Assert.That(getNextCategory() == Category.LetterNameRecognition);
+		Assert.That(getNextCategory(lastCategory) == Category.LetterNameRecognition);
 		lastCategory = Category.LetterNameRecognition;
-		Assert.That(getNextCategory() == Category.LetterSoundMatching);
+		Assert.That(getNextCategory(lastCategory) == Category.LetterSoundMatching);
 		lastCategory = Category.LetterSoundMatching;
-		Assert.That(getNextCategory() == Category.CVCWordIdentification);
+		Assert.That(getNextCategory(lastCategory) == Category.CVCWordIdentification);
 		lastCategory = Category.CVCWordIdentification;
-		Assert.That(getNextCategory() == Category.SightWordIdentification);
+		Assert.That(getNextCategory(lastCategory) == Category.SightWordIdentification);
 		lastCategory = Category.SightWordIdentification;
-		Assert.That(getNextCategory() == Category.RhymingWordMatching);
+		Assert.That(getNextCategory(lastCategory) == Category.RhymingWordMatching);
 		lastCategory = Category.RhymingWordMatching;
-		Assert.That(getNextCategory() == Category.BlendingWordIdentification);
+		Assert.That(getNextCategory(lastCategory) == Category.BlendingWordIdentification);
 		lastCategory = Category.BlendingWordIdentification;
-		Assert.That(getNextCategory() == Category.PseudowordMatching);
+		Assert.That(getNextCategory(lastCategory) == Category.PseudowordMatching);
 		lastCategory = Category.PseudowordMatching;
-		Assert.That(getNextCategory() == Category.PseudowordMatching);
+		Assert.That(getNextCategory(lastCategory) == Category.PseudowordMatching);
 	}
 
 

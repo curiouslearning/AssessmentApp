@@ -23,7 +23,7 @@ public class TouchProcessor : Observer {
 	public GameObject target; //the host's receptacle
 	public float distanceMod; //sizing modifier
 //Event Materials
-	Subject eventWrapper;
+	public Subject eventWrapper;
 	TouchSummary touchSum;
 	touchInstance t;
 	public ScoreTracker scoring;
@@ -42,7 +42,6 @@ public class TouchProcessor : Observer {
 		if (e.type == eType.EndGame) {
 			return;
 		} else if (e.type == eType.NewQuestion) {
-			Debug.Log ("adding a question"); //debugger
 			scoring.addTouch (touchSum);
 			touchSum = new TouchSummary ();
 			//send stuff to score tracker
@@ -54,6 +53,13 @@ public class TouchProcessor : Observer {
 		string value = "posX: " + pos.x.ToString() + ", posY: " + pos.y.ToString();
 		AndroidBroadcastIntentHandler.BroadcastJSONData(key, value);
 	}
+	void sendEvent(eType type)
+	{
+		EventInstance<GameObject> e;
+		e = new EventInstance<GameObject>();
+		e.setEvent(type, this.gameObject);
+		eventWrapper.notify(e);
+	}
 	
 	void Update () {
 		for (int i = 0; i < Input.touchCount; i++)
@@ -63,11 +69,12 @@ public class TouchProcessor : Observer {
 			Touch touch = Input.GetTouch(i);  
 			if (touch.phase == TouchPhase.Began)
 			{
-				sendTouch("touchBegin", touch.position); 
+				sendTouch("touchBegin", touch.position);
+				sendEvent(eType.FingerDown); 
 				//search for an object directly under the finger
 				RaycastHit2D touchHit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(touch.position), -Vector2.up);
-				if(touchHit.collider != null) //we got a hit
-				{
+				if(touchHit.collider != null && touchHit.collider.gameObject.tag != "Suspended") //we got a hit
+				{	
 					selection = touchHit.transform.gameObject; 
 					AndroidBroadcastIntentHandler.BroadcastJSONData("PlayerSelection", selection.gameObject.name);
 					parentBuffer = selection.transform.parent;  //store and remove the parent to prevent weird parent-child behavior during dragging
@@ -80,8 +87,9 @@ public class TouchProcessor : Observer {
 			else if (touch.phase == TouchPhase.Moved||touch.phase == TouchPhase.Stationary)
 			{
 				t.addTime(touch.deltaTime);
-				if(selection != null)
+				if(selection != null) 
 				{
+					sendEvent(eType.Grab);
 					if(touch.phase == TouchPhase.Moved && t.getTime() > 0.5f){
 						t.setTouch(eType.Drag);
 					}
@@ -112,6 +120,7 @@ public class TouchProcessor : Observer {
 					selection.transform.parent = parentBuffer;
 					selection = null;
 				}
+				sendEvent(eType.FingerUp);
 				touchSum.addTouch(t); //store touch instance data
 				t = null;
 			}

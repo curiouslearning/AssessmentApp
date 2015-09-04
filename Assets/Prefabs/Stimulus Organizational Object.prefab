@@ -10,6 +10,7 @@ GameObject:
   - 4: {fileID: 446306}
   - 114: {fileID: 11439060}
   - 61: {fileID: 6134114}
+  - 114: {fileID: 11424370}
   m_Layer: 2
   m_Name: Stimulus Organizational Object
   m_TagString: SOO
@@ -42,6 +43,17 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 15.5500002, y: 10.1499996}
+--- !u!114 &11424370
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 165186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4f642768f1eb4e3aa1032a4147584c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11439060
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -53,7 +65,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa43548fe42e07040ac16548f7ac90a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  marginOfError: 1
   speed: 1
+  eventWrapper: {fileID: 11424370}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -81,6 +95,14 @@ Prefab:
       propertyPath: m_TagString
       value: SOO
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: marginOfError
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: eventWrapper
+      value: 
+      objectReference: {fileID: 11424370}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 165186}
