@@ -22,7 +22,10 @@ public class SpawnerScript : MonoBehaviour {
 	public float left;
 	public float right;
 	public float up;
-	public float down;
+	public float stimDown;
+	public float textureDown; //textures are longer than stimuli
+	public float scaleStim;
+	public float scaleTexture; //factor by which to scale down textures to fit on screen
 	//variables for the SOO to hold onto
 	public Vector3[] destinations;
 	Vector3[] positions;
@@ -168,6 +171,14 @@ public class SpawnerScript : MonoBehaviour {
 		newSoo = Instantiate(sooPrefab) as GameObject;
 		SOOScript holder = newSoo.GetComponent<SOOScript>();
 		newSoo.transform.position = transform.position;
+		float down;
+		if(q.isCustomizationEvent()){
+			down = textureDown;
+		}
+		else {
+				down = stimDown;
+		}
+			
 		//create 4 instances of stimuli as children of the SOO, and arrange them within its Box Collider
 		for (int i =0; i< 4; i++)
 		{
@@ -206,7 +217,14 @@ public class SpawnerScript : MonoBehaviour {
 		holder.setPosArray(positions);
 		holder.setDestArray(destinations);
 		//scale size to screen
-		holder.transform.localScale = new Vector3 (0.6f,0.6f,0.6f);
+		if(q.isCustomizationEvent())
+		{
+			holder.transform.localScale = new Vector3 (scaleTexture,scaleTexture,scaleTexture);
+		}
+		else
+		{
+			holder.transform.localScale = new Vector3 (scaleStim,scaleStim,scaleStim);
+		}		
 		host.registerWithSoo(newSoo);
 		return newSoo;
 		
