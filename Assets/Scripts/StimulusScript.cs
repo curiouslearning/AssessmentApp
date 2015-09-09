@@ -10,7 +10,7 @@ using System.Collections;
 public class StimulusScript : MonoBehaviour{
 
 	private bool isCorrect; //bool for indicating the correct stimulus response in a question
-	private bool isTarget;
+	public bool isTarget;
 	private bool hasBeenTarget;
 	private bool option;
 	private bool isBeingDragged; 
@@ -161,7 +161,8 @@ public class StimulusScript : MonoBehaviour{
 	/// </summary>
 	/// <param name="input">stimulus data.</param>
 	public	void setStim (serStim input) {
-		this.hasBeenTarget = false;
+		this.hasBeenTarget = input.hasBeenTarget;
+		this.isTarget = input.isCorrect;
 		this.isDraggable = input.isDraggable;
 		this.difficulty = input.difficulty;
 		if(input.stimType == "visual")
@@ -184,7 +185,11 @@ public class StimulusScript : MonoBehaviour{
 		Sprite textureSprite = input.texture;
 		this.isDraggable = input.isDraggable;
 		this.GetComponent<SpriteRenderer>().sprite = textureSprite;
-		this.textureName = input.texture.name;
+		if(textureSprite != null){	
+			this.textureName = input.texture.name;
+		} else {
+			this.textureName = "blank";
+		}
 		this.optionBodyPart = input.bodyPart;
 		this.option = true;
 	}
@@ -194,8 +199,6 @@ public class StimulusScript : MonoBehaviour{
 	/// <param name="t">touch instance information</param>
 	public void onSelect (touchInstance t)
 	{
-		Debug.Log("successful selection!");
-		Debug.Log("There was a " + t.getType() + " of length " + t.getTime());
 		//Animation stuff here
 		//sound stuff here
 	}

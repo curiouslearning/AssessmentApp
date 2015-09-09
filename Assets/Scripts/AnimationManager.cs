@@ -52,6 +52,10 @@ public class AnimationManager : Observer {
 			
 		}
 	}	
+	public void registerWithSoo(GameObject SOO)
+	{
+		SOO.GetComponent<Subject>().addObserver(new Subject.GameObjectNotify(this.onNotify));
+	}
 
 	/// <summary>
 	/// Parses the optionsList data into the textures array.
@@ -69,6 +73,34 @@ public class AnimationManager : Observer {
 			optionTextures[bodyPart][texturePosition] = t;
 
 		}
+	}
+
+	public void setHostMedia (serStim m)
+	{
+		
+		if (m.hostStimType== "audio")
+		{
+			AudioClip audio = Resources.Load<AudioClip>("Audio/" + m.hostStim);	
+			if(audio == null)
+			{
+				Debug.LogError("Fetty Wap what are you doing here?");
+			}
+			setHostMediaInternal (audio);
+		}
+		else{
+			Sprite sprite = Resources.Load<Sprite>("Art/" + m.hostStim);
+			setHostMediaInternal (sprite);
+		}
+	}
+
+	void setHostMediaInternal (AudioClip a)
+	{
+		AudioSource host = GetComponent<AudioSource>();
+		host.clip = a;
+	}
+	void setHostMediaInternal (Sprite s)
+	{
+		// logic to add sprite to host's sign
 	}
 	/// <summary>
 	/// Creates atlases for each body part, sets the UVs to default values
@@ -105,12 +137,9 @@ public class AnimationManager : Observer {
 			for (int i = 0; i< sourceLines.Length; i++)
 			{
 				string[] vals = sourceLines[i].Split(',');
-				Debug.Log("texture name: " + e.signaler.GetComponent<StimulusScript>().getTextureName());
 				if(vals[0] == e.signaler.GetComponent<StimulusScript>().getTextureName())
 				{
-					Debug.Log("Howdy");
 					newTexture = int.Parse(vals[2]);
-					Debug.Log("newTexture:" + newTexture);
 					break;
 				}
 			}
@@ -118,9 +147,21 @@ public class AnimationManager : Observer {
 			changeBodyPart( bodyPart, newTexture);
 			//grab texture info and send it to swapper	
 		}
-		else if (e.type == eType.Selected && !e.signaler.GetComponent<StimulusScript>().isOption())
+		if (e.type == eType.Selected || e.type == eType.TimedOut)
+		{
+			GetComponent<AudioSource>().clip = null;
+			return;
+		}
+		if (e.type == eType.Selected && !e.signaler.GetComponent<StimulusScript>().isOption())
 		{
 			animator.SetTrigger("Success");
+		}
+		if (e.type == eType.Ready)
+		{
+			if(GetComponent<AudioSource>().clip != null)
+			{
+				GetComponent<AudioSource>().Play();
+			}
 		}
 	}
 
@@ -132,7 +173,7 @@ public class AnimationManager : Observer {
 	/// <param name="newTexture"> Replacement Texture.</param>
 	void changeBodyPart (int part, int newTexture)
 	{
-		GameObject temp = bodyParts[part];
+		GameObject temp = bodyParts[part];	
 		temp.GetComponent<SkinnedMeshRenderer>().material.mainTexture = optionTextures[part] [newTexture];
 	}
 
@@ -154,9 +195,11 @@ public class AnimationManager : Observer {
 				s.name = textures[j].name;
 				options.Add(s); 
 			}
-		}
+		}	
 		return options;
 	}
+
+	
 	/// <summary>
 	/// Returns the index of the first not-yet-customized body part.
 	/// </summary>
@@ -164,13 +207,26 @@ public class AnimationManager : Observer {
 	public int getBodyPart ()
 	{
 		int i =0;
-		while (bodyPartCustomized[i] == true) {i++;}
+		while (i < bodyPartCustomized.Length && bodyPartCustomized[i] == true ) {i++;}
+
+		{
+			i++;
+		}
+		
 		return i-1;
 	}
 	int getBodyPartInternal()
 	{
 		int i =0;
-		while (bodyPartCustomized[i] == true) {i++;}
+		while (i < bodyPartCustomized.Length && bodyPartCustomized[i] == true ) {i++;}
+		if (i >= bodyPartCustomized.Length) //reset body part list to maintain customizability
+		{
+			for (int j = 1; j < bodyPartCustomized.Length; j++)
+			{
+				bodyPartCustomized[j] = false;
+			}
+			i = 0;
+		}
 		bodyPartCustomized[i] = true;
 		return i;
 	}

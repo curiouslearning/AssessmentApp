@@ -16,11 +16,15 @@ public class SOOScript : Observer {
 	private int questionNumber;
 	bool isDraggable;
 	Vector3 curDest;
+	public float marginOfError;
 	public float speed;
 	bool moving;
+	public Subject eventWrapper;
+	bool movingAlreadyFalse;
 
 	void Start () {
 		isDraggable = false;
+		movingAlreadyFalse = false;
 	}
 
 // Methods for accessing variables
@@ -79,7 +83,6 @@ public class SOOScript : Observer {
 //inherited Observer method
 	public override void onNotify (EventInstance<GameObject> e)
 	{
-		Debug.Log("boo"); //debugger
 		//releaseStim(e.signaler);
 	}
 	
@@ -90,6 +93,8 @@ public class SOOScript : Observer {
 	public void move(int dest)
 	{
 		moving = true;
+		movingAlreadyFalse = false;
+		setDrag("Suspended");
 		curDest = destArray[dest];
 	}
 /// <summary>
@@ -100,7 +105,9 @@ public class SOOScript : Observer {
 		for (int i = 0; i < stimArray.Length; i++)
 		{
 			if (stimArray[i] != null)
+			{
 				stimArray[i].GetComponent<StimulusScript>().setHomePos();
+			}
 		}
 	}
 	
@@ -113,19 +120,38 @@ public class SOOScript : Observer {
 		stimArray = array;
 		questionNumber = qNum;
 	}
+	
 
+	void setDrag (string draggable)
+	{
+		for (int i = 0; i < stimArray.Length; i++)
+		{
+			stimArray[i].GetComponent<StimulusScript>().tag = draggable;
+		}
+	}
 
 	void Update()
 	{
+		if(moving == false && !movingAlreadyFalse)
+		{		
+			setDrag("Stimulus");
+			if(curDest == destArray[0])
+			{
+				eventWrapper.sendEvent(eType.Ready);
+			}
+			movingAlreadyFalse = true; // only do this once per move
+		}
 		if(moving == true)
 		{
 			transform.position = Vector3.Lerp(transform.position, curDest, Time.deltaTime * speed);
-			updatePos();
 		}
-		if(transform.position == curDest)
+		if(moving == true && ((transform.position.x < curDest.x + marginOfError) && (transform.position.x > curDest.x - marginOfError)))
 		{
+			transform.position = curDest;
+			updatePos();
 			moving = false;
 		}
+		
 	}
 		
 			

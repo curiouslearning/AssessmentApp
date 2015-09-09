@@ -2,66 +2,133 @@
 using System.Collections;
 using System.Collections.Generic;
 
-
 /// <summary>
-/// Class to store information about a given touch instance.
+/// TouchProcessor
+/// InputWrapper for touch based input
+/// Contains functionality for dragging, tapping, stimulus snap-back
+/// contains a Subject component for touch event functionality
+/// Directly coupled with ScoreTracker
 /// </summary>
-public class touchInstance{
-	eType type;
-	float duration;
-	string selectionName;
-	public touchInstance(){
-		type = eType.Init;
-		duration =0;
-		selectionName = "";
+
+/* Observes: 		(Update this list with each new addition to an Observer list
+ * 			GameManagerScript
+ */
+public class TouchProcessor : Observer {
+	float screenPoint;
+	Vector3 curScreenPoint;
+	Vector3 curPos;
+	Vector3 offset;
+	GameObject selection;
+	Transform parentBuffer;
+	public GameObject target; //the host's receptacle
+	public float distanceMod; //sizing modifier
+//Event Materials
+	public Subject eventWrapper;
+	TouchSummary touchSum;
+	touchInstance t;
+	public ScoreTracker scoring;
+
+	// Use this for initialization
+	void Start () {
+		selection = null;
+		screenPoint = 0;
+		touchSum = new TouchSummary();	
+		parentBuffer = null;
+		Camera.main.GetComponent<ScoreTracker>().GetComponent<Subject>().addObserver(new Subject.scoreTrackerNotify(this.onNotify));
 	}
-//******************
-// Getter Functions*
-//******************
+
+	public override void onNotify (EventInstance<ScoreTracker> e)
+	{
+		if (e.type == eType.EndGame) {
+			Debug.Log("Caught Endgame");
+			return;
+		} else if (e.type == eType.NewQuestion) {
+			scoring.addTouch (touchSum);
+			touchSum = new TouchSummary ();
+			//send stuff to score tracker
+		}
+	}
 	
-	/// <returns> duration of the touch instance.</returns>
-	public float getTime () {return duration;}
-	/// <returns> the name of the selected object (empty string if no selection)</returns>
-	public string getName () {return selectionName;}
-	/// <returns>The touch type (enum eType).</returns>
-	public eType getType() {return type;}
-	/// <summary>
-	/// checks to see if touch type has been modified since initialization
-	/// </summary>
-	/// <returns><c>true</c>, if type was not modified, <c>false</c> otherwise.</returns>
-	public bool isInit()
+	void sendTouch(string key, Vector2 pos)
 	{
-		return (type == eType.Init);
+		string value = "posX: " + pos.x.ToString() + ", posY: " + pos.y.ToString();
+		AndroidBroadcastIntentHandler.BroadcastJSONData(key, value);
 	}
-//******************
-// Setter Functions*
-//******************
-	/// <summary>
-	/// Increments duration by the given amount 
-	/// </summary>
-	/// <param name="time">elapsed time</param>
-	public void addTime(float time )
+	void sendEvent(eType type)
 	{
-		duration += time;
+		EventInstance<GameObject> e;
+		e = new EventInstance<GameObject>();
+		e.setEvent(type, this.gameObject);
+		eventWrapper.notify(e);
 	}
-	/// <summary>
-	/// Stores the selected object name.
-	/// </summary>
-	/// <param name="selected">Selected object name.</param>
-	public void storeSelection (string selected)
-	{
-		selectionName = selected;
-	}
-	/// <summary>
-	/// sets the instance to the type of touch event.
-	/// </summary>
-	/// <param name="t"> touch type</param>
-	public void setTouch (eType t)
-	{
-		type = t;
+	
+	void Update () {
+		for (int i = 0; i < Input.touchCount; i++)
+		{
+			if(t == null)
+				t = new touchInstance(); //begin storing info about the touch instance
+			Touch touch = Input.GetTouch(i);  
+			if (touch.phase == TouchPhase.Began)
+			{
+				sendTouch("touchBegin", touch.position);
+				sendEvent(eType.FingerDown); 
+				//search for an object directly under the finger
+				RaycastHit2D touchHit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(touch.position), -Vector2.up);
+				if(touchHit.collider != null && touchHit.collider.gameObject.tag != "Suspended") //we got a hit
+				{	
+					selection = touchHit.transform.gameObject; 
+					AndroidBroadcastIntentHandler.BroadcastJSONData("PlayerSelection", selection.gameObject.name);
+					parentBuffer = selection.transform.parent;  //store and remove the parent to prevent weird parent-child behavior during dragging
+					selection.transform.parent = null;
+					Debug.Log(selection.gameObject.name); //debugger
+					offset= selection.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, screenPoint));
+				}
+			
+			}
+			else if (touch.phase == TouchPhase.Moved||touch.phase == TouchPhase.Stationary)
+			{
+				t.addTime(touch.deltaTime);
+				if(selection != null) 
+				{
+					sendEvent(eType.Grab);
+					if(touch.phase == TouchPhase.Moved && t.getTime() > 0.5f){
+						t.setTouch(eType.Drag);
+					}
+					//translate current finger position to new object position  
+					curScreenPoint = new Vector3(touch.position.x, touch.position.y, screenPoint);
+					curPos = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
+					selection.transform.position = curPos;
+					//scale size of object with respect to the Distance between its current position and the host's receptacle
+					selection.GetComponent<StimulusScript>().scaleToTarget(Vector3.Distance(curPos, target.transform.position)*distanceMod);
+				}
+					
+			}
+
+			if (touch.phase == TouchPhase.Ended)
+			{	
+				sendTouch("End Touch", touch.position);
+				if(t.isInit()){ //if t.type was not modified in a Drag phase
+					t.setTouch(eType.Tap);
+				}
+				t.addTime(touch.deltaTime);
+				if(selection != null) //if object was not placed in receptacle
+				{
+					t.storeSelection(selection.name);
+					selection.GetComponent<Selectable>().onSelect(t); //notify the selection it has been touched
+					//return and rescale object, add it back to SOO as a child
+					selection.transform.position = selection.GetComponent<StimulusScript>().returnHomePos();
+					selection.GetComponent<StimulusScript>().resetScale();
+					selection.transform.parent = parentBuffer;
+					selection = null;
+				}
+				sendEvent(eType.FingerUp);
+				touchSum.addTouch(t); //store touch instance data
+				t = null;
+			}
+		}
+	
 	}
 }
-
 
 /// <summary>
 /// Information wrapper containing all information for a given question. Used for packaging touch data into an Event.
@@ -117,109 +184,60 @@ public class TouchSummary {
 
 
 /// <summary>
-/// TouchProcessor
-/// InputWrapper for touch based input
-/// Contains functionality for dragging, tapping, stimulus snap-back
-/// contains a Subject component for touch event functionality
-/// Directly coupled with ScoreTracker
+/// Class to store information about a given touch instance.
 /// </summary>
-
-/* Observes: 		(Update this list with each new addition to an Observer list
- * 			GameManagerScript
- */
-public class TouchProcessor : Observer {
-	float screenPoint;
-	Vector3 curScreenPoint;
-	Vector3 curPos;
-	Vector3 offset;
-	GameObject selection;
-	Transform parentBuffer;
-	public GameObject target; //the host's receptacle
-	public float distanceMod; //sizing modifier
-//Event Materials
-	Subject eventWrapper;
-	TouchSummary touchSum;
-	touchInstance t;
-	public ScoreTracker scoring;
-
-	// Use this for initialization
-	void Start () {
-		selection = null;
-		screenPoint = 0;
-		touchSum = new TouchSummary();	
-		parentBuffer = null;
-		Camera.main.GetComponent<ScoreTracker>().GetComponent<Subject>().addObserver(new Subject.scoreTrackerNotify(this.onNotify));
+public class touchInstance{
+	eType type;
+	float duration;
+	string selectionName;
+	public touchInstance(){
+		type = eType.Init;
+		duration =0;
+		selectionName = "";
 	}
-
-	public override void onNotify (EventInstance<ScoreTracker> e)
+	//******************
+	// Getter Functions*
+	//******************
+	
+	/// <returns> duration of the touch instance.</returns>
+	public float getTime () {return duration;}
+	/// <returns> the name of the selected object (empty string if no selection)</returns>
+	public string getName () {return selectionName;}
+	/// <returns>The touch type (enum eType).</returns>
+	public eType getType() {return type;}
+	/// <summary>
+	/// checks to see if touch type has been modified since initialization
+	/// </summary>
+	/// <returns><c>true</c>, if type was not modified, <c>false</c> otherwise.</returns>
+	public bool isInit()
 	{
-		if (e.type == eType.EndGame) {
-			return;
-		} else if (e.type == eType.NewQuestion) {
-			Debug.Log ("adding a question"); //debugger
-			scoring.addTouch (touchSum);
-			touchSum = new TouchSummary ();
-			//send stuff to score tracker
-		}
+		return (type == eType.Init);
 	}
-	
-	void Update () {
-		for (int i = 0; i < Input.touchCount; i++)
-		{
-			if(t == null)
-				t = new touchInstance(); //begin storing info about the touch instance
-			Touch touch = Input.GetTouch(i);  
-			if (touch.phase == TouchPhase.Began)
-			{ 
-				//search for an object directly under the finger
-				RaycastHit2D touchHit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(touch.position), -Vector2.up);
-				if(touchHit.collider != null) //we got a hit
-				{
-					selection = touchHit.transform.gameObject; 
-					parentBuffer = selection.transform.parent;  //store and remove the parent to prevent weird parent-child behavior during dragging
-					selection.transform.parent = null;
-					Debug.Log(selection.gameObject.name); //debugger
-					offset= selection.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, screenPoint));
-				}
-			
-			}
-			else if (touch.phase == TouchPhase.Moved||touch.phase == TouchPhase.Stationary)
-			{
-				t.addTime(touch.deltaTime);
-				if(selection != null)
-				{
-					if(touch.phase == TouchPhase.Moved && t.getTime() > 0.5f)
-						t.setTouch(eType.Drag);
-					//translate current finger position to new object position  
-					curScreenPoint = new Vector3(touch.position.x, touch.position.y, screenPoint);
-					curPos = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
-					selection.transform.position = curPos;
-					//scale size of object with respect to the Distance between its current position and the host's receptacle
-					selection.GetComponent<StimulusScript>().scaleToTarget(Vector3.Distance(curPos, target.transform.position)*distanceMod);
-				}
-					
-			}
-
-			if (touch.phase == TouchPhase.Ended)
-			{	
-				if(t.isInit()){ //if t.type was not modified in a Drag phase
-					t.setTouch(eType.Tap);
-				}
-				t.addTime(touch.deltaTime);
-				if(selection != null) //if object was not placed in receptacle
-				{
-					t.storeSelection(selection.name);
-					selection.GetComponent<Selectable>().onSelect(t); //notify the selection it has been touched
-					//return and rescale object, add it back to SOO as a child
-					selection.transform.position = selection.GetComponent<StimulusScript>().returnHomePos();
-					selection.GetComponent<StimulusScript>().resetScale();
-					selection.transform.parent = parentBuffer;
-					selection = null;
-				}
-				touchSum.addTouch(t); //store touch instance data
-				t = null;
-			}
-		}
-	
+	//******************
+	// Setter Functions*
+	//******************
+	/// <summary>
+	/// Increments duration by the given amount 
+	/// </summary>
+	/// <param name="time">elapsed time</param>
+	public void addTime(float time )
+	{
+		duration += time;
+	}
+	/// <summary>
+	/// Stores the selected object name.
+	/// </summary>
+	/// <param name="selected">Selected object name.</param>
+	public void storeSelection (string selected)
+	{
+		selectionName = selected;
+	}
+	/// <summary>
+	/// sets the instance to the type of touch event.
+	/// </summary>
+	/// <param name="t"> touch type</param>
+	public void setTouch (eType t)
+	{
+		type = t;
 	}
 }

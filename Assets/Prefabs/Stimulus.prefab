@@ -125,6 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9f0d30fc1c6e9f44a6db09d5a1ee789, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isTarget: 0
   touchInput: {fileID: 11472264}
 --- !u!114 &11472264
 MonoBehaviour:

@@ -1,0 +1,12 @@
+Name,Body Part,Index
+HappyFace1,0,1
+HappyFace2,0,2
+NeutralFace1,0,3
+AngryFace1,0,4
+TestBody__antenna,2,0
+TestBody__body,1,0
+TestBody__head,0,0
+TestBody__l_arm,3,0
+TestBody__r_arm,5,0
+TestBody__l_leg,4,0
+TestBody__r_leg,6,0

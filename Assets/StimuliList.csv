@@ -1,8 +1,8 @@
-Index,Name,Type,Difficulty
-0,Baby,visual,Easy
-1,Girl,visual,Easy
-2,Duck,visual,Easy
-3,Bee,visual,Easy
-4,Tortoise,visual,Easy
-5,Bird,visual,Easy
-6,Monkey,visual,Easy
+Index,Name,Type,Difficulty,HostStim,HostStimType
+0,Baby,visual,Easy,Baby,audio
+1,Girl,visual,Easy,Girl,audio
+2,Duck,visual,Easy,Duck,audio
+3,Bee,visual,Easy,Bee,audio
+4,Tortoise,visual,Easy,Tortoise,audio
+5,Bird,visual,Easy,Bug,audio
+6,Monkey,visual,Easy,Monkey,audio

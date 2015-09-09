@@ -15,6 +15,8 @@ public class serStim{
 	public string audio;
 	public string sprite;
 	public string stimType;
+	public string hostStim;
+	public string hostStimType;
 	public bool isDraggable;
 	public Difficulty difficulty; 
 }
@@ -67,23 +69,14 @@ public class Question : ScriptableObject {
 	/// <param name="sounds">Auditory stimuli</param>
 	/// <param name="correct">Target stimulus</param>
 	/// <param name="cat">Question category</param>
-	public void init (int qNum, List<serStim> stimList, int target, Category cat)
+	public void init (int qNum, List<serStim> stimList, Category cat)
 	{
 		questionNumber = qNum;
 		customizationEvent = false;
+		stimuli = stimList;
 		for (int i = 0; i<4; i++)
 		{
-		  
-			tempStim = new serStim();
-			tempStim.audio = stimList[i].audio;
-			tempStim.sprite = stimList[i].sprite; 
-			tempStim.stimType = stimList[i].stimType;
-			if(i == target) 
-				tempStim.isCorrect = true;
-			else
-				tempStim.isCorrect = false;
-			tempStim.isDraggable = true;
-			stimuli.Add(tempStim);
+			stimuli[i].isDraggable = true;
 		}
 		
 	}
@@ -97,7 +90,7 @@ public class Question : ScriptableObject {
 	{
 		questionNumber = qNum;
 		customizationEvent = true;
-		for (int i = 0; i<4; i++)
+		for (int i = 0; i<textures.Count; i++)
 		{
 			tempOption = new serCustomizationOption();
 			tempOption.texture = textures[i];
@@ -105,7 +98,25 @@ public class Question : ScriptableObject {
 			tempOption.bodyPart = bodyPart;
 			options.Add(tempOption);
 		}
+		if (options.Count < 4)
+		{
+			addBlanks((4-options.Count));
+		}
 		
+	}
+
+	/// <summary>
+	/// Adds blank options to fully populate SOO.
+	/// </summary>
+	/// <param name="count">4 - the options list count.</param>
+	void addBlanks(int count)
+	{
+		tempOption = new serCustomizationOption();
+		for (int i = 0; i < count; i++)
+		{
+			tempOption.isDraggable = false;
+			options.Add(tempOption);
+		}
 	}
 	/// <summary>
 	/// Gets the indicated stimulus
@@ -119,6 +130,15 @@ public class Question : ScriptableObject {
 	/// <returns>Indicated option.</returns>
 	/// <param name="index">Index of desired option.</param>
 	public serCustomizationOption getOption (int index) {return options[index];}
+	
+	/// <summary>
+	/// Returns the option list count.
+	/// </summary>
+	/// <returns>option list count.</returns>
+	public int countOptions ()
+	{
+		return options.Count;
+	}
 	/// <summary>
 	/// Gets the question number.
 	/// </summary>

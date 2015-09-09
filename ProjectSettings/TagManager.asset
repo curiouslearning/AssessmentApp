@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Stimulus
   - SOO
+  - Suspended
   layers:
   - Default
   - TransparentFX
