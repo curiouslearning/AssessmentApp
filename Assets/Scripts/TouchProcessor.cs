@@ -40,6 +40,7 @@ public class TouchProcessor : Observer {
 	public override void onNotify (EventInstance<ScoreTracker> e)
 	{
 		if (e.type == eType.EndGame) {
+			Debug.Log("Caught Endgame");
 			return;
 		} else if (e.type == eType.NewQuestion) {
 			scoring.addTouch (touchSum);

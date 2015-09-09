@@ -207,13 +207,26 @@ public class AnimationManager : Observer {
 	public int getBodyPart ()
 	{
 		int i =0;
-		while (bodyPartCustomized[i] == true) {i++;}
+		while (i < bodyPartCustomized.Length && bodyPartCustomized[i] == true ) {i++;}
+
+		{
+			i++;
+		}
+		
 		return i-1;
 	}
 	int getBodyPartInternal()
 	{
 		int i =0;
-		while (bodyPartCustomized[i] == true) {i++;}
+		while (i < bodyPartCustomized.Length && bodyPartCustomized[i] == true ) {i++;}
+		if (i >= bodyPartCustomized.Length) //reset body part list to maintain customizability
+		{
+			for (int j = 1; j < bodyPartCustomized.Length; j++)
+			{
+				bodyPartCustomized[j] = false;
+			}
+			i = 0;
+		}
 		bodyPartCustomized[i] = true;
 		return i;
 	}

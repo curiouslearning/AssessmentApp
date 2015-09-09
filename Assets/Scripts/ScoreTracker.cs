@@ -131,9 +131,7 @@ public class ScoreTracker : Observer {
 	void endGame ()
 	{
 		eventHandler.sendEvent (eType.EndGame);
-		AndroidBroadcastIntentHandler.BroadcastJSONData("EndGame", printListString ()); //data recording
 
-		Debug.Log(printListString()); //debugger - printListString() is used in the broadcast.
 		//Printing it to the debug log allows us to see the entire
 		//string that will be sent in the broadcast, which contains
 		//all the data collected from the latest game.
@@ -229,6 +227,7 @@ public class ScoreTracker : Observer {
 				return Category.PseudowordMatching;
 	
 			case Category.PseudowordMatching:
+				gameOver = true;
 				endGame();
 				return Category.PseudowordMatching;
 		}
@@ -274,7 +273,10 @@ public class ScoreTracker : Observer {
 		if (numCorrect >= 3) {
 			// If this case is true, the player has exhausted all available categories and difficulties
 			if (s.returnCategory() == Category.PseudowordMatching && s.returnDifficulty() == Difficulty.Hard) {
+				Debug.Log("Game over!");
 				gameOver = true;
+				endGame();
+				return;
 			} else {
 				// if the player answers three consecutive questions correctly, numCorrect is
 				// reset and an event notification of type ChangeDifficulty is sent out, which
@@ -297,6 +299,8 @@ public class ScoreTracker : Observer {
 			s.setCategory(currentCategory);
 			s.setDifficulty(temp);
 			setCategory();
+			if(gameOver)
+				return;
 		}
 
 		stimOrgOb = spawnHolder.spawnNext(currentCategory,s.returnDifficulty(),questionNumber);
@@ -314,6 +318,10 @@ public class ScoreTracker : Observer {
 
 	void Update() 
 	{
+		if (gameOver) {
+			string junk = "meaningless";
+			return;
+		}
 		// questionTime keeps track of the elapsed time since the
 		// start of the current question.  It must be updated
 		// frequently, which is why it is placed in Update().
@@ -351,9 +359,7 @@ public class ScoreTracker : Observer {
 		//if scene is changing do not process input
 		//otherwise generate input commands and pass them to the proper objects
 		// if 
-		if (gameOver) {
-			endGame ();
-		}
+		
 	}
 
 	void printList () //debugger
