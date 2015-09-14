@@ -143,21 +143,24 @@ public class AnimationManager : Observer {
 					break;
 				}
 			}
-			
+			Debug.Log("body part: " + bodyPart);	
 			changeBodyPart( bodyPart, newTexture);
 			//grab texture info and send it to swapper	
 		}
 		if (e.type == eType.Selected || e.type == eType.TimedOut)
 		{
+			animator.ResetTrigger("Landed");
+			animator.SetTrigger("Success");
 			GetComponent<AudioSource>().clip = null;
 			return;
 		}
-		if (e.type == eType.Selected && !e.signaler.GetComponent<StimulusScript>().isOption())
+		if (e.type == eType.Grab)
 		{
-			animator.SetTrigger("Success");
+			animator.SetTrigger("Point");
 		}
 		if (e.type == eType.Ready)
 		{
+			animator.SetTrigger("Landed");
 			if(GetComponent<AudioSource>().clip != null)
 			{
 				GetComponent<AudioSource>().Play();
@@ -207,11 +210,9 @@ public class AnimationManager : Observer {
 	public int getBodyPart ()
 	{
 		int i =0;
-		while (i < bodyPartCustomized.Length && bodyPartCustomized[i] == true ) {i++;}
-
-		{
+		while (i < bodyPartCustomized.Length && bodyPartCustomized[i] == true ) {
 			i++;
-		}
+		}	
 		
 		return i-1;
 	}

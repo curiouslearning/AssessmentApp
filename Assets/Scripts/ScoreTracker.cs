@@ -10,6 +10,7 @@ public class ScoreTracker : Observer {
 	public float questionTime;
 	public float firstLimit;
 	public float secondLimit;
+	public float pointTime;
 	float timeLimit;
 	float startTime;
 	private bool firstTouchHappened;
@@ -23,6 +24,7 @@ public class ScoreTracker : Observer {
 	public GameObject gCollector;
 	GameObject stimOrgOb;
 	SOOScript sooHolder;
+	Animator animator;
 
 	//Event variables
 	public Subject eventHandler;
@@ -56,6 +58,7 @@ public class ScoreTracker : Observer {
 		lastCategory = currentCategory;
 	}	
 	void Start () {	
+		animator = GameObject.Find ("MainCharacter").GetComponent<Animator>();
 		gameOver = false;
 		scoreList = new List<Score>();
 		addSubjects();
@@ -335,6 +338,11 @@ public class ScoreTracker : Observer {
 		// TimeOut (which will be picked up in ScoreTracker)
 		// event and moves on to the next question, calling
 		// move(1) on sooHolder
+		if(questionTime >= pointTime)
+		{
+			animator.SetTrigger("Point");
+			pointTime += Time.time;
+		}
 		if (questionTime >= timeLimit){
 			startTime = Time.time;
 
