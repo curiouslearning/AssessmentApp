@@ -83,7 +83,7 @@ public class AnimationManager : Observer {
 			AudioClip audio = Resources.Load<AudioClip>("Audio/" + m.hostStim);	
 			if(audio == null)
 			{
-				Debug.LogError("Fetty Wap what are you doing here?");
+				Debug.LogError("Audio did not load properly");
 			}
 			setHostMediaInternal (audio);
 		}

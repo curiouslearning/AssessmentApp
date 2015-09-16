@@ -18,7 +18,8 @@ public class serStim{
 	public string hostStim;
 	public string hostStimType;
 	public bool isDraggable;
-	public Difficulty difficulty; 
+	public Difficulty difficulty;
+	public Category category; 
 }
 /// <summary>
 /// Serializable class to store customization event data for question data persistance
@@ -52,13 +53,22 @@ public class Question : ScriptableObject {
 	serStim tempStim;
 	serStim prompt;
 	bool customizationEvent;
-	
-	
+	Category cat;
+
 	void Awake ()
 	{
 		customizationEvent = false;
 		stimuli = new List<serStim>();
 		options = new List<serCustomizationOption>();
+	}
+
+	/// <summary>
+	/// returns the question's category.
+	/// </summary>
+	/// <returns>Category cat.</returns>
+	public Category getCat ()
+	{
+		return cat;
 	}
 	
 	/// <summary>
@@ -69,14 +79,20 @@ public class Question : ScriptableObject {
 	/// <param name="sounds">Auditory stimuli</param>
 	/// <param name="correct">Target stimulus</param>
 	/// <param name="cat">Question category</param>
-	public void init (int qNum, List<serStim> stimList, Category cat)
+	public void init (int qNum, List<serStim> stimList, Category c)
 	{
 		questionNumber = qNum;
 		customizationEvent = false;
+		cat = c;
+		
 		stimuli = stimList;
-		for (int i = 0; i<4; i++)
+		for (int i = 0; i<stimuli.Count; i++)
 		{
-			stimuli[i].isDraggable = true;
+			if(stimuli[i] != null)
+				stimuli[i].isDraggable = true;
+			else {
+				Debug.LogError("null stimuli exception");
+			}
 		}
 		
 	}
@@ -123,7 +139,15 @@ public class Question : ScriptableObject {
 	/// </summary>
 	/// <returns>indicated stimulus</returns>
 	/// <param name="index">Index of desired stimulus</param>
-	public serStim getStim (int index) {return stimuli[index];}
+	public serStim getStim (int index) {
+		serStim butts = new serStim();
+		if(stimuli[index] != null)
+			return stimuli[index];
+		else {
+			Debug.LogError("returning blank stim");
+		}
+		return butts;
+	}
 	/// <summary>
 	/// Gets the indicated option.
 	/// </summary>

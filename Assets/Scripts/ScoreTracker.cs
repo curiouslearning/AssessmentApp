@@ -221,7 +221,7 @@ public class ScoreTracker : Observer {
 				return Category.SightWordIdentification;
 
 			case Category.SightWordIdentification:
-				return Category.RhymingWordMatching;
+				return Category.BlendingWordIdentification; //HACK UNTIL RHYMING CASE IS IMPLEMENTED
 
 			case Category.RhymingWordMatching:
 				return Category.BlendingWordIdentification;
@@ -247,6 +247,20 @@ public class ScoreTracker : Observer {
 			return Difficulty.Hard;
 		case Difficulty.Hard:
 			return Difficulty.Hard;
+		}
+		return curDiff;
+	}
+
+	public Difficulty resetDifficulty (Difficulty curDiff)
+	{	
+		switch(curDiff)
+		{
+		case Difficulty.Easy:
+			return Difficulty.Easy;
+		case Difficulty.Medium:
+			return Difficulty.Easy;
+		case Difficulty.Hard:
+			return Difficulty.Medium;
 		}
 		return curDiff;
 	}
@@ -292,7 +306,7 @@ public class ScoreTracker : Observer {
 				s.setDifficulty(temp);
 				// the difficulty and category variables in the current score variable
 				// must also be adjusted appropriately.
-				updateDifficulty();
+				//updateDifficulty();
 			}	
 		} 
 		else {

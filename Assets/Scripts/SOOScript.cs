@@ -96,6 +96,24 @@ public class SOOScript : Observer {
 		movingAlreadyFalse = false;
 		setDrag("Suspended");
 		curDest = destArray[dest];
+		setWalk("set");
+	}
+
+	void setWalk(string param)
+	{
+		for (int i = 0; i < stimArray.Length; i++)
+		{
+			Animator m = stimArray[i].GetComponent<Animator>();
+			if (m != null)
+			{
+				if(param == "set")
+					m.SetTrigger("Walk_Left");
+				else if (param == "right")
+					m.SetTrigger("Walk_Right");
+				else if (param == "reset")
+					m.SetTrigger("Landed");
+			}
+		}
 	}
 /// <summary>
 /// Tell the stimuli to update homePos to their current position, for snap-back functionality
@@ -149,6 +167,7 @@ public class SOOScript : Observer {
 		{
 			transform.position = curDest;
 			updatePos();
+			setWalk ("reset");
 			moving = false;
 		}
 		

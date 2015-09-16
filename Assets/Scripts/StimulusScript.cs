@@ -14,7 +14,7 @@ public class StimulusScript : MonoBehaviour{
 	private bool hasBeenTarget;
 	private bool option;
 	private bool isBeingDragged; 
-	private bool isDraggable;
+	public bool isDraggable;
 	private string stimType;
 	private string visStim;
 	private Difficulty difficulty;
@@ -22,11 +22,14 @@ public class StimulusScript : MonoBehaviour{
 	private Vector3 startScale; //scaling functionality
 	public Selectable touchInput;
 	private int optionBodyPart;
-	string textureName;	
+	string textureName;
 
 	void Start ()
 	{
-		startScale = transform.localScale*0.6f;
+		if(this.GetComponent<Animator>())
+			startScale = transform.localScale*1.5f;
+		else
+			startScale = transform.localScale*0.6f;
 		isBeingDragged = false;
 		touchInput.initP(onSelect);
 	}
@@ -199,8 +202,14 @@ public class StimulusScript : MonoBehaviour{
 	/// <param name="t">touch instance information</param>
 	public void onSelect (touchInstance t)
 	{
-		//Animation stuff here
-		//sound stuff here
+		AudioSource audio = GetComponent<AudioSource>();
+		Animator anim = GetComponent<Animator>();
+		if (audio.clip != null)
+		{
+			audio.Play();
+			anim.SetTrigger("Talk");
+		}
+			
 	}
 	void Update () {
 

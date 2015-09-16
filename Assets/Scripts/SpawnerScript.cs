@@ -14,17 +14,19 @@ public class SpawnerScript : MonoBehaviour {
 	GameObject[] newStims;
 	Sprite[] newOptions;
 	Dictionary<string, Difficulty> diffParser;
+	Dictionary<string, Category> catParser;
 	List<serStim> stimPool;
 	public TextAsset stimList;
 	public GameObject sooPrefab;
 	public GameObject stimPrefab;
+	public GameObject character;
 	//placement modifiers for stimulus positions
-	public float left;
-	public float right;
-	public float up;
-	public float stimDown;
-	public float textureDown; //textures are longer than stimuli
+	public Vector4 visStimSpacing;
+	public Vector4 charStimSpacing;
+	public Vector4 textureSpacing;
+	public Vector4 spacing;
 	public float scaleStim;
+	public float scaleCharacter;
 	public float scaleTexture; //factor by which to scale down textures to fit on screen
 	//variables for the SOO to hold onto
 	public Vector3[] destinations;
@@ -36,12 +38,26 @@ public class SpawnerScript : MonoBehaviour {
 		diffParser.Add ("Easy", Difficulty.Easy);
 		diffParser.Add ("Medium", Difficulty.Medium);
 		diffParser.Add ("Hard", Difficulty.Hard);
+		initCatParser();
 		newStims = new GameObject[4];
 		positions = new Vector3[4]; 
 		stimPool = new List<serStim>();
 		parseData();
 	}
-	
+
+	void initCatParser()	
+	{
+		catParser = new Dictionary<string, Category>();
+		catParser.Add("ReceptiveVocabulary",Category.ReceptiveVocabulary);
+		catParser.Add("BlendingWordIdentification",Category.BlendingWordIdentification);
+		catParser.Add("Customization",Category.Customization);
+		catParser.Add("CVCWordIdentification",Category.CVCWordIdentification);
+		catParser.Add("LetterNameID",Category.LetterNameRecognition);
+		catParser.Add("LetterSoundMatching",Category.LetterSoundMatching);
+		catParser.Add("PseudoWordMatching",Category.PseudowordMatching);
+		catParser.Add("RhymingWordMatching",Category.RhymingWordMatching);
+		catParser.Add("SightWordIdentification",Category.SightWordIdentification);
+	}
 	void parseData()
 	{ 
 		string[] sourceLines = stimList.text.Split('\n');
@@ -50,11 +66,19 @@ public class SpawnerScript : MonoBehaviour {
 			serStim data = new serStim();
 			string [] vals = sourceLines[i].Split(',');
 			data.hasBeenTarget = false;
-			data.sprite = vals[1]; 
-			data.stimType = vals[2];
-			data.difficulty = diffParser[vals[3].TrimEnd('\r')];
+			if(vals[1] == "audio")
+			{
+				data.audio = vals[0];
+			}
+			else
+			{
+				data.sprite = vals[0];
+			}
+			data.stimType = vals[1];
+			data.difficulty = diffParser[vals[2].TrimEnd('\r')];	
+			data.hostStimType = vals[3];
 			data.hostStim = vals[4];  //what the host shows/says when this stimulus is the target
-			data.hostStimType = vals[5];
+			data.category = catParser[vals[5].TrimEnd('\r')];
 			stimPool.Add(data);
 		}
 	}
@@ -70,60 +94,88 @@ public class SpawnerScript : MonoBehaviour {
 		List<serStim> answer = new List<serStim>();
 		int counter = 0;
 		int targetCount = 0;
+		int revolutionCount =0;
 		string type;
 		// the variable type, which is used to determine whether findStim
 		// is looking for audio or visual stimulus, is assigned based
 		// on the current category
 
-		/*if (cat.Equals (Category.ReceptiveVocabulary)) { //this is needed only with mixed stimuli
+		if (cat.Equals (Category.ReceptiveVocabulary) || cat.Equals(Category.Customization)) {
 			type = "visual";
-		} else 
-			type = "audio";*/
-		type = "visual"; //temp fix
+		} else {
+			type = "audio";
+		}
+		//type = "visual"; //temp fix
 
+		Debug.Log("type: " + type);
 		while (answer.Count == 0)
 		{
 			if (counter == stimPool.Count)
 				counter = 0;
 			serStim s = stimPool[counter];
-			if(s.hasBeenTarget)
+			if(s.stimType.Equals(type) && s.category.Equals(cat))
 			{
-				Debug.Log(s.sprite + " Has been target");
-				targetCount++;
-				if(targetCount == stimPool.Count)
+				if(s.hasBeenTarget)
 				{
-					Debug.LogError("ran out of stims! Counter == " + stimPool.Count);
+					targetCount++;
+					if(targetCount == stimPool.Count)
+					{
+						break;
+					}
+					else{
+						counter++;
+						continue;
+					}
+				}
+				
+				// this block of code handles retrieving a
+				// stimulus to be the target
+				float f = Random.Range (0.0f,4.0f);
+				if (f < 1.0f) {
+					stimPool[counter].hasBeenTarget = true;
+					s.isCorrect = true;
+					answer.Add(s);
+					host.setHostMedia(s);
 					break;
 				}
-				else{
-					counter++;
-					continue;
-				}
-			}
-			s.stimType = type;
-			// this block of code handles retrieving a
-			// stimulus to be the target
-			float f = Random.Range (0.0f,4.0f);
-			if (f < 1.0f) {
-				Debug.Log("found: " + s.sprite + " and marking it true");
-				stimPool[counter].hasBeenTarget = true;
-				s.isCorrect = true;
-				answer.Add(s);
-				host.setHostMedia(s);
-				break;
 			}
 			counter++;
 		}
 		counter = 0;
 		while (answer.Count < 4) {
 			if (counter == stimPool.Count)
+			{
 				counter = 0;
+				revolutionCount++;
+				if(revolutionCount > 5)
+				{
+					resetTargets();
+					revolutionCount = 0;
+				}
+			}
 			serStim s = stimPool[counter];
-			s.stimType = type;
+			if(s.hasBeenTarget)
+			{
+				targetCount++;
+				if(targetCount == stimPool.Count)
+				{
+					Debug.Log("ran out of " + diffLevel + " stims");
+					ScoreTracker inst = GameObject.Find ("Main Camera").GetComponent<ScoreTracker>();
+					diffLevel = inst.resetDifficulty(diffLevel); //if we run out of one difficulty don't freak out
+					resetTargets();
+					counter = 0;
+					revolutionCount++;
+					continue;
+				}
+				else{
+					counter++;
+					continue;
+				}
+			}
 			// when a list of 4 serStims is assembled, findStim returns answer
-			 if (stimPool[counter].stimType.Equals (type) && 
-			    stimPool[counter].difficulty.Equals (diffLevel) &&
-			    !answer.Contains(stimPool[counter])) { 
+			 if (s.stimType.Equals (type) && 
+			    s.difficulty.Equals (diffLevel) &&
+			    !answer.Contains(s) && s.category.Equals(cat)) { 
 				// this block of code handles generating non-target
 				// stimuli
 			    float f = Random.Range (0.0f,4.0f);
@@ -137,7 +189,14 @@ public class SpawnerScript : MonoBehaviour {
 		return answer;
 	}
 
-
+	void resetTargets()
+	{
+		for (int i = 0; i < stimPool.Count; i++)
+		{	
+			stimPool[i].hasBeenTarget = false;
+			stimPool[i].isCorrect = false;
+		}
+	}
 
 	/// <summary>
 	/// Randomly create a question or customization event based on the category and current difficulty level
@@ -171,66 +230,105 @@ public class SpawnerScript : MonoBehaviour {
 		newSoo = Instantiate(sooPrefab) as GameObject;
 		SOOScript holder = newSoo.GetComponent<SOOScript>();
 		newSoo.transform.position = transform.position;
-		float down;
-		if(q.isCustomizationEvent()){
-			down = textureDown;
-		}
-		else {
-				down = stimDown;
-		}
-			
-		//create 4 instances of stimuli as children of the SOO, and arrange them within its Box Collider
-		for (int i =0; i< 4; i++)
-		{
-			newStims[i] = Instantiate (stimPrefab) as GameObject;
-			newStims[i].transform.SetParent(newSoo.transform);
-			
-			//set stimulus position within SOO
-			switch(i){
-				case 0: 
-					newStims[i].transform.position = newSoo.transform.position + new Vector3 (left, up, 0);
-					break;
-				case 1: 
-					newStims[i].transform.position = newSoo.transform.position + new Vector3 (right, up, 0);
-					break;
-				case 2: 
-					newStims[i].transform.position = newSoo.transform.position + new Vector3 (right, down, 0);
-					break;
-				case 3: 
-					newStims[i].transform.position = newSoo.transform.position + new Vector3 (left, down, 0);
-					break;
-			}
-			positions[i] = transform.position;
-			if(q.isCustomizationEvent())
-			{
-				newStims[i].GetComponent<StimulusScript>().setOptions(q.getOption(i)); 
-				
-			}
-			else
-			{
-				newStims[i].GetComponent<StimulusScript>().setStim(q.getStim(i));
-				newStims[i].GetComponent<StimulusScript>().initSprite();	
-			}
-		}
+		arrangeSOO(q); //arrange the objects inside the SOO
 		//add stims, stim positions, and SOO destinations to SOO instance
 		holder.setSoo(newStims, q.getNumber()); 
 		holder.setPosArray(positions);
 		holder.setDestArray(destinations);
-		//scale size to screen
+		holder = scaleChildren(q, holder);  //scale size to screen	
+		host.registerWithSoo(newSoo);
+		return newSoo;	
+	}
+
+//*****************************
+//* spawnSOO HELPER FUNCTIONS *
+//*****************************
+	void arrangeSOO(Question q)
+	{
+		//create 4 instances of stimuli as children of the SOO, and arrange them within its Box Collider
+		for (int i =0; i< 4; i++)
+		{
+			//identify the prefab and proper spacing needed within the SOO
+			if(needsCharacter(q.getCat()))
+			{
+				newStims[i] = Instantiate (character) as GameObject; //use the secondary character
+				spacing = charStimSpacing;
+			}
+			else{
+				newStims[i] = Instantiate (stimPrefab) as GameObject; //just display the stimulus as a sprite
+				if(q.getCat() == Category.Customization)
+				{
+					spacing = textureSpacing;
+				}
+				else{
+					spacing = visStimSpacing;
+				}
+			}
+			newStims[i].transform.SetParent(newSoo.transform);
+			
+			//set stimulus position within SOO
+			switch(i){
+			case 0: 
+				newStims[i].transform.position = newSoo.transform.position + new Vector3 (spacing.x, spacing.y, 0); //upper left
+				break;
+			case 1: 
+				newStims[i].transform.position = newSoo.transform.position + new Vector3 (spacing.z, spacing.y, 0); //upper right
+				break;
+			case 2: 
+				newStims[i].transform.position = newSoo.transform.position + new Vector3 (spacing.z, spacing.w, 0); //lower right
+				break;
+			case 3: 
+				newStims[i].transform.position = newSoo.transform.position + new Vector3 (spacing.x, spacing.w, 0); //lower left
+				break;
+			}
+			positions[i] = transform.position;
+			initChild(q, i);	
+		}
+	}
+	
+	void initChild (Question q, int i)
+	{
+		if(q.isCustomizationEvent())
+		{
+			newStims[i].GetComponent<StimulusScript>().setOptions(q.getOption(i)); 
+			
+		}
+		else if (needsCharacter(q.getCat()))
+		{
+			newStims[i].GetComponent<StimulusScript>().setStim(q.getStim(i));
+		}
+		else {
+			newStims[i].GetComponent<StimulusScript>().setStim(q.getStim(i));
+			newStims[i].GetComponent<StimulusScript>().initSprite();	
+		}		
+	}
+
+	SOOScript scaleChildren (Question q, SOOScript holder)
+	{
 		if(q.isCustomizationEvent())
 		{
 			holder.transform.localScale = new Vector3 (scaleTexture,scaleTexture,scaleTexture);
 		}
+		else if (needsCharacter(q.getCat()))
+		{
+			holder.transform.localScale = new Vector3 (scaleCharacter,scaleCharacter,scaleCharacter);
+		}
 		else
 		{
 			holder.transform.localScale = new Vector3 (scaleStim,scaleStim,scaleStim);
-		}		
-		host.registerWithSoo(newSoo);
-		return newSoo;
-		
-	}		
-	GameObject spawnSOO2 (Question q)
-	{
-		return spawnSOO(q);
+		}
+		return holder;
 	}
+
+	bool needsCharacter (Category cat)
+	{
+		switch (cat){
+		case Category.ReceptiveVocabulary: //add categories that don't need the SecChar as cases here
+			return false;
+		case Category.Customization:
+			return false;
+		default:
+			return true;
+		}
+	}			
 }
