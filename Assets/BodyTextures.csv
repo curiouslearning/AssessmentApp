@@ -1,17 +1,22 @@
 Name,Body Part,Index
 head01-color,0,0
-head01-color,0,4
 NeutralFace1,0,1
 head02-color,0,2
-head02-color,0,3
+head03-color,0,3
 body01-color,1,0
 body02-color,1,1
+body03-color,1,2
 antenna01-color,2,0
+antenna02-color,2,1
+antenna03-color,2,2
 nose01-color,3,0
 nose02-color,3,1
+nose03-color,3,2
 hat01-color,4,0
 hat02-color,4,1
 hat03-color,4,2
 wing01-color,5,0
+wing02-color,5,1
+wing03-color,5,2
 eyes01-color,6,0
 eyes02-color,6,1

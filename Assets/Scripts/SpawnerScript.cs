@@ -32,6 +32,7 @@ public class SpawnerScript : MonoBehaviour {
 	public Vector3[] destinations;
 	Vector3[] positions;
 	public AnimationManager host;
+	public ToggleBasket receptacle;
 	// Use this for initialization
 	void Awake () {
 		diffParser = new Dictionary<string, Difficulty>();
@@ -237,6 +238,7 @@ public class SpawnerScript : MonoBehaviour {
 		holder.setDestArray(destinations);
 		holder = scaleChildren(q, holder);  //scale size to screen	
 		host.registerWithSoo(newSoo);
+		receptacle.registerWithSoo(newSoo);
 		return newSoo;	
 	}
 
