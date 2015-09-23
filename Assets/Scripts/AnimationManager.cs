@@ -9,6 +9,10 @@ using System.Collections.Generic;
 /// </summary>
 public class AnimationManager : Observer {
 	Animator animator;
+	public Animator squareCard;
+	//public Animator rectangleCard;
+	Material square;
+	//Material rectangle;
 	public GameObject[] subjects;
 	public TextAsset optionsList;
 	const int NUMBODYPARTS = 7;
@@ -30,6 +34,8 @@ public class AnimationManager : Observer {
 			optionTextures[i] = new Texture2D[NUMOPTIONS];
 		}		
 		animator = GetComponent<Animator>();
+		square = squareCard.GetComponent<MeshRenderer>().material;
+		//rectangle = rectangleCard.GetComponent<MeshRenderer>().material;
 		initTextures();
 	
 	}
@@ -88,6 +94,7 @@ public class AnimationManager : Observer {
 			setHostMediaInternal (audio);
 		}
 		else{
+			Debug.Log("vis stim with name: " + m.hostStim);
 			Sprite sprite = Resources.Load<Sprite>("Art/" + m.hostStim);
 			setHostMediaInternal (sprite);
 		}
@@ -97,10 +104,20 @@ public class AnimationManager : Observer {
 	{
 		AudioSource host = GetComponent<AudioSource>();
 		host.clip = a;
+		square.mainTexture = null;
+		//rectangle.mainTexture = null;
 	}
 	void setHostMediaInternal (Sprite s)
 	{
-		// logic to add sprite to host's sign
+		//if ((s.rect.xMax-s.rect.xMin) != (s.rect.yMax-s.rect.yMin)) //if the texture is a rectangle
+		//{
+			//rectangle.mainTexture = s.texture;
+			//square.mainTexture = null;
+		//}
+		//else {
+			square.mainTexture = s.texture;
+			//rectangle.mainTexture = null;
+		//}
 	}
 	/// <summary>
 	/// Creates atlases for each body part, sets the UVs to default values
@@ -165,6 +182,17 @@ public class AnimationManager : Observer {
 			{
 				GetComponent<AudioSource>().Play();
 			}
+			if(square.mainTexture != null)
+			{
+				animator.SetTrigger("ShowCard");
+				squareCard.SetTrigger("ShowCard");
+			}
+			/*else if (rectangle.mainTexture != null)  //Commented out while rectangle card is nonexistent
+			{
+				animator.SetTrigger("ShowCard");
+				rectangleCard.SetTrigger("ShowCard");
+				
+			}*/
 		}
 	}
 
