@@ -242,6 +242,10 @@ Prefab:
       propertyPath: bodyParts.Array.data[6]
       value: 
       objectReference: {fileID: 145727779}
+    - target: {fileID: 178776, guid: 24cfefb2d97714555a40308930997e64, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 24cfefb2d97714555a40308930997e64, type: 2}
   m_IsPrefabParent: 0
@@ -257,6 +261,7 @@ GameObject:
   - 92: {fileID: 1587353494}
   - 124: {fileID: 1587353493}
   - 81: {fileID: 1587353492}
+  - 114: {fileID: 1587353497}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -330,6 +335,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
+--- !u!114 &1587353497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1587353491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 591a7eabe4fca48239bf174367c419b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stimList: {fileID: 4900000, guid: aeac18b4abb714e208799f7e17a6d7c3, type: 3}
 --- !u!4 &1683486708 stripped
 Transform:
   m_PrefabParentObject: {fileID: 432144, guid: 24cfefb2d97714555a40308930997e64, type: 2}

@@ -10,9 +10,9 @@ using System.Collections.Generic;
 public class AnimationManager : Observer {
 	Animator animator;
 	public Animator squareCard;
-	//public Animator rectangleCard;
+	public Animator rectangleCard;
 	Material square;
-	//Material rectangle;
+	Material rectangle;
 	public GameObject[] subjects;
 	public TextAsset optionsList;
 	const int NUMBODYPARTS = 7;
@@ -35,7 +35,7 @@ public class AnimationManager : Observer {
 		}		
 		animator = GetComponent<Animator>();
 		square = squareCard.GetComponent<MeshRenderer>().material;
-		//rectangle = rectangleCard.GetComponent<MeshRenderer>().material;
+		rectangle = rectangleCard.GetComponent<MeshRenderer>().material;
 		initTextures();
 	
 	}
@@ -105,19 +105,19 @@ public class AnimationManager : Observer {
 		AudioSource host = GetComponent<AudioSource>();
 		host.clip = a;
 		square.mainTexture = null;
-		//rectangle.mainTexture = null;
+		rectangle.mainTexture = null;
 	}
 	void setHostMediaInternal (Sprite s)
 	{
-		//if ((s.rect.xMax-s.rect.xMin) != (s.rect.yMax-s.rect.yMin)) //if the texture is a rectangle
-		//{
-			//rectangle.mainTexture = s.texture;
-			//square.mainTexture = null;
-		//}
-		//else {
+		if ((s.rect.xMax-s.rect.xMin) >= (s.rect.yMax-s.rect.yMin +50)) //if the texture is a rectangle
+		{
+			rectangle.mainTexture = s.texture;
+			square.mainTexture = null;
+		}
+		else {
 			square.mainTexture = s.texture;
-			//rectangle.mainTexture = null;
-		//}
+			rectangle.mainTexture = null;
+		}
 	}
 	/// <summary>
 	/// Creates atlases for each body part, sets the UVs to default values
@@ -187,12 +187,12 @@ public class AnimationManager : Observer {
 				animator.SetTrigger("ShowCard");
 				squareCard.SetTrigger("ShowCard");
 			}
-			/*else if (rectangle.mainTexture != null)  //Commented out while rectangle card is nonexistent
+			else if (rectangle.mainTexture != null)  //Commented out while rectangle card is nonexistent
 			{
 				animator.SetTrigger("ShowCard");
 				rectangleCard.SetTrigger("ShowCard");
 				
-			}*/
+			}
 		}
 	}
 
