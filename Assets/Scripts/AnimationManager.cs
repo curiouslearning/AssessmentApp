@@ -19,6 +19,7 @@ public class AnimationManager : Observer {
 	const int NUMOPTIONS = 10;
 	public GameObject[] bodyParts;
 	public Texture2D[][] optionTextures;
+	Dictionary <string, Texture2D> optionDict; //for fast lookup of a selected texture
 	public int defaultPos; //standard index for the default texture for each body part
 	string[] sourceLines;
 	bool[] bodyPartCustomized; //tracks which options have been customized
@@ -26,6 +27,7 @@ public class AnimationManager : Observer {
 
 	// Use this for initialization
 	void Awake () {
+		optionDict = new Dictionary<string, Texture2D>();
 		bodyPartCustomized = new bool[NUMBODYPARTS];
 		optionTextures = new Texture2D[NUMBODYPARTS][];
 		for(int i = 0; i < NUMBODYPARTS; i++)
@@ -77,6 +79,7 @@ public class AnimationManager : Observer {
 			int texturePosition = int.Parse(values[2]);
 			Texture2D t =  Resources.Load<Texture2D>("Textures/" + values[0]);
 			optionTextures[bodyPart][texturePosition] = t;
+			optionDict.Add(values[0], t);
 
 		}
 	}
@@ -146,29 +149,21 @@ public class AnimationManager : Observer {
 	/// </summary>
 	/// <param name="e">Event Instance.</param>
 	public override void onNotify (EventInstance<GameObject> e)
-	{
-		int newTexture = 0;
-		if(e.type == eType.Selected && e.signaler.GetComponent<StimulusScript>().isOption())
-		{
-			int bodyPart = e.signaler.GetComponent<StimulusScript>().getBodyPart();
-			for (int i = 0; i< sourceLines.Length; i++)
-			{
-				string[] vals = sourceLines[i].Split(',');
-				if(vals[0] == e.signaler.GetComponent<StimulusScript>().getTextureName())
-				{
-					newTexture = int.Parse(vals[2]);
-					break;
-				}
-			}
-			Debug.Log("body part: " + bodyPart);	
-			changeBodyPart( bodyPart, newTexture);
-			//grab texture info and send it to swapper	
-		}
+	{	
 		if (e.type == eType.Selected || e.type == eType.TimedOut)
 		{
 			animator.ResetTrigger("Landed");
 			animator.SetTrigger("Success");
 			GetComponent<AudioSource>().clip = null;
+			if(e.type == eType.Selected)
+			{
+				if(!e.signaler.GetComponent<StimulusScript>().Equals(null) && e.signaler.GetComponent<StimulusScript>().isOption()) //if selected object is a body part
+				{
+					StimulusScript s = e.signaler.GetComponent<StimulusScript>();
+					changeBodyPart(s.getBodyPart(), s.getTextureName());
+				}
+			}
+			Debug.Log("survived animation manager");
 			return;
 		}
 		if (e.type == eType.Grab)
@@ -202,10 +197,10 @@ public class AnimationManager : Observer {
 	/// </summary>
 	/// <param name="part">Index of the bone to be changed in bodyParts.</param>
 	/// <param name="newTexture"> Replacement Texture.</param>
-	void changeBodyPart (int part, int newTexture)
+	void changeBodyPart (int part, string newTexture)
 	{
 		GameObject temp = bodyParts[part];	
-		temp.GetComponent<SkinnedMeshRenderer>().material.mainTexture = optionTextures[part] [newTexture];
+		temp.GetComponent<SkinnedMeshRenderer>().material.mainTexture = optionDict[newTexture];
 	}
 
 	/// <summary>

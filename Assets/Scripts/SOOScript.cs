@@ -134,7 +134,8 @@ public class SOOScript : Observer {
 /// </summary>
 /// <param name="array">Array of selectable objects (stimuli or customization options).</param>
 /// <param name="qNum">Question number.</param>
-	public void setSoo (GameObject[] array, int qNum) {
+	public void setSoo (GameObject[] array, int qNum) 
+	{
 		stimArray = array;
 		questionNumber = qNum;
 	}
@@ -144,7 +145,15 @@ public class SOOScript : Observer {
 	{
 		for (int i = 0; i < stimArray.Length; i++)
 		{
-			stimArray[i].GetComponent<StimulusScript>().tag = draggable;
+			if (stimArray[i].transform.childCount > 1)
+			{
+				Debug.Log("oops");
+				stimArray[i].GetComponentInChildren<TokenScript>().tag = draggable;
+			}
+			else
+			{
+				stimArray[i].GetComponent<StimulusScript>().tag = draggable;
+			}
 		}
 	}
 

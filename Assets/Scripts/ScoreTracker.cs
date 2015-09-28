@@ -80,6 +80,7 @@ public class ScoreTracker : Observer {
 		spawnHolder = spawner.GetComponent<SpawnerScript>();
 		trashHolder = receptacle.GetComponent<CollisionNotification>();
 		trashHolder.sub.addObserver(new Subject.GameObjectNotify(this.onNotify));
+		trashHolder.sub.addObserver(new Subject.boolNotify(this.onNotify));
 		trashHolder = gCollector.GetComponent<CollisionNotification>();	
 		trashHolder.sub.addObserver(new Subject.GameObjectNotify(this.onNotify));
 		this.GetComponent<TouchProcessor>().eventWrapper.addObserver(new Subject.GameObjectNotify(this.onNotify));
@@ -131,6 +132,22 @@ public class ScoreTracker : Observer {
 		}
 	}
 
+	public override void onNotify (EventInstance<bool> e)
+	{
+		if(e.type == eType.Selected)
+		{
+			if(e.signaler)
+			{
+				s.addScore(true);
+			}
+			else
+			{
+				s.addScore(false);
+			}
+			sooHolder.move(1);
+			return;
+		}
+	}
 	void endGame ()
 	{
 		eventHandler.sendEvent (eType.EndGame);

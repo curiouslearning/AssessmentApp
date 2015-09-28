@@ -78,17 +78,20 @@ public class TouchProcessor : Observer {
 				{	
 					selection = touchHit.transform.gameObject; 
 					AndroidBroadcastIntentHandler.BroadcastJSONData("PlayerSelection", selection.gameObject.name);
-					parentBuffer = selection.transform.parent;  //store and remove the parent to prevent weird parent-child behavior during dragging
-					selection.transform.parent = null;
-					Debug.Log(selection.gameObject.name); //debugger
-					offset= selection.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, screenPoint));
+					if(selection.gameObject.tag == "Stimulus")
+					{
+						parentBuffer = selection.transform.parent;  //store and remove the parent to prevent weird parent-child behavior during dragging
+						selection.transform.parent = null;
+						Debug.Log(selection.gameObject.name); //debugger
+						offset= selection.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, screenPoint));
+					}
 				}
 			
 			}
 			else if (touch.phase == TouchPhase.Moved||touch.phase == TouchPhase.Stationary)
 			{
 				t.addTime(touch.deltaTime);
-				if(selection != null) 
+				if(selection != null && selection.gameObject.tag == "Stimulus") 
 				{
 					sendEvent(eType.Grab);
 					if(touch.phase == TouchPhase.Moved && t.getTime() > 0.5f){
@@ -115,10 +118,13 @@ public class TouchProcessor : Observer {
 				{
 					t.storeSelection(selection.name);
 					selection.GetComponent<Selectable>().onSelect(t); //notify the selection it has been touched
-					//return and rescale object, add it back to SOO as a child
-					selection.transform.position = selection.GetComponent<StimulusScript>().returnHomePos();
-					selection.GetComponent<StimulusScript>().resetScale();
-					selection.transform.parent = parentBuffer;
+					if(selection.gameObject.tag == "Stimulus")
+					{
+						//return and rescale object, add it back to SOO as a child
+						selection.transform.position = selection.GetComponent<StimulusScript>().returnHomePos();
+						selection.GetComponent<StimulusScript>().resetScale();
+						selection.transform.parent = parentBuffer;
+					}
 					selection = null;
 				}
 				sendEvent(eType.FingerUp);

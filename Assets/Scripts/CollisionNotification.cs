@@ -22,10 +22,14 @@ public class CollisionNotification : MonoBehaviour {
 			return;
 		}
 		selected = col.gameObject;
-		EventInstance<GameObject> e = new EventInstance<GameObject>();
-		e.setEvent(type, selected);
-		col.transform.parent = null;
-		sub.notify(e);
+		if (dragTag == "Stimulus" && selected.GetComponent<StimulusScript>().Equals(null))
+		{
+			sub.sendBoolEvent(eType.Selected, selected.GetComponent<TokenScript>().returnIsCorrect());
+			Destroy(selected.gameObject);
+		}
+		else {
+			sub.sendEvent(type);			
+		}
 		selected = null;
 	}
 }

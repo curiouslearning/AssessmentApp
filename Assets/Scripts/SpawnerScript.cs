@@ -254,7 +254,7 @@ public class SpawnerScript : MonoBehaviour {
 			if(needsCharacter(q.getCat()))
 			{
 				newStims[i] = Instantiate (character) as GameObject; //use the secondary character
-				spacing = charStimSpacing;
+				spacing = charStimSpacing;	
 			}
 			else{
 				newStims[i] = Instantiate (stimPrefab) as GameObject; //just display the stimulus as a sprite

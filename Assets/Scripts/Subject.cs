@@ -22,6 +22,9 @@ public class Subject : MonoBehaviour {
 	// delegates for ScoreTracker notifications
 	public delegate void scoreTrackerNotify (EventInstance<ScoreTracker> key);
 	public event scoreTrackerNotify scoreEvent;
+	// delegates for bool notifications
+	public delegate void boolNotify (EventInstance<bool> key);
+	public event boolNotify boolEvent;
 	/*delegates for animator notifications     COMMENTED OUT DUE TO UNUSE
 	public delegate void animatorNotify (EventInstance<AnimationManager> key);
 	public event animatorNotify anEvent;*/
@@ -38,8 +41,16 @@ public class Subject : MonoBehaviour {
 	{
 		EventInstance<GameObject> e;
 		e = new EventInstance<GameObject> ();
-		e.setEvent (type, this);
+		e.setEvent (type, this.gameObject);
 		notify (e);	
+	}
+	public void sendBoolEvent (eType type, bool val)
+	{
+		EventInstance<bool> e;
+		e = new EventInstance<bool>();
+		e.signaler = val;
+		e.type = type;
+		notify (e);
 	}
 	/// <summary>
 	/// calls the onNotify() methods of all Observers in the Event list.
@@ -59,6 +70,13 @@ public class Subject : MonoBehaviour {
 			scoreEvent(e);
 		}
 	}
+	
+	public void notify(EventInstance<bool> e)
+	{
+		if(boolEvent != null){
+			boolEvent(e);
+		}
+	}
 
 /// <summary>
 /// Adds the observer to the Event list.
@@ -76,6 +94,12 @@ public class Subject : MonoBehaviour {
 		scoreEvent += ob;
 		numObservers++;
 	}
+
+	public void addObserver (boolNotify ob)
+	{
+		boolEvent += ob;
+		numObservers++;
+	}
 /// <summary>
 /// Removes the observer from the Event List.
 /// Overridden to accept multiple Delegate types.
@@ -90,5 +114,10 @@ public class Subject : MonoBehaviour {
 	{
 		scoreEvent -= ob;
 		numObservers--;
-	} 		 
+	} 		
+	public void removeObserver (boolNotify ob)
+	{
+		boolEvent -= ob;
+		numObservers--;
+	} 
 }

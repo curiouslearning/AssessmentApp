@@ -23,6 +23,7 @@ public class StimulusScript : MonoBehaviour{
 	public Selectable touchInput;
 	private int optionBodyPart;
 	string textureName;
+	public TokenScript token;
 
 	void Start ()
 	{
@@ -124,6 +125,10 @@ public class StimulusScript : MonoBehaviour{
 
 	public void setIsTarget(bool b) {
 		isTarget = b;
+		if(stimType == "audio")
+		{
+			passTarget(b);
+		}
 	}
 
 	public void setHasBeenTarget(bool b) {
@@ -210,6 +215,11 @@ public class StimulusScript : MonoBehaviour{
 			anim.SetTrigger("Talk");
 		}
 			
+	}
+
+	void passTarget(bool b)
+	{
+		token.setIsCorrect(b);
 	}
 	void Update () {
 

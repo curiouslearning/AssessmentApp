@@ -11,5 +11,6 @@ public class Observer : MonoBehaviour {
 	/// <param name="e">Event Instance containing the subject and they type of event thrown.</param>
 	public virtual void onNotify(EventInstance<GameObject> e){}	
 	public virtual void onNotify (EventInstance<int> e){}
+	public virtual void onNotify (EventInstance<bool> e){}
 	public virtual void onNotify (EventInstance<ScoreTracker> e) {}
 }
