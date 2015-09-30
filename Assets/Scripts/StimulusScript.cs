@@ -20,7 +20,7 @@ public class StimulusScript : MonoBehaviour{
 	private Difficulty difficulty;
 	private Vector3 homePos; //snapback functionality
 	private Vector3 startScale; //scaling functionality
-	public Selectable touchInput;
+	Selectable touchInput;
 	private int optionBodyPart;
 	string textureName;
 	public TokenScript token;
@@ -32,6 +32,7 @@ public class StimulusScript : MonoBehaviour{
 		else
 			startScale = transform.localScale*0.6f;
 		isBeingDragged = false;
+		touchInput = GetComponent<Selectable>();
 		touchInput.initP(onSelect);
 	}
 

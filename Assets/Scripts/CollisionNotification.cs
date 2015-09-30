@@ -28,7 +28,7 @@ public class CollisionNotification : MonoBehaviour {
 			Destroy(selected.gameObject);
 		}
 		else {
-			sub.sendEvent(type);			
+			sub.sendEvent(type, selected);			
 		}
 		selected = null;
 	}

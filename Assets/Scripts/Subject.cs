@@ -44,6 +44,15 @@ public class Subject : MonoBehaviour {
 		e.setEvent (type, this.gameObject);
 		notify (e);	
 	}
+
+	public void sendEvent (eType type, GameObject g)
+	{
+		EventInstance<GameObject> e;
+		e = new EventInstance<GameObject> ();
+		e.setEvent (type, g);
+		notify (e);	
+	}	
+	
 	public void sendBoolEvent (eType type, bool val)
 	{
 		EventInstance<bool> e;

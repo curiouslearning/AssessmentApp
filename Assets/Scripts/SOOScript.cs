@@ -145,7 +145,11 @@ public class SOOScript : Observer {
 	{
 		for (int i = 0; i < stimArray.Length; i++)
 		{
-			if (stimArray[i].transform.childCount > 1)
+			if(stimArray[i] == null)
+			{
+				continue;
+			}
+			else if (stimArray[i].transform.childCount > 1)
 			{
 				Debug.Log("oops");
 				stimArray[i].GetComponentInChildren<TokenScript>().tag = draggable;

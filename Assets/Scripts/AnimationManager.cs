@@ -157,7 +157,7 @@ public class AnimationManager : Observer {
 			GetComponent<AudioSource>().clip = null;
 			if(e.type == eType.Selected)
 			{
-				if(!e.signaler.GetComponent<StimulusScript>().Equals(null) && e.signaler.GetComponent<StimulusScript>().isOption()) //if selected object is a body part
+				if(e.signaler.GetComponent<StimulusScript>() != null && e.signaler.GetComponent<StimulusScript>().isOption()) //if selected object is a body part
 				{
 					StimulusScript s = e.signaler.GetComponent<StimulusScript>();
 					changeBodyPart(s.getBodyPart(), s.getTextureName());
