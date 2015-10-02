@@ -149,10 +149,10 @@ public class SOOScript : Observer {
 			{
 				continue;
 			}
-			else if (stimArray[i].transform.childCount > 1)
+			else if (stimArray[i].GetComponent<StimulusScript>().token != null)
 			{
-				Debug.Log("oops");
-				stimArray[i].GetComponentInChildren<TokenScript>().tag = draggable;
+				TokenScript token = stimArray[i].GetComponent<StimulusScript>().token; 
+				token.gameObject.tag = draggable;
 			}
 			else
 			{

@@ -6,13 +6,24 @@ using System.Collections;
 public class Selectable : MonoBehaviour {
 	public delegate void passInput (touchInstance t);
 	passInput p;
+	passInput o;
 
 	public void initP (passInput input)
 	{
 		p = input;
 	}
+	public void initO (passInput input)
+	{
+		o = input;
+	}
 	public void onSelect(touchInstance t)
 	{
-		p(t);
+		if(p != null)
+			p(t);
+	}
+	public void offSelect(touchInstance t)
+	{
+		if (o != null)
+			o(t);
 	}
 }

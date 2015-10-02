@@ -84,7 +84,10 @@ public class TouchProcessor : Observer {
 						selection.transform.parent = null;
 						Debug.Log(selection.gameObject.name); //debugger
 						offset= selection.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, screenPoint));
-					}
+
+						if(selection.GetComponent<Selectable>() != null) {
+							selection.GetComponent<Selectable>().onSelect(t); //notify the selection it has been touched
+						}					}
 				}
 			
 			}
@@ -102,7 +105,11 @@ public class TouchProcessor : Observer {
 					curPos = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
 					selection.transform.position = curPos;
 					//scale size of object with respect to the Distance between its current position and the host's receptacle
-					selection.GetComponent<StimulusScript>().scaleToTarget(Vector3.Distance(curPos, target.transform.position)*distanceMod);
+					if (selection.GetComponent<StimulusScript>() != null)
+					{
+						selection.GetComponent<StimulusScript>().scaleToTarget(Vector3.Distance(curPos, target.transform.position)*distanceMod);
+					}
+						
 				}
 					
 			}
@@ -117,14 +124,18 @@ public class TouchProcessor : Observer {
 				if(selection != null) //if object was not placed in receptacle
 				{
 					t.storeSelection(selection.name);
-					selection.GetComponent<Selectable>().onSelect(t); //notify the selection it has been touched
 					if(selection.gameObject.tag == "Stimulus")
 					{
-						//return and rescale object, add it back to SOO as a child
-						selection.transform.position = selection.GetComponent<StimulusScript>().returnHomePos();
-						selection.GetComponent<StimulusScript>().resetScale();
-						selection.transform.parent = parentBuffer;
+						if(selection.GetComponent<StimulusScript>() != null){ 
+							//return and rescale object, add it back to SOO as a child
+							selection.transform.position = selection.GetComponent<StimulusScript>().returnHomePos();
+							selection.GetComponent<StimulusScript>().resetScale();
+						}
+						if(selection.GetComponent<Selectable>() != null) {
+							selection.GetComponent<Selectable>().offSelect(t);
+						}			
 					}
+					selection.transform.parent = parentBuffer;
 					selection = null;
 				}
 				sendEvent(eType.FingerUp);

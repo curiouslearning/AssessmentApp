@@ -390,7 +390,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questionNumber: 0
   questionTime: 0
-  firstLimit: 15
+  firstLimit: 3
   secondLimit: 10
   pointTime: 5
   spawner: {fileID: 955094559}
@@ -640,8 +640,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1479861952}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 3.32999992}
-  m_LocalScale: {x: 30.8600006, y: 20.8199997, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 50}
+  m_LocalScale: {x: 46.0120621, y: 31.0424862, z: 1.49099362}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
