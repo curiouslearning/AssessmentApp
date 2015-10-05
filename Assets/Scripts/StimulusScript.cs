@@ -33,7 +33,8 @@ public class StimulusScript : MonoBehaviour{
 			startScale = transform.localScale*0.6f;
 		isBeingDragged = false;
 		touchInput = GetComponent<Selectable>();
-		touchInput.initP(onSelect);
+		if(touchInput != null)
+			touchInput.initP(onSelect);
 	}
 
 //*******************

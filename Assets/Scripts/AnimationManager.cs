@@ -163,7 +163,6 @@ public class AnimationManager : Observer {
 					changeBodyPart(s.getBodyPart(), s.getTextureName());
 				}
 			}
-			Debug.Log("survived animation manager");
 			return;
 		}
 		if (e.type == eType.Grab)

@@ -121,7 +121,6 @@ public class ScoreTracker : Observer {
 		{
 			if(e.signaler.GetComponent<StimulusScript>().returnIsTarget())
 			{
-				Debug.Log("Caught a correct stimulus");
 				s.addScore(true);
 			}
 			else{s.addScore(false);}
@@ -175,13 +174,11 @@ public class ScoreTracker : Observer {
 			numCorrect++;
 			numWrong = 0; 
 			response = "correct";
-			Debug.Log("correct! NumWrong: " + numWrong);
 		} else {
 			totalScore--;
 			numWrong++; 
 			numCorrect = 0;
 			response = "incorrect";
-			Debug.Log("incorrect! NumWrong: " + numWrong);
 		}
 		//data recording
 		value = ("Question: " + s.getNum().ToString() + ", Result: " + response + ", time: " + s.getTime().ToString() + ", total score: " + totalScore);

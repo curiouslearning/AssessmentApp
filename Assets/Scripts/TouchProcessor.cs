@@ -87,7 +87,8 @@ public class TouchProcessor : Observer {
 
 						if(selection.GetComponent<Selectable>() != null) {
 							selection.GetComponent<Selectable>().onSelect(t); //notify the selection it has been touched
-						}					}
+						}					
+					}
 				}
 			
 			}

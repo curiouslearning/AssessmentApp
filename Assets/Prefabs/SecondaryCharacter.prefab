@@ -313,8 +313,8 @@ GameObject:
   - 95: {fileID: 9534140}
   - 61: {fileID: 6155662}
   - 114: {fileID: 11482300}
-  - 114: {fileID: 11470838}
   - 82: {fileID: 8248962}
+  - 114: {fileID: 11472492}
   m_Layer: 0
   m_Name: SecondaryCharacter
   m_TagString: Untagged
@@ -3822,7 +3822,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 490b87372d41f4a1a967cd4aaa1d522f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &11470838
+--- !u!114 &11472492
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}

@@ -6,12 +6,15 @@ public class TokenScript : MonoBehaviour {
 	bool isCorrect;
 	Selectable touchInput;
 	
-	void start() {
+	void Start() {
 		isCorrect = false;
 		touchInput = this.GetComponent<Selectable>();
 		if(touchInput == null)
 		{
 			Debug.LogError("could not get selectable");
+		}
+		else{
+			Debug.Log("my name is: " + this.transform.name);
 		}
 		touchInput.initP(onSelect);
 		touchInput.initO(offSelect);
@@ -29,6 +32,7 @@ public class TokenScript : MonoBehaviour {
 	
 	public void onSelect(touchInstance t)
 	{
+		Debug.Log("selected");
 		GetComponent<Animator>().SetBool("Selected", true);
 	}
 	public void offSelect(touchInstance t)
