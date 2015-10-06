@@ -119,7 +119,7 @@ public class ScoreTracker : Observer {
 		}
 		else if (e.type == eType.Selected)
 		{
-			if(e.signaler.GetComponent<StimulusScript>().returnIsTarget())
+			if(e.signaler.GetComponent<StimulusScript>() != null && e.signaler.GetComponent<StimulusScript>().returnIsTarget())
 			{
 				s.addScore(true);
 			}

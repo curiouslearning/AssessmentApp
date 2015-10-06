@@ -22,7 +22,7 @@ public class CollisionNotification : MonoBehaviour {
 			return;
 		}
 		selected = col.gameObject;
-		if (dragTag == "Stimulus" && selected.GetComponent<StimulusScript>().Equals(null))
+		if (dragTag == "Stimulus" && selected.GetComponent<StimulusScript>() != null)
 		{
 			sub.sendBoolEvent(eType.Selected, selected.GetComponent<TokenScript>().returnIsCorrect());
 			Destroy(selected.gameObject);

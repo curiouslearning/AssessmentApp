@@ -97,7 +97,7 @@ public class AnimationManager : Observer {
 			setHostMediaInternal (audio);
 		}
 		else{
-			Debug.Log("vis stim with name: " + m.hostStim);
+			//Debug.Log("vis stim with name: " + m.hostStim);
 			Sprite sprite = Resources.Load<Sprite>("Art/" + m.hostStim);
 			setHostMediaInternal (sprite);
 		}

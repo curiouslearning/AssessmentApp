@@ -132,11 +132,16 @@ public class TouchProcessor : Observer {
 							selection.transform.position = selection.GetComponent<StimulusScript>().returnHomePos();
 							selection.GetComponent<StimulusScript>().resetScale();
 						}
+						else
+						{
+							selection.transform.position = selection.GetComponent<TokenScript>().returnStartPos();
+						}
 						if(selection.GetComponent<Selectable>() != null) {
 							selection.GetComponent<Selectable>().offSelect(t);
-						}			
+						}
+						selection.transform.parent = parentBuffer;			
 					}
-					selection.transform.parent = parentBuffer;
+					
 					selection = null;
 				}
 				sendEvent(eType.FingerUp);

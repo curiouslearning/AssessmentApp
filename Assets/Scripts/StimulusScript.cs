@@ -116,6 +116,10 @@ public class StimulusScript : MonoBehaviour{
 	/// </summary>
 	public void setHomePos() {
 		homePos = transform.position;
+		if (token != null) //update the token as well
+		{
+			token.setPos();
+		}
 	}
 	/// <summary>
 	/// Sets the difficulty to the question's difficulty level.

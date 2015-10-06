@@ -108,7 +108,7 @@ public class SpawnerScript : MonoBehaviour {
 		}
 		//type = "visual"; //temp fix
 
-		Debug.Log("type: " + type);
+		//Debug.Log("type: " + type);
 		while (answer.Count == 0)
 		{
 			if (counter == stimPool.Count)
