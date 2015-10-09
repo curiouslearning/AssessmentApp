@@ -25,6 +25,8 @@ public class ScoreTracker : Observer {
 	GameObject stimOrgOb;
 	SOOScript sooHolder;
 	Animator animator;
+	public GameObject rhymeRecep1;
+	public GameObject rhymeRecep2;
 
 	//Event variables
 	public Subject eventHandler;
@@ -235,9 +237,15 @@ public class ScoreTracker : Observer {
 				return Category.SightWordIdentification;
 
 			case Category.SightWordIdentification:
-				return Category.BlendingWordIdentification; //HACK UNTIL RHYMING CASE IS IMPLEMENTED
+				receptacle.SetActive(false);
+				rhymeRecep1.SetActive(true);
+				rhymeRecep2.SetActive(true);
+				return Category.RhymingWordMatching;
 
 			case Category.RhymingWordMatching:
+				receptacle.SetActive(true);
+				rhymeRecep1.SetActive(false);
+				rhymeRecep2.SetActive(false);
 				return Category.BlendingWordIdentification;
 
 			case Category.BlendingWordIdentification:
