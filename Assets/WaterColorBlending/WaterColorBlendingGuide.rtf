@@ -1,0 +1,120 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset0 Calibri;}{\f1\fnil\fcharset2 Symbol;}}
+{\*\generator Riched20 6.3.9600}\viewkind4\uc1 
+\pard\sl276\slmult1\b\f0\fs28\lang9 Water Color Blending Guide\b0\fs22\par
+04.10.2015\par
+By Simeon Rice\par
+\par
+The requirements for water color blending result in a somewhat complex implementation due to both needs and hardware restrictions. This guide will explain the techniques used and how to best integrate them.\par
+\par
+\par
+\par
+\b\fs28 Restrictions & Requirements\b0\fs22\par
+\par
+\b Textures\b0\par
+Textures CANNOT use white as a color of a body part since it will become invisible.\par
+Some body parts will require secondary, unique textures with expanded alpha mask to have stencil mask out previously rendered body parts ( e.g. head masking body)\par
+\par
+\b Stencils\b0\par
+Stencils may not be supported on all devices, there is some debate for example if Tegra 2 & 3 support them.\par
+For stencil support ensure 'Use 32-bit Display Buffer' is enabled, or maybe disabled in Player settings ( may affect different devices ) and ensure that 'Disable Depth and Stencil' is NOT enabled.\par
+\par
+\b Forward Rendering Mode Only\b0\par
+The provided shaders only work in forward rendering mode, you can still use deferred mode, but materials using these shaders will be render in forward mode after the deferred gameObjects. Due to use of stencil there is no way around this and indeed supporting deferred rendering is much more complex.\par
+\par
+\par
+\par
+\par
+\b\fs28 Suggestions\par
+\b0\fs22\par
+Whilst multiply will combine the texture with the background quite nicely, it doesn't really generate the result shown in the character sample image. It may be more beneifical to include some of actual texture of the paper within the character body part images  or introduce some gradient type information into the texture with white speckles etc.\par
+\par
+You might also want to play around with the strength or contrast of colours in photoshop for the textures, maybe reducing the contrast.\par
+\par
+\par
+\par
+\par
+\par
+\b\fs28 Techniques\b0\fs22\par
+\par
+\b Multiply Blending with Alpha\par
+\b0 From my research this is simply not possible to achieve with gpu hardware. The blending equation for multiply negates the use of alpha for masking or even blending the texture with the color buffer. Indeed using Multiply blending does not require the use of alpha at all, instead anything you want to be invisible should just use white., whilst anything black will show as black.\par
+\par
+This means to have areas masked out they need to be white. This is somewhat awkward to achieve in Photoshop and its default png export, but it is possible using suprPNG exporter and switching to exporting the alpha channel as opposed to Photoshops transparency. Using the alpha channel explicitly ( you make a copy from your transparent layers) means you can add a white background to your image in photoshop and thus get a white background image out of it.\par
+\par
+An alternative and easier method is to do this conversion in a shader and for this reason you'll find most WaterColor Shaders provided will automatically lerp between the rgb of the image and white based on the alpha channel value. This means that areas with an alpha of zero (i.e where image should not be visible) will become white and due to how multiply works those areas will become invisible. To facilitate this there is a property called 'AlphaFactor' that can modify the textures alpha value, pusing the lerp to white to be more or less pronouced. Currently a default value of 1.5 seems to work well for the example textures provided.\par
+\par
+\par
+\b RenderQueue, Offset and Render order.\b0\par
+An important aspect of water color rendering especialy due to the transparent nature of the textures is that we will need to control the render order of specific gameObjects/Materials to ensure the correct results on screen. Ignoring the renderqueue means that gameObjects with transparent materials will be rendered based on distance from the active camera and this can cause unexpected render issues since the gameObjects in this case tend to share the same or similar depth values. To address this issue i've added the ability to override Unity's default renderQueue values on a per material basis. \par
+\par
+Unity uses the concept of renderqueues to sort and order the rendering of gameObjects prior to distance sorting. So for example Unity has four default tags to define a specific renderqueue value, Background (1000),  Geometry (2000), AlphaTest(2450), Transparent (3000), Overlay (4000).\par
+However it also allows developers to override this queue value on a per material basis to provide more control over the render order. This does not disable or replace depth sorting for transparent objects, but the renderqueue sort happens prior to depth sorting.\par
+\par
+In our case we provide a property called 'QueueOffset' that is a +/- value that is added to the default renderQueue value.  In the case of transparent objects then we can force our multiply materials to render prior or after the default transparent objects.\par
+\par
+Testing has determined you'll mostly want to use negative values for the QueueOffset as this will ensure that non-multiply transaprent objects are always rendered after multiply blended gameObjects. For example if the head has a positive QueueOffset  value, it will cause the glasses lens to turn green! Instead use a negative value and the glasses remain white.\par
+\par
+In terms of render order lower queue values ( not the queue offset/override) are rendered before higher values. So a head with a queue offset of -4 will have a renderqueue value of 2996, whilst standard transparent materials willl have the default 3000, thus the head is rendered first.\par
+\par
+There are two methods provided to set the materials renderQueue. One method uses a script applied to each gameObject, whilst the second improved method utilises the shader to store the offset and a custom Shader Inpector gui to apply it. The material/shader version is far superior as it does not require the addition of scripts to gameObjects ( which will only work at runtime) and the material is able to provide direct feedback as to the offset value and the final renderqueue value.\par
+\par
+\par
+\b Stencils for Masking\b0\par
+In order to mask out other gameObjects use of the stencil buffer is required. I can not think of any realistic alternative that wouldn't increase the complexitiy further ( e.g. depth buffer or alpha channel) and worse produce more edge case failures. Even so use of the stencil buffer does increase usability complexitiy requiring additonal thought from the developer.\par
+\par
+The concept with using the stencil buffer to mask out objects is simple. First prior to any other objects, especially those we wish to be masked, we render 'invisible' objects that will fill or populate the stencil buffer with non-zero values for the objects we wish to act as a mask. When we say 'invisible' in this context, we simply mean that the object is not rendered into the colour or depth buffers, so on screen you will literally see nothing has changed.\par
+\par
+Once the stencil buffer is populate we can render the rest of the gameObjects as normal, but for specific gameObjects that need to be masked they must test against the stencil buffer, compare the value aginst there own stencil reference ID and only render to the color/depth buffers if they are the same.\par
+\par
+In our example then we wish to mask out the antennas behind the hat, whilst the hat needs to mask out the top of the head, and in turn the head needs to mask out a boder area over the top of the body. To acheive this we need stencilMask materials for the hat and head whilst the Antenna, hat, head and body need to use materials with shader that compares the stencil value.\par
+\par
+The stencilMasks will also need to adjust their render queue too so that stencil values are correctly written in the desired order and thus over-writing previous stencilMasks correctly.\par
+\par
+\par
+\b Stencil Viewer\b0\par
+There is a special StencilViewer shader ( see StencilViewer gameObject inhierarchy) that can help debug and view where a specific stencilID is active or not. However due to how stencil buffer works you can only preview a single stencilID at a time per material, if you wanted to view multiple stencilID's at once you need to genetate multiple materials and multiple gameObject quads into the scene.\par
+\par
+\par
+\par
+\b\fs28 Integration\b0\fs22\par
+\par
+The project is split into \par
+
+\pard{\pntext\f1\'B7\tab}{\*\pn\pnlvlblt\pnf1\pnindent0{\pntxtb\'B7}}\fi-360\li720\sl276\slmult1\b WaterColorBlending \b0 - Essential base files e.g. shaders, editor scripts, scripts and information.\par
+{\pntext\f1\'B7\tab}\b WaterColorBlendingExamples \b0 - additional materials, scenes, textures for the examples.\par
+
+\pard\sl276\slmult1\par
+Please refer to the 'BlendingTest' Scene in the \b WaterColorBlendingExamples \b0 folder.\par
+\par
+\par
+\b\fs24 Original_MainCharacter_Idle\b0\fs22\par
+This is simply the original character model using the original materials, where transparent materials use Unity unlit/Transparent i.e alpha-blending. If you play with the camera or character oreintation you'll probably notice transparent render issues occur as there is no renderQueue control over the render order.\par
+\par
+\b\fs24 Multiply_MainCharacter_Idle\b0\fs22\par
+This versions replaces many materials with Multiply versions that use the \b WaterColorMultiplyAlpha \b0 shader ( see folder \b Materials - Multiply\b0 ). It provides access to the 'AlphaFactor' value with which to modify the alpha value which lerps between rgb and white. Its the simplest method of using multiply blending with the character, with no stencil masks or shader/material control over the renderQueue. Instead to control the renderQueue order you must add the \b MaterialRenderQueueOverride.cs\b0  script to each game object that requires it. While this works, the lack of stencil masks and the requirement to add a script to gameObjects makes it some what unattractive and inefficeint to use.\par
+\par
+\b\fs24 Custom_MainCharacter_Idle\b0\fs22\par
+This version replaces many materials with Multiply versions that use the \b WaterColorCustom \b0 shader ( see folder \b Materials - Custom\b0 ). It provides access to the 'AlphaFactor' value with which to modify the alpha value which lerps between rgb and white. This custom version of the shader stores the renderQueue offset data in the shader, but it can only be accessed and uterlised via its counterpart \b ShaderGUIWaterColorCustom.cs \b0 editor script. The editor script provides a custom interface in the inspector with which to interact with the material and shader data. This also means the shader can provide a render option to use either Multiply or alpha blending.\par
+\par
+This is far superior to the previous version as it means you don't have to add any scripts to gameObjects and the inspector shows the actual renderQUeue value as well as the queueOffset value. This also means that you can set up the renderQueue order of the materials by selecting the material instead of the gameobjects, generally a more efficeint and easier to use approach.\par
+\par
+\b\fs24 Stencil_MainCharacter_Idle\b0\fs22\par
+This version is used to replace specific materials with a Multiply version that also masks by stencil ID. through the \b StencilWaterColorCustom \b0 shader ( see folder \b Materials - Stencil\b0 ). In addition the are new materials that make use of StencilMask in order to render stencilID's into the stencil buffer and both StencilUnlitColor and StencilUnlitTranpsarent to replace the non stencil versions of those shaders ( e.g. antenna uses StencilUnlitTranpsarent to ensure it only renders where the stencil buffer has a value of 0, thus not where the stencilMask_hat has been).\par
+\par
+Like the custom value previously it use a custom editor script \b ShaderGUIStencilWaterColorCustom \b0 to provide a custom inspector interface to stencilID and render QueueOffset.\par
+\par
+This is the best system to use, but due to the addition of stencil masks it is the most complex. In order to populate the stencil buffer we must first render gameObjects into it. This is acheive through the use of multiple materials in the renderer of a gameObject. So where as say the Hat gameObject would normally have a single material it now has two, meaning the gameObject is rendered twice once for each material. NOTE - this will ONLY work if the renderer has a single mesh, it cannot have multiple submeshes or require multiple materials to render normally.\par
+\par
+This version does mean you could for example disable the hat gameObject and the character will correctly render the antenna and head without artifacts.\par
+\par
+\b\fs24 StencilAlternative_MainCharacter_Idle\b0\fs22\par
+This version is the same as above, but instead of masking gameObjects having two materials per renderer, we instead duplicate the gameobject and put the stencilMask material on the dupicate. Essentially there is no difference between the two versions, but this version can be used when a renderer has multipl submeshes and thus is included purely for reference.\par
+\par
+This version means if you disable the hat gameObject the anteena and head will still be masked by the hat until you also disable the duplicated hat gameObject.\par
+\par
+\par
+\par
+\par
+\par
+}
+ 
