@@ -396,6 +396,8 @@ MonoBehaviour:
   spawner: {fileID: 955094559}
   receptacle: {fileID: 1523307913}
   gCollector: {fileID: 1331431048}
+  rhymeRecep1: {fileID: 0}
+  rhymeRecep2: {fileID: 0}
   eventHandler: {fileID: 829527127}
 --- !u!1 &895537447 stripped
 GameObject:
