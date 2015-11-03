@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 0280d075d65574362a6fffa7683ab780
-timeCreated: 1442856815
+guid: b79d70b593e7d441db19ae5ba06cbe3e
+timeCreated: 1446564517
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
@@ -375,7 +375,7 @@ ModelImporter:
     4300046: MainCharacter:mouth
     4300048: MainCharacter:l_eye
     4300050: MainCharacter:r_eye
-    7400000: WalkRight
+    7400000: Carry
     9500000: //RootNode
     13700000: MainCharacter:body
     13700002: MainCharacter:eyes
@@ -424,10 +424,10 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: WalkRight
+      name: Carry
       takeName: Take 001
       firstFrame: 1
-      lastFrame: 73
+      lastFrame: 25
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

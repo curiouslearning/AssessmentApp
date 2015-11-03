@@ -128,6 +128,7 @@ public class SOOScript : Observer {
 			}
 		}
 	}
+
 	
 /// <summary>
 /// Sets the soo.

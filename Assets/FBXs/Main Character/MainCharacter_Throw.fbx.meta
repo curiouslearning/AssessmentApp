@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 67cae1cd206b54db7bd9fa7b15176182
-timeCreated: 1443195925
+guid: f5abfdcb7640a43888ff1bf89e0a6bea
+timeCreated: 1446564519
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
@@ -375,7 +375,7 @@ ModelImporter:
     4300046: MainCharacter:mouth
     4300048: MainCharacter:l_eye
     4300050: MainCharacter:r_eye
-    7400000: ThrowBasket
+    7400000: Throw
     9500000: //RootNode
     13700000: MainCharacter:body
     13700002: MainCharacter:eyes
@@ -424,7 +424,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: ThrowBasket
+      name: Throw
       takeName: Take 001
       firstFrame: 1
       lastFrame: 73

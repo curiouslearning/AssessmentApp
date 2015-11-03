@@ -293,9 +293,10 @@ public class ScoreTracker : Observer {
 
 	// for use at the beginning of the game
 	void startQuestion() {
-		//sendEvent (eType.NewQuestion);
+		eventHandler.sendEvent(eType.NewQuestion);
 		stimOrgOb = spawnHolder.spawnNext(currentCategory,s.returnDifficulty(),questionNumber);
 		sooHolder = stimOrgOb.GetComponent<SOOScript>();
+		animator.SetTrigger("Success"); //start the character moving	
 		sooHolder.move(0);
 	} 
 	
@@ -358,7 +359,7 @@ public class ScoreTracker : Observer {
 	void Update() 
 	{
 		if (gameOver) {
-			string junk = "meaningless";
+			string junk = "meaningless"; //hack to get around control flow after GameOver
 			return;
 		}
 		// questionTime keeps track of the elapsed time since the

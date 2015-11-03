@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 341d4e384183c4d94b52785aedf356a9
-timeCreated: 1443195921
+guid: 411f7b12606a64157b066beb710297e8
+timeCreated: 1446564513
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
@@ -375,7 +375,7 @@ ModelImporter:
     4300046: MainCharacter:mouth
     4300048: MainCharacter:l_eye
     4300050: MainCharacter:r_eye
-    7400000: CarryBasket
+    7400000: Skip
     9500000: //RootNode
     13700000: MainCharacter:body
     13700002: MainCharacter:eyes
@@ -424,10 +424,10 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: CarryBasket
+      name: Skip
       takeName: Take 001
       firstFrame: 1
-      lastFrame: 25
+      lastFrame: 37
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -829,8 +829,7 @@ ModelImporter:
     legStretch: .0500000007
     feetSpacing: 0
     rootMotionBoneName: 
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 2b9be02ceeb9f45f4aa900ac678d9ec5,
-    type: 3}
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 2
   additionalBone: 0
   userData: 

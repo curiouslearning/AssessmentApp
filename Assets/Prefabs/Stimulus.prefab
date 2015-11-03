@@ -126,7 +126,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTarget: 0
-  touchInput: {fileID: 11472264}
+  isDraggable: 0
+  charMod: 1.5
+  textureMod: .300000012
+  stimMod: .600000024
+  token: {fileID: 0}
 --- !u!114 &11472264
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -195,6 +199,18 @@ Prefab:
       propertyPath: touchInput
       value: 
       objectReference: {fileID: 11472264}
+    - target: {fileID: 0}
+      propertyPath: charMod
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: textureMod
+      value: .300000012
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: stimMod
+      value: .600000024
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 149632}

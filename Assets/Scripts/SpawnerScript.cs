@@ -33,6 +33,7 @@ public class SpawnerScript : MonoBehaviour {
 	Vector3[] positions;
 	public AnimationManager host;
 	public ToggleBasket receptacle;
+	public BackgroundScroller background;
 	// Use this for initialization
 	void Awake () {
 		diffParser = new Dictionary<string, Difficulty>();
@@ -91,6 +92,7 @@ public class SpawnerScript : MonoBehaviour {
 	/// <param name="cat">current Category in game</param>
 	/// <param name="diffLevel">current Difficulty in game</param>
 
+	//TODO: REFACTOR THIS BEHEMOTH
 	List<serStim> findStim (Category cat, Difficulty diffLevel) {
 		List<serStim> answer = new List<serStim>();
 		int counter = 0;
@@ -237,8 +239,9 @@ public class SpawnerScript : MonoBehaviour {
 		holder.setPosArray(positions);
 		holder.setDestArray(destinations);
 		holder = scaleChildren(q, holder);  //scale size to screen	
-		host.registerWithSoo(newSoo);
-		receptacle.registerWithSoo(newSoo);
+		host.registerGameObjectWithSoo(newSoo);
+		receptacle.registerGameObjectWithSoo(newSoo);
+		background.registerGameObjectWithSoo(newSoo);
 		return newSoo;	
 	}
 

@@ -79,15 +79,15 @@ public class TouchProcessor : Observer {
 					selection = touchHit.transform.gameObject; 
 					AndroidBroadcastIntentHandler.BroadcastJSONData("PlayerSelection", selection.gameObject.name);
 					if(selection.gameObject.tag == "Stimulus")
-					{
+					{	//TODO: Add functionality to grab token when 2ndary character is selected
 						parentBuffer = selection.transform.parent;  //store and remove the parent to prevent weird parent-child behavior during dragging
 						selection.transform.parent = null;
 						Debug.Log(selection.gameObject.name); //debugger
 						offset= selection.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, screenPoint));
-
-						if(selection.GetComponent<Selectable>() != null) {
-							selection.GetComponent<Selectable>().onSelect(t); //notify the selection it has been touched
-						}					
+					}
+					
+					if(selection.GetComponent<Selectable>() != null) {
+						selection.GetComponent<Selectable>().onSelect(t); //notify the selection it has been touched
 					}
 				}
 			

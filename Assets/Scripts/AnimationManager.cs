@@ -60,9 +60,9 @@ public class AnimationManager : Observer {
 			
 		}
 	}	
-	public void registerWithSoo(GameObject SOO)
+	public override void registerGameObjectWithSoo(GameObject SOO)
 	{
-		SOO.GetComponent<Subject>().addObserver(new Subject.GameObjectNotify(this.onNotify));
+		base.registerGameObjectWithSoo(SOO);
 	}
 
 	/// <summary>

@@ -21,12 +21,12 @@ public class ToggleBasket : Observer{
 		}
 	}
 
-	public void registerWithSoo(GameObject SOO)
+	public override void registerGameObjectWithSoo(GameObject SOO)
 	{
-		SOO.GetComponent<Subject>().addObserver(new Subject.GameObjectNotify(this.onNotify));
+		base.registerGameObjectWithSoo(SOO);
 	}
 
-	void onNotify (EventInstance<GameObject> e)
+	public override  void onNotify (EventInstance<GameObject> e)
 	{
 		if (e.type == eType.Selected || e.type == eType.TimedOut)
 		{
