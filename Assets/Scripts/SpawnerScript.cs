@@ -84,6 +84,24 @@ public class SpawnerScript : MonoBehaviour {
 			stimPool.Add(data);
 		}
 	}
+
+
+	string setType (Category cat)
+	{
+		string type;
+		if (cat.Equals (Category.ReceptiveVocabulary) || cat.Equals(Category.Customization)) {
+			type = "visual";
+		} else {
+			type = "audio";
+		}	
+		return type;
+	}
+
+	/*serStim selectTarget (Category cat, Difficulty diffLevel, string type)
+	{
+		//TODO: MOVE THE FIND TARGET WHILE LOOP HERE
+	}*/
+
 	/// <summary>
 	/// Returns a list of four semi-randomly generated serStims, one of which is
 	/// tagged as the correct answer
@@ -99,28 +117,19 @@ public class SpawnerScript : MonoBehaviour {
 		int targetCount = 0;
 		int revolutionCount =0;
 		string type;
-		// the variable type, which is used to determine whether findStim
-		// is looking for audio or visual stimulus, is assigned based
-		// on the current category
-
-		if (cat.Equals (Category.ReceptiveVocabulary) || cat.Equals(Category.Customization)) {
-			type = "visual";
-		} else {
-			type = "audio";
-		}
-		//type = "visual"; //temp fix
-
-		//Debug.Log("type: " + type);
+		
+		// the type of stimulus accepted is assigned based on the current category
+		type = setType(cat);
 		while (answer.Count == 0)
 		{
-			if (counter == stimPool.Count)
+			if (counter == stimPool.Count) //remember to declare this in new fxn
 				counter = 0;
-			serStim s = stimPool[counter];
+			serStim s = stimPool[counter]; //does this need to be global?
 			if(s.stimType.Equals(type) && s.category.Equals(cat))
 			{
 				if(s.hasBeenTarget)
 				{
-					targetCount++;
+					targetCount++; //make an independent variable for this
 					if(targetCount == stimPool.Count)
 					{
 						break;
@@ -137,8 +146,8 @@ public class SpawnerScript : MonoBehaviour {
 				if (f < 1.0f) {
 					stimPool[counter].hasBeenTarget = true;
 					s.isCorrect = true;
-					answer.Add(s);
-					host.setHostMedia(s);
+					answer.Add(s); //pass this, return this
+					host.setHostMedia(s); //global
 					break;
 				}
 			}
