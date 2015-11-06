@@ -127,6 +127,7 @@ public class SpawnerScript : MonoBehaviour {
 			}
 			counter++;
 		}
+		//randomize order here
 		return answer;
 	}
 
@@ -209,10 +210,14 @@ public class SpawnerScript : MonoBehaviour {
 	//randomly choose whether or not to add the selected stimulus
 	List<serStim> randomAdd(List<serStim> answer, serStim s)
 	{
-		float f = Random.Range (0.0f,4.0f);
+		float f = Random.Range (0.0f,8.0f);
 		if (f < 1.0f) 
 		{
 			answer.Add(s);
+		}
+		else if (f > 1.0f && f < 2.0f)
+		{
+			answer.Insert(0, s); //if f is between 1 & 2, insert the stimulus at the beginning. Helps randomize position of target
 		}
 		return answer;
 	}
@@ -278,6 +283,7 @@ public class SpawnerScript : MonoBehaviour {
 //*****************************
 	void arrangeSOO(Question q)
 	{
+		
 		//create 4 instances of stimuli as children of the SOO, and arrange them within its Box Collider
 		for (int i =0; i< 4; i++)
 		{
