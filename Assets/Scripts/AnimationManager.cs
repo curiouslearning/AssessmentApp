@@ -172,6 +172,7 @@ public class AnimationManager : Observer {
 		if (e.type == eType.Ready)
 		{
 			animator.SetTrigger("Landed");
+			animator.SetTrigger("Highlight");
 			if(GetComponent<AudioSource>().clip != null)
 			{
 				GetComponent<AudioSource>().Play();
