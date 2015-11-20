@@ -83,7 +83,10 @@ public class SOOScript : Observer {
 //inherited Observer method
 	public override void onNotify (EventInstance<GameObject> e)
 	{
-		//releaseStim(e.signaler);
+		if(e.type == eType.Drag)
+		{
+			toggleHighlights(false);
+		}
 	}
 	
 /// <summary>
@@ -161,7 +164,23 @@ public class SOOScript : Observer {
 			}
 		}
 	}
-
+	
+	void toggleHighlights (bool t)
+	{
+		Highlighter h;
+		for (int i = 0; i < stimArray.Length; i++)
+		{
+			h = stimArray[i].GetComponentInChildren<Highlighter>();
+			if (t)
+			{
+				h.highlight();
+			}
+			else 
+			{
+				h.reset();
+			}
+		}
+	}
 	void Update()
 	{
 		if(moving == false && !movingAlreadyFalse)
@@ -175,6 +194,7 @@ public class SOOScript : Observer {
 		}
 		if(moving == true)
 		{
+			toggleHighlights(false);
 			transform.position = Vector3.Lerp(transform.position, curDest, Time.deltaTime * speed);
 		}
 		if(moving == true && ((transform.position.x < curDest.x + marginOfError) && (transform.position.x > curDest.x - marginOfError)))
@@ -183,6 +203,7 @@ public class SOOScript : Observer {
 			updatePos();
 			setWalk ("reset");
 			moving = false;
+			toggleHighlights(true);
 		}
 		
 	}

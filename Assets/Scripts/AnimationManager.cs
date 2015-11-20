@@ -23,7 +23,7 @@ public class AnimationManager : Observer {
 	public int defaultPos; //standard index for the default texture for each body part
 	string[] sourceLines;
 	bool[] bodyPartCustomized; //tracks which options have been customized
-	
+	public string [] actionList;
 
 	// Use this for initialization
 	void Awake () {
@@ -43,7 +43,7 @@ public class AnimationManager : Observer {
 	}
 	void Start()
 	{		
-		addSelfToSubjects();	
+		addSelfToSubjects();
 	}
 
 	/// <summary>
@@ -153,7 +153,7 @@ public class AnimationManager : Observer {
 		if (e.type == eType.Selected || e.type == eType.TimedOut)
 		{
 			animator.ResetTrigger("Landed");
-			animator.SetTrigger("Success");
+			animator.SetTrigger(randomAction());
 			GetComponent<AudioSource>().clip = null;
 			if(e.type == eType.Selected)
 			{
@@ -172,7 +172,6 @@ public class AnimationManager : Observer {
 		if (e.type == eType.Ready)
 		{
 			animator.SetTrigger("Landed");
-			animator.SetTrigger("Highlight");
 			if(GetComponent<AudioSource>().clip != null)
 			{
 				GetComponent<AudioSource>().Play();
@@ -191,7 +190,11 @@ public class AnimationManager : Observer {
 		}
 	}
 
-	
+	string randomAction ()
+	{
+		int val = Random.Range(0, actionList.Length);
+		return actionList[val];
+	}
 	/// <summary>
 	/// Changes the body part.
 	/// </summary>
