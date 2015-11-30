@@ -12,6 +12,7 @@ using System.Collections.Generic;
 /// Contains a doubly linked list of ObsNode pointers that Observers can add themselves to.
 /// Notifies Observers with notify (eType, EventInstance<GameObject>).
 /// </summary>
+//TODO: Deep copy fxn that takes a signaler and copies all relevant data
 public class Subject : MonoBehaviour {
 	
 	private int numObservers;

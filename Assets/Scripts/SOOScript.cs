@@ -83,7 +83,7 @@ public class SOOScript : Observer {
 //inherited Observer method
 	public override void onNotify (EventInstance<GameObject> e)
 	{
-		if(e.type == eType.Drag)
+		if(e.type== eType.Grab || e.type == eType.Drag)
 		{
 			toggleHighlights(false);
 		}
@@ -170,7 +170,12 @@ public class SOOScript : Observer {
 		Highlighter h;
 		for (int i = 0; i < stimArray.Length; i++)
 		{
-			h = stimArray[i].GetComponentInChildren<Highlighter>();
+		
+			h = stimArray[i].GetComponentInChildren<Highlighter>();	
+			if(h  == null)
+			{
+				continue;
+			}
 			if (t)
 			{
 				h.highlight();

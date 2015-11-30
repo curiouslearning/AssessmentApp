@@ -133,30 +133,11 @@ public class ScoreTracker : Observer {
 		}
 	}
 
-	public override void onNotify (EventInstance<bool> e)
-	{
-		if(e.type == eType.Selected)
-		{
-			if(e.signaler)
-			{
-				s.addScore(true);
-			}
-			else
-			{
-				s.addScore(false);
-			}
-			sooHolder.move(1);
-			return;
-		}
-	}
+	
 	void endGame ()
 	{
 		eventHandler.sendEvent (eType.EndGame);
-
-		//Printing it to the debug log allows us to see the entire
-		//string that will be sent in the broadcast, which contains
-		//all the data collected from the latest game.
-
+		//more endgame here TODO
 	}
 	
 	public void addTouch (TouchSummary t) // called by TouchProcessor
