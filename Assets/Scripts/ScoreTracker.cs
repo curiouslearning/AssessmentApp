@@ -178,7 +178,14 @@ public class ScoreTracker : Observer {
 			AndroidBroadcastIntentHandler.BroadcastJSONData("Difficulty Change", "Hard");  //data recording
 	}
 	
-
+	/// <summary>
+	/// Returns the current category
+	/// </summary>
+	/// <returns>The category.</returns>
+	public Category queryCategory ()
+	{
+		return currentCategory;
+	}
 	void setCategory()
 	{
 		if (s.returnCategory().Equals(Category.Customization)) {//only ever spend one question in customization 	
@@ -195,6 +202,7 @@ public class ScoreTracker : Observer {
 			currentCategory = Category.Customization;
 			AndroidBroadcastIntentHandler.BroadcastJSONData("Category Change", "Customization"); //data recording
 		}
+		
 
 	}
 
@@ -280,7 +288,8 @@ public class ScoreTracker : Observer {
 		animator.SetTrigger("Success"); //start the character moving	
 		sooHolder.move(0);
 	} 
-	
+
+	//TODO Refactor this	
 	void changeQuestion () {
 		timeLimit = firstLimit;
 		questionTime = 0;

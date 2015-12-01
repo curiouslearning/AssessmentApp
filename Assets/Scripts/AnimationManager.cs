@@ -23,6 +23,7 @@ public class AnimationManager : Observer {
 	public int defaultPos; //standard index for the default texture for each body part
 	string[] sourceLines;
 	bool[] bodyPartCustomized; //tracks which options have been customized
+	Category currentCategory;
 	public string [] actionList;
 
 	// Use this for initialization
@@ -149,7 +150,11 @@ public class AnimationManager : Observer {
 	/// </summary>
 	/// <param name="e">Event Instance.</param>
 	public override void onNotify (EventInstance<GameObject> e)
-	{	
+	{
+		if (e.type == eType.NewQuestion)
+		{
+			updateCategory();
+		}	
 		if (e.type == eType.Selected || e.type == eType.TimedOut)
 		{
 			animator.ResetTrigger("Landed");
@@ -188,6 +193,12 @@ public class AnimationManager : Observer {
 				
 			}
 		}
+	}
+
+	void updateCategory ()
+	{
+		ScoreTracker s = GameObject.Find("Main Camera").GetComponent<ScoreTracker>();
+		currentCategory = s.queryCategory();
 	}
 
 	string randomAction ()
