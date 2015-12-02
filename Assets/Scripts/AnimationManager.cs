@@ -24,6 +24,7 @@ public class AnimationManager : Observer {
 	string[] sourceLines;
 	bool[] bodyPartCustomized; //tracks which options have been customized
 	Category currentCategory;
+	Animator highlighter;
 	public string [] actionList;
 
 	// Use this for initialization
@@ -186,7 +187,7 @@ public class AnimationManager : Observer {
 				animator.SetTrigger("ShowCard");
 				squareCard.SetTrigger("ShowCard");
 			}
-			else if (rectangle.mainTexture != null)  //Commented out while rectangle card is nonexistent
+			else if (rectangle.mainTexture != null) 
 			{
 				animator.SetTrigger("ShowCard");
 				rectangleCard.SetTrigger("ShowCard");
@@ -199,8 +200,36 @@ public class AnimationManager : Observer {
 	{
 		ScoreTracker s = GameObject.Find("Main Camera").GetComponent<ScoreTracker>();
 		currentCategory = s.queryCategory();
+		if(currentCategory == Category.Customization)
+		{
+			updateHighlighter(); //commented out while fuction is being written
+		}
+		else
+		{
+			hideHighlighter();
+		}
 	}
 
+	void updateHighlighter()
+	{
+		int part = getBodyPart();
+		bodyParts[part].transform.GetChild(0).gameObject.SetActive(true);
+		for (int i =0; i < bodyParts.Length; i++)
+		{
+			if (i != part)	
+			{	
+				bodyParts[i].transform.GetChild(0).gameObject.SetActive(false);
+			}
+		}
+	}
+	
+	void hideHighlighter()
+	{
+		for (int i = 0; i < bodyParts.Length; i++)
+		{
+			bodyParts[i].transform.GetChild(0).gameObject.SetActive(false);
+		}
+	}
 	string randomAction ()
 	{
 		int val = Random.Range(0, actionList.Length);
@@ -225,7 +254,7 @@ public class AnimationManager : Observer {
 	{
 		List<Sprite> options;
 		options = new List<Sprite>();
-		int curBodyPart = getBodyPartInternal();
+		int curBodyPart = getNextBodyPart();
 		Texture2D[] textures = optionTextures[curBodyPart];
 		for(int j = 0; j < textures.Length; j++)  //convert and package options
 		{
@@ -250,10 +279,11 @@ public class AnimationManager : Observer {
 		while (i < bodyPartCustomized.Length && bodyPartCustomized[i] == true ) {
 			i++;
 		}	
-		
-		return i-1;
+		if( i > 0)	
+			return i-1;
+		return i;
 	}
-	int getBodyPartInternal()
+	int getNextBodyPart()
 	{
 		int i =0;
 		while (i < bodyPartCustomized.Length && bodyPartCustomized[i] == true ) {i++;}

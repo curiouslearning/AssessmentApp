@@ -38,7 +38,6 @@ public class Highlighter : Observer {
 	/// </summary>
 	public void highlight ()
 	{
-		this.transform.localPosition = new Vector3 (0f,0.1f,0f); //make sure highlight is centered over parent
 		//this.gameObject.SetActive(true);
 		if(isPlaying ()) //prevent multiple calls from interrupting animation
 		{
