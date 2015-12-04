@@ -46,7 +46,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 149632}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.4061537, y: -6.52886343, z: 0}
+  m_LocalPosition: {x: -23.2214355, y: 4.94904613, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 486246}
@@ -206,8 +206,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   subjects: []
-  start: 
-  stop: 0a0000000200000007000000
+  start: 0b000000
+  stop: 0a00000007000000
 --- !u!114 &11461342
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -271,7 +271,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 0}
       propertyPath: stop.Array.size
-      value: 3
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: start.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: subjects.Array.size
@@ -319,7 +323,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: stop.Array.data[1]
-      value: 2
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: stop.Array.data[2]
@@ -348,6 +352,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_LocalPosition.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: start.Array.data[0]
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

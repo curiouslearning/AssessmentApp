@@ -277,6 +277,7 @@ public class SpawnerScript : MonoBehaviour {
 		//receptacle.registerGameObjectWithSoo(newSoo);
 		//background.registerGameObjectWithSoo(newSoo);
 		registerObservers(newSoo);
+		registerChildren(newSoo);
 		return newSoo;	
 	}
 
@@ -291,6 +292,15 @@ public class SpawnerScript : MonoBehaviour {
 			observers[i].registerGameObjectWithSoo(soo);
 		}
 	}
+	void registerChildren (GameObject soo)
+	{
+		for (int i =0; i < newStims.Length; i++)
+		{
+			Highlighter h = newStims[i].GetComponentInChildren<Highlighter>();
+			h.registerGameObjectWithSoo(soo);
+		}
+	}
+	
 	void arrangeSOO(Question q)
 	{
 		

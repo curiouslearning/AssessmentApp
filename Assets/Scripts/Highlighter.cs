@@ -19,6 +19,12 @@ public class Highlighter : Observer {
 	public eType[] stop;
 	void Awake () {
 		controller = this.GetComponent<Animator>();
+		Subject s;
+		s = GameObject.Find("Main Camera").GetComponent<Subject>();
+		if(!subjects.Contains(s))
+		{
+			subjects.Add(s);
+		}
 		//this.gameObject.SetActive(false);
 	}
 
@@ -49,6 +55,7 @@ public class Highlighter : Observer {
 		}
 		
 	}
+	
 	/// <summary>
 	/// Reset this instance.
 	/// </summary>
@@ -68,13 +75,20 @@ public class Highlighter : Observer {
 	}	
 	public override void onNotify (EventInstance<GameObject> e)
 	{
-		if (listContains (e.type, start))
+		if (listContains (e.type, start) && this.gameObject.activeSelf)
 		{
 			highlight();
 		}
-		else if (listContains(e.type, stop))
+		else if (listContains(e.type, stop) && this.gameObject.activeSelf)
 		{
 			reset();
+		}
+	}
+	void OnDestroy ()
+	{
+		for (int i = 0; i < subjects.Count; i++)
+		{
+			subjects[i].removeObserver(new Subject.GameObjectNotify(this.onNotify)); //deregister from observers
 		}
 	}
 }

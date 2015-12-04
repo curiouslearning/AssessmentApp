@@ -11,6 +11,7 @@ public class AnimationManager : Observer {
 	Animator animator;
 	public Animator squareCard;
 	public Animator rectangleCard;
+	ScoreTracker scoreTracker;
 	Material square;
 	Material rectangle;
 	public GameObject[] subjects;
@@ -46,6 +47,7 @@ public class AnimationManager : Observer {
 	void Start()
 	{		
 		addSelfToSubjects();
+		scoreTracker = GameObject.Find("Main Camera").GetComponent<ScoreTracker>();
 	}
 
 	/// <summary>
@@ -154,7 +156,15 @@ public class AnimationManager : Observer {
 	{
 		if (e.type == eType.NewQuestion)
 		{
-			updateCategory();
+			currentCategory = scoreTracker.queryCategory();
+			if(currentCategory == Category.Customization)
+			{
+				updateHighlighter(); 
+			}
+			else
+			{
+				hideHighlighter();
+			}
 		}	
 		if (e.type == eType.Selected || e.type == eType.TimedOut)
 		{
@@ -196,19 +206,7 @@ public class AnimationManager : Observer {
 		}
 	}
 
-	void updateCategory ()
-	{
-		ScoreTracker s = GameObject.Find("Main Camera").GetComponent<ScoreTracker>();
-		currentCategory = s.queryCategory();
-		if(currentCategory == Category.Customization)
-		{
-			updateHighlighter(); //commented out while fuction is being written
-		}
-		else
-		{
-			hideHighlighter();
-		}
-	}
+	
 
 	void updateHighlighter()
 	{

@@ -7,9 +7,12 @@ public class ToggleBasket : Observer{
 	public List<Subject> subjects;
 	public Sprite basketSprite;
 	public Sprite noSprite;
+	Category currentCategory;
+	ScoreTracker scoreTracker;
 	// Use this for initialization
 	void Start () {
 		addSelfToSubjects();
+		scoreTracker = GameObject.Find("Main Camera").GetComponent<ScoreTracker>();
 	
 	}
 
@@ -28,13 +31,18 @@ public class ToggleBasket : Observer{
 
 	public override  void onNotify (EventInstance<GameObject> e)
 	{
+		if(e.type == eType.NewQuestion) 
+		{
+			currentCategory = scoreTracker.queryCategory();	
+		}
 		if (e.type == eType.Selected || e.type == eType.TimedOut)
 		{
 			this.GetComponent<SpriteRenderer>().sprite = null;
 		}
-		if (e.type == eType.Ready)
+		if (e.type == eType.Ready && currentCategory != Category.Customization)
 		{
 			this.GetComponent<SpriteRenderer>().sprite = basketSprite;
 		}
-	}	
+	}
+		
 }
