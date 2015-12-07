@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: dab85f8b064c843d2a98b4ffb39e3b61
-timeCreated: 1447705009
+guid: 93fae5110acff4d8cac4ebea2fe761a2
+timeCreated: 1449512878
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
@@ -36,7 +36,7 @@ ModelImporter:
       name: Highlight
       takeName: Take 001
       firstFrame: 1
-      lastFrame: 25
+      lastFrame: 26
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -63,7 +63,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 100
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1
