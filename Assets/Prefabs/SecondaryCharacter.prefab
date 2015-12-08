@@ -3944,6 +3944,7 @@ MonoBehaviour:
   subjects: []
   start: 
   stop: 0700000002000000
+  tex: {fileID: 2800000, guid: c4c7d93a0b5c749e89aaf0b86edcb9c6, type: 3}
 --- !u!137 &13701042
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
@@ -4710,6 +4711,10 @@ Prefab:
       propertyPath: stop.Array.data[2]
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: tex
+      value: 
+      objectReference: {fileID: 2800000, guid: c4c7d93a0b5c749e89aaf0b86edcb9c6, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 116526}

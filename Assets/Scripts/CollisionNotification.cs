@@ -14,24 +14,16 @@ public class CollisionNotification : MonoBehaviour {
 	public eType type;
 	GameObject selected;
 	public string dragTag;
-	public string inactiveCategory; //the category that this particular receptacle will be inactive during. "None" maintains constant activity, "Test" is only on for Customization
 	void Awake ()
 	{
 		sub = GetComponent<Subject>();
 	}
 	void Start()
 	{
-		track = GameObject.Find ("Main Camera").GetComponent<ScoreTracker>();
 	}
-	string updateCat()
-	{
-		Category cat = track.queryCategory();
-		return cat.ToString();
-	}
+	
 	void OnTriggerEnter2D (Collider2D col){
-		if(updateCat() == inactiveCategory || (inactiveCategory == "Test" && updateCat() != "Customization"))
-			return;
-		 
+		
 		if(col.gameObject.tag != dragTag){ //prevent unwanted collisions from affecting gameplay
 			return;
 		}

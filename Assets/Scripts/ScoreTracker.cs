@@ -127,12 +127,26 @@ public class ScoreTracker : Observer {
 			}
 			else{s.addScore(false);}
 
-			e.signaler.gameObject.SetActive(false);
+			if( e.signaler.GetComponent<StimulusScript>().isOption()){
+				e.signaler.gameObject.SetActive(false);
+			}
+			else {
+				Destroy (e.signaler);
+			}
 			sooHolder.move(1);
 			return;
 		}
 	}
 
+	public override void onNotify (EventInstance<bool> e)
+	{
+		if (e.type == eType.Selected)
+		{
+			s.addScore(e.signaler);
+		}
+		sooHolder.move (1);
+		return;
+	}
 	
 	void endGame ()
 	{

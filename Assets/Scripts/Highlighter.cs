@@ -17,6 +17,7 @@ public class Highlighter : Observer {
 	public List<Subject> subjects;
 	public eType[] start;
 	public eType[] stop;
+	public Texture tex;
 	void Awake () {
 		controller = this.GetComponent<Animator>();
 		Subject s;
@@ -25,6 +26,7 @@ public class Highlighter : Observer {
 		{
 			subjects.Add(s);
 		}
+		this.GetComponent<MeshRenderer>().material.mainTexture = null;
 		//this.gameObject.SetActive(false);
 	}
 
@@ -51,6 +53,7 @@ public class Highlighter : Observer {
 		}
 		else
 		{
+			this.GetComponent<MeshRenderer>().material.mainTexture = tex;
 			controller.SetBool("Highlight", true);
 		}
 		
@@ -62,6 +65,7 @@ public class Highlighter : Observer {
 	public void reset () 
 	{
 		controller.SetBool("Highlight", false);
+		this.GetComponent<MeshRenderer>().material.mainTexture = null;
 		//this.gameObject.SetActive(false);
 	}
 	bool listContains (eType e, eType[] list)

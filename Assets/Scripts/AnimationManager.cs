@@ -177,6 +177,7 @@ public class AnimationManager : Observer {
 				{
 					StimulusScript s = e.signaler.GetComponent<StimulusScript>();
 					changeBodyPart(s.getBodyPart(), s.getTextureName());
+					Destroy (e.signaler);
 				}
 			}
 			return;
