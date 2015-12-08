@@ -83,7 +83,9 @@ public class SOOScript : Observer {
 //inherited Observer method
 	public override void onNotify (EventInstance<GameObject> e)
 	{
-		//releaseStim(e.signaler);
+		if(e.type== eType.Grab || e.type == eType.Drag)
+		{
+		}
 	}
 	
 /// <summary>
@@ -128,6 +130,7 @@ public class SOOScript : Observer {
 			}
 		}
 	}
+
 	
 /// <summary>
 /// Sets the soo.
@@ -160,7 +163,7 @@ public class SOOScript : Observer {
 			}
 		}
 	}
-
+	
 	void Update()
 	{
 		if(moving == false && !movingAlreadyFalse)

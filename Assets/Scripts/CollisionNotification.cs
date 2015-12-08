@@ -10,6 +10,7 @@ using System.Collections;
 /// </summary>
 public class CollisionNotification : MonoBehaviour {
 	public Subject sub;
+	ScoreTracker track;
 	public eType type;
 	GameObject selected;
 	public string dragTag;
@@ -17,7 +18,12 @@ public class CollisionNotification : MonoBehaviour {
 	{
 		sub = GetComponent<Subject>();
 	}
-	void OnTriggerEnter2D (Collider2D col){ 
+	void Start()
+	{
+	}
+	
+	void OnTriggerEnter2D (Collider2D col){
+		
 		if(col.gameObject.tag != dragTag){ //prevent unwanted collisions from affecting gameplay
 			return;
 		}

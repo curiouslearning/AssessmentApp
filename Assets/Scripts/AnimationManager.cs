@@ -11,6 +11,7 @@ public class AnimationManager : Observer {
 	Animator animator;
 	public Animator squareCard;
 	public Animator rectangleCard;
+	ScoreTracker scoreTracker;
 	Material square;
 	Material rectangle;
 	public GameObject[] subjects;
@@ -23,7 +24,9 @@ public class AnimationManager : Observer {
 	public int defaultPos; //standard index for the default texture for each body part
 	string[] sourceLines;
 	bool[] bodyPartCustomized; //tracks which options have been customized
-	
+	Category currentCategory;
+	Animator highlighter;
+	public string [] actionList;
 
 	// Use this for initialization
 	void Awake () {
@@ -43,7 +46,8 @@ public class AnimationManager : Observer {
 	}
 	void Start()
 	{		
-		addSelfToSubjects();	
+		addSelfToSubjects();
+		scoreTracker = GameObject.Find("Main Camera").GetComponent<ScoreTracker>();
 	}
 
 	/// <summary>
@@ -60,9 +64,9 @@ public class AnimationManager : Observer {
 			
 		}
 	}	
-	public void registerWithSoo(GameObject SOO)
+	public override void registerGameObjectWithSoo(GameObject SOO)
 	{
-		SOO.GetComponent<Subject>().addObserver(new Subject.GameObjectNotify(this.onNotify));
+		base.registerGameObjectWithSoo(SOO);
 	}
 
 	/// <summary>
@@ -149,11 +153,23 @@ public class AnimationManager : Observer {
 	/// </summary>
 	/// <param name="e">Event Instance.</param>
 	public override void onNotify (EventInstance<GameObject> e)
-	{	
+	{
+		if (e.type == eType.NewQuestion)
+		{
+			currentCategory = scoreTracker.queryCategory();
+			if(currentCategory == Category.Customization)
+			{
+				updateHighlighter(); 
+			}
+			else
+			{
+				hideHighlighter();
+			}
+		}	
 		if (e.type == eType.Selected || e.type == eType.TimedOut)
 		{
 			animator.ResetTrigger("Landed");
-			animator.SetTrigger("Success");
+			animator.SetTrigger(randomAction());
 			GetComponent<AudioSource>().clip = null;
 			if(e.type == eType.Selected)
 			{
@@ -161,6 +177,7 @@ public class AnimationManager : Observer {
 				{
 					StimulusScript s = e.signaler.GetComponent<StimulusScript>();
 					changeBodyPart(s.getBodyPart(), s.getTextureName());
+					Destroy (e.signaler);
 				}
 			}
 			return;
@@ -181,7 +198,7 @@ public class AnimationManager : Observer {
 				animator.SetTrigger("ShowCard");
 				squareCard.SetTrigger("ShowCard");
 			}
-			else if (rectangle.mainTexture != null)  //Commented out while rectangle card is nonexistent
+			else if (rectangle.mainTexture != null) 
 			{
 				animator.SetTrigger("ShowCard");
 				rectangleCard.SetTrigger("ShowCard");
@@ -191,6 +208,32 @@ public class AnimationManager : Observer {
 	}
 
 	
+
+	void updateHighlighter()
+	{
+		int part = getBodyPart();
+		bodyParts[part].transform.GetChild(0).gameObject.SetActive(true);
+		for (int i =0; i < bodyParts.Length; i++)
+		{
+			if (i != part)	
+			{	
+				bodyParts[i].transform.GetChild(0).gameObject.SetActive(false);
+			}
+		}
+	}
+	
+	void hideHighlighter()
+	{
+		for (int i = 0; i < bodyParts.Length; i++)
+		{
+			bodyParts[i].transform.GetChild(0).gameObject.SetActive(false);
+		}
+	}
+	string randomAction ()
+	{
+		int val = Random.Range(0, actionList.Length);
+		return actionList[val];
+	}
 	/// <summary>
 	/// Changes the body part.
 	/// </summary>
@@ -210,7 +253,7 @@ public class AnimationManager : Observer {
 	{
 		List<Sprite> options;
 		options = new List<Sprite>();
-		int curBodyPart = getBodyPartInternal();
+		int curBodyPart = getNextBodyPart();
 		Texture2D[] textures = optionTextures[curBodyPart];
 		for(int j = 0; j < textures.Length; j++)  //convert and package options
 		{
@@ -235,10 +278,11 @@ public class AnimationManager : Observer {
 		while (i < bodyPartCustomized.Length && bodyPartCustomized[i] == true ) {
 			i++;
 		}	
-		
-		return i-1;
+		if( i > 0)	
+			return i-1;
+		return i;
 	}
-	int getBodyPartInternal()
+	int getNextBodyPart()
 	{
 		int i =0;
 		while (i < bodyPartCustomized.Length && bodyPartCustomized[i] == true ) {i++;}

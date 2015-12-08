@@ -7,10 +7,15 @@ public class ToggleBasket : Observer{
 	public List<Subject> subjects;
 	public Sprite basketSprite;
 	public Sprite noSprite;
+	Category currentCategory;
+	ScoreTracker scoreTracker;
+	GameObject highlight;
 	// Use this for initialization
 	void Start () {
 		addSelfToSubjects();
-	
+		scoreTracker = GameObject.Find("Main Camera").GetComponent<ScoreTracker>();
+		highlight = GetComponentInChildren<Highlighter>().gameObject;
+		highlight.SetActive(false);
 	}
 
 	void addSelfToSubjects()
@@ -21,20 +26,31 @@ public class ToggleBasket : Observer{
 		}
 	}
 
-	public void registerWithSoo(GameObject SOO)
+	public override void registerGameObjectWithSoo(GameObject SOO)
 	{
-		SOO.GetComponent<Subject>().addObserver(new Subject.GameObjectNotify(this.onNotify));
+		base.registerGameObjectWithSoo(SOO);
 	}
 
-	void onNotify (EventInstance<GameObject> e)
+	public override  void onNotify (EventInstance<GameObject> e)
 	{
+		if(e.type == eType.NewQuestion) 
+		{
+			currentCategory = scoreTracker.queryCategory();
+			Debug.Log(currentCategory.ToString());
+			if (currentCategory == Category.Customization)
+			{
+				highlight.SetActive(false);
+			}	
+		}
 		if (e.type == eType.Selected || e.type == eType.TimedOut)
 		{
 			this.GetComponent<SpriteRenderer>().sprite = null;
 		}
-		if (e.type == eType.Ready)
+		if (e.type == eType.Ready && currentCategory != Category.Customization)
 		{
+			highlight.SetActive(true);
 			this.GetComponent<SpriteRenderer>().sprite = basketSprite;
 		}
-	}	
+	}
+		
 }

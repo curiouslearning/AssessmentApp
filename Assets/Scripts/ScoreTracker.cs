@@ -127,7 +127,12 @@ public class ScoreTracker : Observer {
 			}
 			else{s.addScore(false);}
 
-			e.signaler.gameObject.SetActive(false);
+			if( e.signaler.GetComponent<StimulusScript>().isOption()){
+				e.signaler.gameObject.SetActive(false);
+			}
+			else {
+				Destroy (e.signaler);
+			}
 			sooHolder.move(1);
 			return;
 		}
@@ -135,28 +140,18 @@ public class ScoreTracker : Observer {
 
 	public override void onNotify (EventInstance<bool> e)
 	{
-		if(e.type == eType.Selected)
+		if (e.type == eType.Selected)
 		{
-			if(e.signaler)
-			{
-				s.addScore(true);
-			}
-			else
-			{
-				s.addScore(false);
-			}
-			sooHolder.move(1);
-			return;
+			s.addScore(e.signaler);
 		}
+		sooHolder.move (1);
+		return;
 	}
+	
 	void endGame ()
 	{
 		eventHandler.sendEvent (eType.EndGame);
-
-		//Printing it to the debug log allows us to see the entire
-		//string that will be sent in the broadcast, which contains
-		//all the data collected from the latest game.
-
+		//more endgame here TODO
 	}
 	
 	public void addTouch (TouchSummary t) // called by TouchProcessor
@@ -197,7 +192,14 @@ public class ScoreTracker : Observer {
 			AndroidBroadcastIntentHandler.BroadcastJSONData("Difficulty Change", "Hard");  //data recording
 	}
 	
-
+	/// <summary>
+	/// Returns the current category
+	/// </summary>
+	/// <returns>The category.</returns>
+	public Category queryCategory ()
+	{
+		return currentCategory;
+	}
 	void setCategory()
 	{
 		if (s.returnCategory().Equals(Category.Customization)) {//only ever spend one question in customization 	
@@ -214,6 +216,7 @@ public class ScoreTracker : Observer {
 			currentCategory = Category.Customization;
 			AndroidBroadcastIntentHandler.BroadcastJSONData("Category Change", "Customization"); //data recording
 		}
+		
 
 	}
 
@@ -293,12 +296,14 @@ public class ScoreTracker : Observer {
 
 	// for use at the beginning of the game
 	void startQuestion() {
-		//sendEvent (eType.NewQuestion);
+		eventHandler.sendEvent(eType.NewQuestion);
 		stimOrgOb = spawnHolder.spawnNext(currentCategory,s.returnDifficulty(),questionNumber);
 		sooHolder = stimOrgOb.GetComponent<SOOScript>();
+		animator.SetTrigger("Success"); //start the character moving	
 		sooHolder.move(0);
 	} 
-	
+
+	//TODO Refactor this	
 	void changeQuestion () {
 		timeLimit = firstLimit;
 		questionTime = 0;
@@ -358,7 +363,7 @@ public class ScoreTracker : Observer {
 	void Update() 
 	{
 		if (gameOver) {
-			string junk = "meaningless";
+			string junk = "meaningless"; //hack to get around control flow after GameOver
 			return;
 		}
 		// questionTime keeps track of the elapsed time since the

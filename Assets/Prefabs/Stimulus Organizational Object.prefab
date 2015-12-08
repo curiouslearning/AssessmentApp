@@ -66,7 +66,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   marginOfError: 1
-  speed: 1
+  speed: .649999976
   eventWrapper: {fileID: 11424370}
 --- !u!1001 &100100000
 Prefab:
@@ -85,7 +85,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: speed
-      value: 1
+      value: .649999976
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_Layer
