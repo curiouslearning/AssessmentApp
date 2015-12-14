@@ -141,7 +141,6 @@ public class TouchProcessor : Observer {
 						}
 						selection.transform.parent = parentBuffer;			
 					}
-					
 					selection = null;
 				}
 				sendEvent(eType.FingerUp);

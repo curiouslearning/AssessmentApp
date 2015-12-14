@@ -156,6 +156,11 @@ public class StimulusScript : MonoBehaviour{
 		}
 	}
 
+	public void	toggleBoxCollider(bool b)
+	{
+		GetComponent<BoxCollider2D>().enabled = b;
+	}
+
 //********************
 // Scaling functions *
 //********************

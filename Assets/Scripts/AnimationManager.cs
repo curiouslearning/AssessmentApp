@@ -180,6 +180,7 @@ public class AnimationManager : Observer {
 					Destroy (e.signaler);
 				}
 			}
+			clearCards();
 			return;
 		}
 		if (e.type == eType.Grab)
@@ -208,7 +209,11 @@ public class AnimationManager : Observer {
 	}
 
 	
-
+	void clearCards ()
+	{
+		square.mainTexture = null;
+		rectangle.mainTexture = null;
+	}
 	void updateHighlighter()
 	{
 		int part = getBodyPart();

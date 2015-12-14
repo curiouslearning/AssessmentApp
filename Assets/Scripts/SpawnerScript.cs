@@ -90,8 +90,23 @@ public class SpawnerScript : MonoBehaviour {
 		}
 	}
 
-
-	
+	/// <summary>
+	/// Gets the hard stim count.
+	/// </summary>
+	/// <returns>The hard stims.</returns>
+	public int getStimsByDifficulty (Difficulty diff, string type)
+	{
+		int retval = 0;
+		for (int i = 0; i < stimPool.Count; i++)
+		{
+			if( stimPool[i].difficulty == diff && stimPool[i].stimType == type)
+			{
+				retval++;
+			}
+		}
+		Debug.Log("retval: " + retval);
+		return retval;
+	}
 
 	/// <summary>
 	/// Returns a list of four semi-randomly generated serStims, one of which is

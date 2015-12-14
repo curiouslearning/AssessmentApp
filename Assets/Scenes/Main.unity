@@ -745,7 +745,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1331431048}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -21, y: 1.53999996, z: 0}
+  m_LocalPosition: {x: -9.52000046, y: 1.53999996, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -804,7 +804,6 @@ GameObject:
   - 114: {fileID: 1523307918}
   - 50: {fileID: 1523307919}
   - 114: {fileID: 1523307920}
-  - 61: {fileID: 1523307921}
   m_Layer: 2
   m_Name: Receptacle
   m_TagString: Untagged
@@ -862,9 +861,9 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_Offset: {x: -3.01999998, y: 2.66000009}
+  m_Offset: {x: -12.8599997, y: 6.86000013}
   serializedVersion: 2
-  m_Size: {x: 9.18999958, y: 7.61999989}
+  m_Size: {x: 33.9000015, y: 27.2000008}
 --- !u!4 &1523307917
 Transform:
   m_ObjectHideFlags: 0
@@ -921,19 +920,6 @@ MonoBehaviour:
   - {fileID: 829527127}
   basketSprite: {fileID: 21300000, guid: 471712c21191e4a3fb83abc3135d9c1c, type: 3}
   noSprite: {fileID: 0}
---- !u!61 &1523307921
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1523307913}
-  m_Enabled: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_Offset: {x: -16.6499996, y: 7.94000006}
-  serializedVersion: 2
-  m_Size: {x: 12.5799999, y: 29}
 --- !u!4 &1643050282 stripped
 Transform:
   m_PrefabParentObject: {fileID: 426786, guid: 9f42b5bf04bd3417bab29cedf35761c7, type: 2}
