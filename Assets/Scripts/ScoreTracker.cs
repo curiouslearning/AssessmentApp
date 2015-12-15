@@ -349,7 +349,6 @@ public class ScoreTracker : Observer {
 			} 
 			else if( s.returnDifficulty() == Difficulty.Hard) //HACK NEED TO MAKE SURE THERE ARE STIMULI IN ALL LEVELS
 			{
-				numCorrect = 0;
 				Difficulty temp = s.returnDifficulty();
 				scoreList.Add(s);
 				s = new Score(questionNumber);
