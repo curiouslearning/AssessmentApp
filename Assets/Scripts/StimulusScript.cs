@@ -43,10 +43,16 @@ public class StimulusScript : MonoBehaviour{
 			startScale = transform.localScale * stimMod;
 		}
 		//other initializations
+		GameObject.Find("Main Camera").GetComponent<ScreenCleaner>().registerObject (this.gameObject, OnscreenObjectList.MyObjectTypes.Stimulus); //register with screen cleaner
 		isBeingDragged = false;
 		touchInput = GetComponent<Selectable>();
 		if(touchInput != null)
 			touchInput.initP(onSelect); //attach self to input wrapper
+	}
+
+	void OnDestroy ()
+	{
+		GameObject.Find("Main Camera").GetComponent<ScreenCleaner>().deRegisterObject (this.gameObject, OnscreenObjectList.MyObjectTypes.Stimulus); //deregister with screen cleaner
 	}
 
 //*******************

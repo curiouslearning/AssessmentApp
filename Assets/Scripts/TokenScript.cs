@@ -17,8 +17,13 @@ public class TokenScript : MonoBehaviour {
 		StimulusScript s = GetComponentInParent<StimulusScript>();
 		touchInput.initP(onSelect, s.onSelect);
 		touchInput.initO(offSelect);
+		GameObject.Find("Main Camera").GetComponent<ScreenCleaner>().registerObject (this.gameObject, OnscreenObjectList.MyObjectTypes.Token);
 	}
-	
+
+	void OnDestroy ()
+	{
+		GameObject.Find("Main Camera").GetComponent<ScreenCleaner>().deRegisterObject (this.gameObject, OnscreenObjectList.MyObjectTypes.Token); //deregister with screen cleaner
+	}	
 	public void setIsCorrect (bool val)
 	{
 		isCorrect = val;
