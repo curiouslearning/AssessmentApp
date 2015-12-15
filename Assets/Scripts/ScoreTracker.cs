@@ -239,7 +239,7 @@ public class ScoreTracker : Observer {
 			AndroidBroadcastIntentHandler.BroadcastJSONData("Category Change", lastCategory.ToString()); //data recording
 		}
 		 //change category and drop difficulty level after 4 wrong answers, 3 correct answers on hard difficulty, or the category total has been reached.	 
-		else if (numWrong >= wrongCap || numAnswered  >= totalCap || (s.returnDifficulty() == Difficulty.Hard && numCorrect == correctCap)) {
+		else  {
 			lastCategory = currentCategory;
 			s.setCategory (Category.Customization);
 			currentCategory = Category.Customization;
@@ -336,6 +336,7 @@ public class ScoreTracker : Observer {
 
 		checkAnswer();
 		Debug.Log("numCorrect: " + numCorrect);	
+		Debug.Log("numWrong: " + numWrong);	
 
 		
 		if (numCorrect >= correctCap) {
@@ -379,7 +380,9 @@ public class ScoreTracker : Observer {
 			s = new Score(questionNumber);
 			s.setCategory(currentCategory);
 			s.setDifficulty(temp);
-			setCategory();
+			if(numWrong >= wrongCap || numAnswered >= totalCap || currentCategory == Category.Customization){
+				setCategory();
+			}
 			if(gameOver)
 				return;
 		}

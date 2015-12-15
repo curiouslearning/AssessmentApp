@@ -14,7 +14,8 @@ public class TokenScript : MonoBehaviour {
 		{
 			Debug.LogError("could not get selectable");
 		}
-		touchInput.initP(onSelect);
+		StimulusScript s = GetComponentInParent<StimulusScript>();
+		touchInput.initP(onSelect, s.onSelect);
 		touchInput.initO(offSelect);
 	}
 	
