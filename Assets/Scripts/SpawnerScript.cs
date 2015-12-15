@@ -139,6 +139,7 @@ public class SpawnerScript : MonoBehaviour {
 			// when a list of 4 serStims is assembled, findStim returns answer
 			 if (matchesCriteria (cat, diffLevel, type, s) && !answer.Contains(s)) 
 			{
+				s.isTarget = false;
 				answer = randomAdd (answer, s); 
 			}
 			counter++;
@@ -180,7 +181,7 @@ public class SpawnerScript : MonoBehaviour {
 			if (counter == stimPool.Count) 
 				counter = 0;
 			s = stimPool[counter]; 
-			if(s.stimType.Equals(type) && s.category.Equals(cat))
+			if(s.stimType.Equals(type) && s.category.Equals(cat) && s.difficulty == diffLevel)
 			{
 				if(s.hasBeenTarget) //pass over any previously used targets
 				{
@@ -192,7 +193,7 @@ public class SpawnerScript : MonoBehaviour {
 				float f = Random.Range (0.0f,4.0f);
 				if (f < 1.0f) {
 					stimPool[counter].hasBeenTarget = true;
-					s.isCorrect = true;
+					s.isTarget = true;
 					foundTarget = true;
 					host.setHostMedia(s); // pass the target's prompt to the main character
 					break;
@@ -245,7 +246,7 @@ public class SpawnerScript : MonoBehaviour {
 		for (int i = 0; i < stimPool.Count; i++)
 		{	
 			stimPool[i].hasBeenTarget = false;
-			stimPool[i].isCorrect = false;
+			stimPool[i].isTarget = false;
 		}
 	}
 

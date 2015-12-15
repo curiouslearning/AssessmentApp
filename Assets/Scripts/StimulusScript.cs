@@ -193,7 +193,7 @@ public class StimulusScript : MonoBehaviour{
 	/// <param name="input">stimulus data.</param>
 	public	void setStim (serStim input) {
 		this.hasBeenTarget = input.hasBeenTarget;
-		this.isTarget = input.isCorrect;
+		this.isTarget = input.isTarget;
 		this.isDraggable = input.isDraggable;
 		this.difficulty = input.difficulty;
 		if(input.stimType == "visual")
