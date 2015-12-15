@@ -35,6 +35,7 @@ public class CollisionNotification : MonoBehaviour {
 		}
 		else
 		{
+			Debug.Log("boop");
 			sub.sendEvent(type, selected);			
 		}
 		selected = null;
