@@ -37,6 +37,8 @@ public class SpawnerScript : MonoBehaviour {
 	//variables for the SOO to hold onto
 	public Vector3[] destinations;
 	Vector3[] positions;
+	public Sprite noSprite;
+	public Sprite visStimSprite;
 	
 	// Use this for initialization
 	void Awake () 
@@ -319,6 +321,7 @@ public class SpawnerScript : MonoBehaviour {
 	
 	void arrangeSOO(Question q)
 	{
+			SpriteRenderer background;
 		
 		//create 4 instances of stimuli as children of the SOO, and arrange them within its Box Collider
 		for (int i =0; i< 4; i++)
@@ -327,18 +330,23 @@ public class SpawnerScript : MonoBehaviour {
 			if(needsCharacter(q.getCat()))
 			{
 				newStims[i] = Instantiate (character) as GameObject; //use the secondary character
-				spacing = charStimSpacing;	
+				spacing = charStimSpacing;
+				background = newStims[i].GetComponentInChildren<SpriteRenderer>();
+				background.enabled = false;
 			}
 			else
 			{
 				newStims[i] = Instantiate (stimPrefab) as GameObject; //just display the stimulus as a sprite
+				background = newStims[i].transform.GetChild(0).GetComponent<SpriteRenderer>();
 				if(q.getCat() == Category.Customization)
 				{
 					spacing = textureSpacing;
+					background.sprite  = null;
 				}
 				else
 				{
 					spacing = visStimSpacing;
+					background.sprite = visStimSprite;
 				}
 			}
 			newStims[i].transform.SetParent(newSoo.transform);
