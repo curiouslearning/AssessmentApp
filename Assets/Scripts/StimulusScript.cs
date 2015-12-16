@@ -43,10 +43,18 @@ public class StimulusScript : MonoBehaviour{
 			startScale = transform.localScale * stimMod;
 		}
 		//other initializations
+		GameObject.Find("Main Camera").GetComponent<ScreenCleaner>().registerObject (this.gameObject, OnscreenObjectList.MyObjectTypes.Stimulus); //register with screen cleaner
 		isBeingDragged = false;
 		touchInput = GetComponent<Selectable>();
 		if(touchInput != null)
 			touchInput.initP(onSelect); //attach self to input wrapper
+	}
+
+	void OnDestroy ()
+	{
+		if(GameObject.Find("Main Camera") == null)
+			return;
+		GameObject.Find("Main Camera").GetComponent<ScreenCleaner>().deRegisterObject (this.gameObject, OnscreenObjectList.MyObjectTypes.Stimulus); //deregister with screen cleaner
 	}
 
 //*******************
@@ -156,6 +164,11 @@ public class StimulusScript : MonoBehaviour{
 		}
 	}
 
+	public void	toggleBoxCollider(bool b)
+	{
+		GetComponent<BoxCollider2D>().enabled = b;
+	}
+
 //********************
 // Scaling functions *
 //********************
@@ -188,7 +201,7 @@ public class StimulusScript : MonoBehaviour{
 	/// <param name="input">stimulus data.</param>
 	public	void setStim (serStim input) {
 		this.hasBeenTarget = input.hasBeenTarget;
-		this.isTarget = input.isCorrect;
+		this.isTarget = input.isTarget;
 		this.isDraggable = input.isDraggable;
 		this.difficulty = input.difficulty;
 		if(input.stimType == "visual")

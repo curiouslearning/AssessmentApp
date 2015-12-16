@@ -25,11 +25,15 @@ public class AnimationManager : Observer {
 	string[] sourceLines;
 	bool[] bodyPartCustomized; //tracks which options have been customized
 	Category currentCategory;
-	Animator highlighter;
+	Animator partHighlighter;
+	public Highlighter mainHighlighter;
 	public string [] actionList;
+	float audioCounter;
+	public float audioInterval;
 
 	// Use this for initialization
 	void Awake () {
+		audioCounter = 0;
 		optionDict = new Dictionary<string, Texture2D>();
 		bodyPartCustomized = new bool[NUMBODYPARTS];
 		optionTextures = new Texture2D[NUMBODYPARTS][];
@@ -180,6 +184,7 @@ public class AnimationManager : Observer {
 					Destroy (e.signaler);
 				}
 			}
+			clearCards();
 			return;
 		}
 		if (e.type == eType.Grab)
@@ -189,10 +194,6 @@ public class AnimationManager : Observer {
 		if (e.type == eType.Ready)
 		{
 			animator.SetTrigger("Landed");
-			if(GetComponent<AudioSource>().clip != null)
-			{
-				GetComponent<AudioSource>().Play();
-			}
 			if(square.mainTexture != null)
 			{
 				animator.SetTrigger("ShowCard");
@@ -208,7 +209,11 @@ public class AnimationManager : Observer {
 	}
 
 	
-
+	void clearCards ()
+	{
+		square.mainTexture = null;
+		rectangle.mainTexture = null;
+	}
 	void updateHighlighter()
 	{
 		int part = getBodyPart();
@@ -297,8 +302,34 @@ public class AnimationManager : Observer {
 		bodyPartCustomized[i] = true;
 		return i;
 	}
+	public void playAudio ()
+	{
+		AudioSource a = GetComponent<AudioSource>();
+		if(a != null && !a.isPlaying)
+		{
+			mainHighlighter.highlightOnce();
+			a.Play();	
+		}
+	}
+	public void onSelect (touchInstance t)
+	{
+		Debug.Log("caught tap");
+		animator.SetTrigger("Talk");
+		audioCounter = 0f;
+		
+	}
 	// Update is called once per frame
 	void Update () {
+		if(GetComponent<AudioSource>().clip != null)
+		{
+			audioCounter += Time.deltaTime;
+			if(audioCounter >= audioInterval && !GetComponent<AudioSource>().isPlaying)
+			{
+				animator.SetTrigger("Talk");
+				audioCounter = 0f;
+			}
+		}
+		else { audioCounter = 0f;}
 
 	}
 }

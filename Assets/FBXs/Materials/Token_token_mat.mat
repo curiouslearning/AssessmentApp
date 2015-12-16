@@ -7,10 +7,10 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Token_token_mat
-  m_Shader: {fileID: 10751, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
+  m_Shader: {fileID: 4800000, guid: 67575cabe63b5c84cb2437cf70b6eab2, type: 3}
+  m_ShaderKeywords: _MULTIPLYMODE
   m_LightmapFlags: 5
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 3000
   stringTagMap: {}
   m_SavedProperties:
     serializedVersion: 2
@@ -19,7 +19,7 @@ Material:
         first:
           name: _MainTex
         second:
-          m_Texture: {fileID: 2800000, guid: b02634d3a99d9490f8fead326514713a, type: 3}
+          m_Texture: {fileID: 2800000, guid: 3faaef04ddf6f4d30bf64d97dd6ea312, type: 3}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
       data:
@@ -82,7 +82,7 @@ Material:
       data:
         first:
           name: _SrcBlend
-        second: 1
+        second: 2
       data:
         first:
           name: _DstBlend
@@ -122,10 +122,22 @@ Material:
       data:
         first:
           name: _Mode
-        second: 0
+        second: 1
       data:
         first:
           name: _Metallic
+        second: 0
+      data:
+        first:
+          name: _StencilID
+        second: 0
+      data:
+        first:
+          name: _AlphaFactor
+        second: 1.5
+      data:
+        first:
+          name: _QueueOffset
         second: 0
     m_Colors:
       data:

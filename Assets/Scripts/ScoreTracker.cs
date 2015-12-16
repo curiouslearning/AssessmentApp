@@ -8,10 +8,10 @@ public class ScoreTracker : Observer {
 	//timekeeping variables
 	public int questionNumber;
 	public float questionTime;
-	public float firstLimit;
-	public float secondLimit;
-	public float pointTime;
-	float timeLimit;
+	public float timeLeft;
+	public float pointInterval;
+	float pointTime;
+	public float timeLimit;
 	float startTime;
 	private bool firstTouchHappened;
 	private bool pauseTimer;
@@ -40,6 +40,10 @@ public class ScoreTracker : Observer {
 	int numCorrect;
 	int numWrong;
 	int numAnswered;
+	//question-capping variables
+	int correctCap;
+	int wrongCap;
+	int totalCap;
 	Category currentCategory;
 	Category lastCategory;
 	Score s;
@@ -65,13 +69,32 @@ public class ScoreTracker : Observer {
 		scoreList = new List<Score>();
 		addSubjects();
 		questionNumber = 0;
-		questionTime = 0f;
-		startTime = Time.time;
-		timeLimit = firstLimit;
-		firstTouchHappened = false;
-		broadcastSent = false;
+		resetTiming();
 		pauseTimer = false;
+		setCaps();
 		startQuestion ();
+	}
+
+	void setCaps()
+	{
+		int stimCount = spawnHolder.getStimsByDifficulty(Difficulty.Hard, "visual");
+		if(stimCount < 4)
+		{
+			wrongCap = stimCount;
+			correctCap = stimCount;
+		}
+		else if (stimCount > 4 && stimCount < 20)
+		{
+			wrongCap = 4;
+			correctCap = 3;
+			totalCap = stimCount;
+		}
+		else
+		{
+			wrongCap = 4;
+			correctCap = 3;
+			totalCap = 20;
+		}
 	}
 
 	void addSubjects ()
@@ -99,6 +122,9 @@ public class ScoreTracker : Observer {
 		{
 			if(!firstTouchHappened)
 				firstTouchHappened = true;
+			else{
+				timeLeft = timeLimit;
+			}
 		}
 		if(e.type == eType.Grab)
 		{
@@ -210,7 +236,9 @@ public class ScoreTracker : Observer {
 			s.setDifficulty(Difficulty.Easy);
 			AndroidBroadcastIntentHandler.BroadcastJSONData("Difficulty Change", "Easy");  //data recording
 			AndroidBroadcastIntentHandler.BroadcastJSONData("Category Change", lastCategory.ToString()); //data recording
-		} else if (numWrong >= 4 || numAnswered  >= 20) { //change category and drop difficulty level after 4 wrong answers	
+		}
+		 //change category and drop difficulty level after 4 wrong answers, 3 correct answers on hard difficulty, or the category total has been reached.	 
+		else  {
 			lastCategory = currentCategory;
 			s.setCategory (Category.Customization);
 			currentCategory = Category.Customization;
@@ -240,15 +268,9 @@ public class ScoreTracker : Observer {
 				return Category.SightWordIdentification;
 
 			case Category.SightWordIdentification:
-				receptacle.SetActive(false);
-				rhymeRecep1.SetActive(true);
-				rhymeRecep2.SetActive(true);
 				return Category.RhymingWordMatching;
 
 			case Category.RhymingWordMatching:
-				receptacle.SetActive(true);
-				rhymeRecep1.SetActive(false);
-				rhymeRecep2.SetActive(false);
 				return Category.BlendingWordIdentification;
 
 			case Category.BlendingWordIdentification:
@@ -305,23 +327,35 @@ public class ScoreTracker : Observer {
 
 	//TODO Refactor this	
 	void changeQuestion () {
-		timeLimit = firstLimit;
-		questionTime = 0;
-		startTime = Time.time;
+		resetTiming();
 		questionNumber++;
 		numAnswered++;
 
-		checkAnswer();	
+		checkAnswer();
+		Debug.Log("numCorrect: " + numCorrect);	
+		Debug.Log("numWrong: " + numWrong);	
 
 		
-		if (numCorrect >= 3) {
+		if (numCorrect >= correctCap) {
 			// If this case is true, the player has exhausted all available categories and difficulties
-			if (s.returnCategory() == Category.PseudowordMatching && s.returnDifficulty() == Difficulty.Hard) {
+			if (s.returnCategory() == Category.PseudowordMatching && s.returnDifficulty() == Difficulty.Hard) 
+			{
 				Debug.Log("Game over!");
 				gameOver = true;
 				endGame();
 				return;
-			} else {
+			} 
+			else if( s.returnDifficulty() == Difficulty.Hard) //HACK NEED TO MAKE SURE THERE ARE STIMULI IN ALL LEVELS
+			{
+				Difficulty temp = s.returnDifficulty();
+				scoreList.Add(s);
+				s = new Score(questionNumber);
+				s.setCategory(currentCategory);
+				s.setDifficulty(temp);
+				setCategory();
+			}
+		else
+			 {
 				// if the player answers three consecutive questions correctly, numCorrect is
 				// reset and an event notification of type ChangeDifficulty is sent out, which
 				// will be picked up by GameManager.
@@ -333,7 +367,8 @@ public class ScoreTracker : Observer {
 				s.setDifficulty(temp);
 				// the difficulty and category variables in the current score variable
 				// must also be adjusted appropriately.
-				//updateDifficulty();
+				updateDifficulty();
+				Debug.Log("newdiff: " + s.returnDifficulty());
 			}	
 		} 
 		else {
@@ -342,14 +377,14 @@ public class ScoreTracker : Observer {
 			s = new Score(questionNumber);
 			s.setCategory(currentCategory);
 			s.setDifficulty(temp);
-			setCategory();
+			if(numWrong >= wrongCap || numAnswered >= totalCap || currentCategory == Category.Customization){
+				setCategory();
+			}
 			if(gameOver)
 				return;
 		}
 
 		stimOrgOb = spawnHolder.spawnNext(currentCategory,s.returnDifficulty(),questionNumber);
-		firstTouchHappened = false;
-		broadcastSent = false;
 		sooHolder = stimOrgOb.GetComponent<SOOScript>();
 		sooHolder.move(0);
 
@@ -358,7 +393,17 @@ public class ScoreTracker : Observer {
 		string value = "Question Number: " + questionNumber + ", Category: " + currentCategory + ", Difficulty: " + s.returnDifficulty();
 		AndroidBroadcastIntentHandler.BroadcastJSONData("New Question", value);
 	}
-	
+
+	//initialize or reset all timekeeping variables for the question timer
+	void resetTiming()
+	{	
+		timeLeft = timeLimit;
+		questionTime = 0;
+		startTime = Time.time;
+		firstTouchHappened = false;
+		broadcastSent = false;
+		pointTime = pointInterval;
+	}
 
 	void Update() 
 	{
@@ -371,10 +416,10 @@ public class ScoreTracker : Observer {
 		// frequently, which is why it is placed in Update().
 		while(pauseTimer)
 		{
-			timeLimit += Time.deltaTime;
-			return;
+			return; //do not increase timer while paused;
 		}
 		questionTime = Time.time - startTime;
+		timeLeft -= Time.deltaTime;
 		// if questionTime goes over 15 seconds it sends a
 		// TimeOut (which will be picked up in ScoreTracker)
 		// event and moves on to the next question, calling
@@ -382,9 +427,9 @@ public class ScoreTracker : Observer {
 		if(questionTime >= pointTime)
 		{
 			animator.SetTrigger("Point");
-			pointTime += Time.time;
+			pointTime = Time.time + 5f;
 		}
-		if (questionTime >= timeLimit){
+		if (timeLeft <= 0f && currentCategory != Category.Customization){ //do not time out on Customization events
 			startTime = Time.time;
 
 			s.setTimedOut(true);
@@ -399,9 +444,7 @@ public class ScoreTracker : Observer {
 		else if (firstTouchHappened && !broadcastSent)
 		{
 			string value = ("First Touch for Question " + questionNumber.ToString() + " Occurred at " + Time.time.ToString());
-			questionTime = 0;
-			startTime = Time.time;
-			timeLimit = secondLimit;
+			timeLeft = timeLimit;
 			AndroidBroadcastIntentHandler.BroadcastJSONData("First Touch", value);
 			broadcastSent = true;
 		}

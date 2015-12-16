@@ -238,6 +238,18 @@ Prefab:
       propertyPath: tex
       value: 
       objectReference: {fileID: 2800000, guid: c4c7d93a0b5c749e89aaf0b86edcb9c6, type: 3}
+    - target: {fileID: 11474328, guid: 24cfefb2d97714555a40308930997e64, type: 2}
+      propertyPath: audioInterval
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 101234, guid: 24cfefb2d97714555a40308930997e64, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11474328, guid: 24cfefb2d97714555a40308930997e64, type: 2}
+      propertyPath: mainHighlighter
+      value: 
+      objectReference: {fileID: 285965001}
     m_RemovedComponents:
     - {fileID: 11484366, guid: 24cfefb2d97714555a40308930997e64, type: 2}
     - {fileID: 6199682, guid: 24cfefb2d97714555a40308930997e64, type: 2}
@@ -522,6 +534,7 @@ GameObject:
   - 114: {fileID: 829527126}
   - 114: {fileID: 829527128}
   - 114: {fileID: 829527127}
+  - 114: {fileID: 829527125}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -595,6 +608,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
+--- !u!114 &829527125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 829527119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2767ac5610a6749129efd8710e426e67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &829527126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -634,9 +658,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questionNumber: 0
   questionTime: 0
-  firstLimit: 15
-  secondLimit: 10
-  pointTime: 5
+  timeLeft: 0
+  pointInterval: 5
+  timeLimit: 15
   spawner: {fileID: 955094559}
   receptacle: {fileID: 1523307913}
   gCollector: {fileID: 1331431048}
@@ -683,16 +707,18 @@ MonoBehaviour:
   - {fileID: 276359290}
   - {fileID: 285965001}
   - {fileID: 829527126}
-  visStimSpacing: {x: -4.03000021, y: 2.46000004, z: 3, w: -2.5}
-  charStimSpacing: {x: -4.03000021, y: .25, z: 1.5, w: -2.5}
-  textureSpacing: {x: -4.03000021, y: 7, z: 14, w: -8.5}
+  visStimSpacing: {x: -4.03000021, y: 2.75, z: 4, w: -5}
+  charStimSpacing: {x: -2.02999997, y: .25, z: 2.25, w: -2.5}
+  textureSpacing: {x: -4.03000021, y: 4, z: 10, w: -9.5}
   spacing: {x: 0, y: 0, z: 0, w: 0}
   scaleStim: .600000024
   scaleCharacter: 1.5
   scaleTexture: .300000012
   destinations:
-  - {x: 2, y: 1.53999996, z: 0}
+  - {x: 1.25, y: 1.03999996, z: 0}
   - {x: -21, y: 1.53999996, z: 0}
+  noSprite: {fileID: 0}
+  visStimSprite: {fileID: 21300000, guid: 7d5de144cac9d4820a29e4fd9a7a18b6, type: 3}
 --- !u!4 &955094561
 Transform:
   m_ObjectHideFlags: 0
@@ -745,7 +771,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1331431048}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -21, y: 1.53999996, z: 0}
+  m_LocalPosition: {x: -9.52000046, y: 1.53999996, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -760,9 +786,9 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: .959999979, y: 0}
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: .389999986, y: 9.52000046}
 --- !u!114 &1331431052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -804,8 +830,8 @@ GameObject:
   - 114: {fileID: 1523307918}
   - 50: {fileID: 1523307919}
   - 114: {fileID: 1523307920}
-  - 61: {fileID: 1523307921}
-  m_Layer: 2
+  - 114: {fileID: 1523307921}
+  m_Layer: 0
   m_Name: Receptacle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -862,9 +888,9 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_Offset: {x: -3.01999998, y: 2.66000009}
+  m_Offset: {x: -12.8599997, y: 6.86000013}
   serializedVersion: 2
-  m_Size: {x: 9.18999958, y: 7.61999989}
+  m_Size: {x: 33.9000015, y: 27.2000008}
 --- !u!4 &1523307917
 Transform:
   m_ObjectHideFlags: 0
@@ -921,19 +947,19 @@ MonoBehaviour:
   - {fileID: 829527127}
   basketSprite: {fileID: 21300000, guid: 471712c21191e4a3fb83abc3135d9c1c, type: 3}
   noSprite: {fileID: 0}
---- !u!61 &1523307921
-BoxCollider2D:
+  s: {fileID: 1523307921}
+  m: {fileID: 423845921}
+--- !u!114 &1523307921
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1523307913}
   m_Enabled: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_Offset: {x: -16.6499996, y: 7.94000006}
-  serializedVersion: 2
-  m_Size: {x: 12.5799999, y: 29}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 490b87372d41f4a1a967cd4aaa1d522f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1643050282 stripped
 Transform:
   m_PrefabParentObject: {fileID: 426786, guid: 9f42b5bf04bd3417bab29cedf35761c7, type: 2}

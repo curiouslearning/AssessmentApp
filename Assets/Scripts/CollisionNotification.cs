@@ -22,7 +22,7 @@ public class CollisionNotification : MonoBehaviour {
 	{
 	}
 	
-	void OnTriggerEnter2D (Collider2D col){
+	void OnTriggerExit2D(Collider2D col){
 		
 		if(col.gameObject.tag != dragTag){ //prevent unwanted collisions from affecting gameplay
 			return;
@@ -33,7 +33,8 @@ public class CollisionNotification : MonoBehaviour {
 			sub.sendBoolEvent(eType.Selected, selected.GetComponent<TokenScript>().returnIsCorrect());
 			Destroy(selected.gameObject);
 		}
-		else {
+		else
+		{
 			sub.sendEvent(type, selected);			
 		}
 		selected = null;

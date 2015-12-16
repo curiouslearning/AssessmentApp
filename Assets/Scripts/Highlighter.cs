@@ -58,6 +58,21 @@ public class Highlighter : Observer {
 		}
 		
 	}
+
+	public void highlightOnce ()
+	{
+		Texture t = GetComponent<MeshRenderer>().material.mainTexture;
+		//this.gameObject.SetActive(true);
+		if(isPlaying ()) //prevent multiple calls from interrupting animation
+		{
+			return;
+		}
+		else
+		{
+			t = tex;
+			controller.SetTrigger("OneHighlight");
+		}
+	}
 	
 	/// <summary>
 	/// Reset this instance.

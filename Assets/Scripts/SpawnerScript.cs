@@ -37,6 +37,8 @@ public class SpawnerScript : MonoBehaviour {
 	//variables for the SOO to hold onto
 	public Vector3[] destinations;
 	Vector3[] positions;
+	public Sprite noSprite;
+	public Sprite visStimSprite;
 	
 	// Use this for initialization
 	void Awake () 
@@ -90,8 +92,23 @@ public class SpawnerScript : MonoBehaviour {
 		}
 	}
 
-
-	
+	/// <summary>
+	/// Gets the hard stim count.
+	/// </summary>
+	/// <returns>The hard stims.</returns>
+	public int getStimsByDifficulty (Difficulty diff, string type)
+	{
+		int retval = 0;
+		for (int i = 0; i < stimPool.Count; i++)
+		{
+			if( stimPool[i].difficulty == diff && stimPool[i].stimType == type)
+			{
+				retval++;
+			}
+		}
+		Debug.Log("retval: " + retval);
+		return retval;
+	}
 
 	/// <summary>
 	/// Returns a list of four semi-randomly generated serStims, one of which is
@@ -124,6 +141,7 @@ public class SpawnerScript : MonoBehaviour {
 			// when a list of 4 serStims is assembled, findStim returns answer
 			 if (matchesCriteria (cat, diffLevel, type, s) && !answer.Contains(s)) 
 			{
+				s.isTarget = false;
 				answer = randomAdd (answer, s); 
 			}
 			counter++;
@@ -165,7 +183,7 @@ public class SpawnerScript : MonoBehaviour {
 			if (counter == stimPool.Count) 
 				counter = 0;
 			s = stimPool[counter]; 
-			if(s.stimType.Equals(type) && s.category.Equals(cat))
+			if(s.stimType.Equals(type) && s.category.Equals(cat) && s.difficulty == diffLevel)
 			{
 				if(s.hasBeenTarget) //pass over any previously used targets
 				{
@@ -177,7 +195,7 @@ public class SpawnerScript : MonoBehaviour {
 				float f = Random.Range (0.0f,4.0f);
 				if (f < 1.0f) {
 					stimPool[counter].hasBeenTarget = true;
-					s.isCorrect = true;
+					s.isTarget = true;
 					foundTarget = true;
 					host.setHostMedia(s); // pass the target's prompt to the main character
 					break;
@@ -230,7 +248,7 @@ public class SpawnerScript : MonoBehaviour {
 		for (int i = 0; i < stimPool.Count; i++)
 		{	
 			stimPool[i].hasBeenTarget = false;
-			stimPool[i].isCorrect = false;
+			stimPool[i].isTarget = false;
 		}
 	}
 
@@ -303,6 +321,7 @@ public class SpawnerScript : MonoBehaviour {
 	
 	void arrangeSOO(Question q)
 	{
+			SpriteRenderer background;
 		
 		//create 4 instances of stimuli as children of the SOO, and arrange them within its Box Collider
 		for (int i =0; i< 4; i++)
@@ -311,18 +330,23 @@ public class SpawnerScript : MonoBehaviour {
 			if(needsCharacter(q.getCat()))
 			{
 				newStims[i] = Instantiate (character) as GameObject; //use the secondary character
-				spacing = charStimSpacing;	
+				spacing = charStimSpacing;
+				background = newStims[i].GetComponentInChildren<SpriteRenderer>();
+				background.enabled = false;
 			}
 			else
 			{
 				newStims[i] = Instantiate (stimPrefab) as GameObject; //just display the stimulus as a sprite
+				background = newStims[i].transform.GetChild(0).GetComponent<SpriteRenderer>();
 				if(q.getCat() == Category.Customization)
 				{
 					spacing = textureSpacing;
+					background.sprite  = null;
 				}
 				else
 				{
 					spacing = visStimSpacing;
+					background.sprite = visStimSprite;
 				}
 			}
 			newStims[i].transform.SetParent(newSoo.transform);

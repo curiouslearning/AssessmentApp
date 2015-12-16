@@ -20,21 +20,21 @@ public class BackgroundScroller : Observer {
 		return scrolling;
 	}
 	
-	public void toggleScroll ()
+	void toggleScroll (bool b)
 	{
-		if (scrolling) {
-			scrolling = false;
-		}
-		else {
-			scrolling = true;
-		}
-
+			scrolling = b;
 	}
 
 	public override void onNotify(EventInstance<GameObject> e)
 	{
-		if (e.type == eType.Ready || e.type == eType.Selected || e.type == eType.TimedOut)
-			toggleScroll();
+		if (e.type == eType.Ready)
+		{ 
+			toggleScroll(false);
+		}
+		else if (e.type == eType.Selected || e.type == eType.TimedOut)
+		{
+			toggleScroll(true);
+		}
 	} 
 
 	public override void registerGameObjectWithSoo(GameObject SOO)
