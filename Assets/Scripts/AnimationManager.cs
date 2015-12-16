@@ -25,7 +25,8 @@ public class AnimationManager : Observer {
 	string[] sourceLines;
 	bool[] bodyPartCustomized; //tracks which options have been customized
 	Category currentCategory;
-	Animator highlighter;
+	Animator partHighlighter;
+	public Highlighter mainHighlighter;
 	public string [] actionList;
 	float audioCounter;
 	public float audioInterval;
@@ -306,7 +307,8 @@ public class AnimationManager : Observer {
 		AudioSource a = GetComponent<AudioSource>();
 		if(a != null && !a.isPlaying)
 		{
-			a.Play();
+			mainHighlighter.highlightOnce();
+			a.Play();	
 		}
 	}
 	public void onSelect (touchInstance t)
