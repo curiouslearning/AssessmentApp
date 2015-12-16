@@ -22,6 +22,8 @@ public class TokenScript : MonoBehaviour {
 
 	void OnDestroy ()
 	{
+		if(GameObject.Find("Main Camera") == null)
+			return;
 		GameObject.Find("Main Camera").GetComponent<ScreenCleaner>().deRegisterObject (this.gameObject, OnscreenObjectList.MyObjectTypes.Token); //deregister with screen cleaner
 	}	
 	public void setIsCorrect (bool val)

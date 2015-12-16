@@ -52,6 +52,8 @@ public class StimulusScript : MonoBehaviour{
 
 	void OnDestroy ()
 	{
+		if(GameObject.Find("Main Camera") == null)
+			return;
 		GameObject.Find("Main Camera").GetComponent<ScreenCleaner>().deRegisterObject (this.gameObject, OnscreenObjectList.MyObjectTypes.Stimulus); //deregister with screen cleaner
 	}
 
