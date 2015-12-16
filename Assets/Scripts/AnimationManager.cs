@@ -27,9 +27,12 @@ public class AnimationManager : Observer {
 	Category currentCategory;
 	Animator highlighter;
 	public string [] actionList;
+	float audioCounter;
+	public float audioInterval;
 
 	// Use this for initialization
 	void Awake () {
+		audioCounter = 0;
 		optionDict = new Dictionary<string, Texture2D>();
 		bodyPartCustomized = new bool[NUMBODYPARTS];
 		optionTextures = new Texture2D[NUMBODYPARTS][];
@@ -190,10 +193,6 @@ public class AnimationManager : Observer {
 		if (e.type == eType.Ready)
 		{
 			animator.SetTrigger("Landed");
-			if(GetComponent<AudioSource>().clip != null)
-			{
-				GetComponent<AudioSource>().Play();
-			}
 			if(square.mainTexture != null)
 			{
 				animator.SetTrigger("ShowCard");
@@ -302,8 +301,29 @@ public class AnimationManager : Observer {
 		bodyPartCustomized[i] = true;
 		return i;
 	}
+
+	public void onSelect (touchInstance t)
+	{
+		Debug.Log("caught tap");
+		AudioSource a = GetComponent<AudioSource>();
+		if(a != null /*&& t.getType() == eType.Tap*/)
+		{
+			a.Play();
+			audioCounter = 0f;
+		}
+	}
 	// Update is called once per frame
 	void Update () {
+		if(GetComponent<AudioSource>().clip != null)
+		{
+			audioCounter += Time.deltaTime;
+			if(audioCounter >= audioInterval)
+			{
+				GetComponent<AudioSource>().Play();
+				audioCounter = 0f;
+			}
+		}
+		else { audioCounter = 0f;}
 
 	}
 }

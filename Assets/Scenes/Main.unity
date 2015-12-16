@@ -238,6 +238,10 @@ Prefab:
       propertyPath: tex
       value: 
       objectReference: {fileID: 2800000, guid: c4c7d93a0b5c749e89aaf0b86edcb9c6, type: 3}
+    - target: {fileID: 11474328, guid: 24cfefb2d97714555a40308930997e64, type: 2}
+      propertyPath: audioInterval
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11484366, guid: 24cfefb2d97714555a40308930997e64, type: 2}
     - {fileID: 6199682, guid: 24cfefb2d97714555a40308930997e64, type: 2}
@@ -816,7 +820,8 @@ GameObject:
   - 114: {fileID: 1523307918}
   - 50: {fileID: 1523307919}
   - 114: {fileID: 1523307920}
-  m_Layer: 2
+  - 114: {fileID: 1523307921}
+  m_Layer: 0
   m_Name: Receptacle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -932,6 +937,19 @@ MonoBehaviour:
   - {fileID: 829527127}
   basketSprite: {fileID: 21300000, guid: 471712c21191e4a3fb83abc3135d9c1c, type: 3}
   noSprite: {fileID: 0}
+  s: {fileID: 1523307921}
+  m: {fileID: 423845921}
+--- !u!114 &1523307921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1523307913}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 490b87372d41f4a1a967cd4aaa1d522f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1643050282 stripped
 Transform:
   m_PrefabParentObject: {fileID: 426786, guid: 9f42b5bf04bd3417bab29cedf35761c7, type: 2}

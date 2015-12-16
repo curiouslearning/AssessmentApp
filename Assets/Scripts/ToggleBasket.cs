@@ -10,10 +10,14 @@ public class ToggleBasket : Observer{
 	Category currentCategory;
 	ScoreTracker scoreTracker;
 	GameObject highlight;
+	//Tap support for MainCharacter
+	public Selectable s;
+	public AnimationManager m;
 	// Use this for initialization
 	void Start () {
 		addSelfToSubjects();
 		scoreTracker = GameObject.Find("Main Camera").GetComponent<ScoreTracker>();
+		s.initP(m.onSelect);
 		highlight = GetComponentInChildren<Highlighter>().gameObject;
 		highlight.SetActive(false);
 	}
