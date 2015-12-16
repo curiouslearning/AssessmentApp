@@ -306,7 +306,7 @@ public class AnimationManager : Observer {
 	{
 		Debug.Log("caught tap");
 		AudioSource a = GetComponent<AudioSource>();
-		if(a != null /*&& t.getType() == eType.Tap*/)
+		if(a != null && !a.isPlaying)
 		{
 			a.Play();
 			audioCounter = 0f;
@@ -317,7 +317,7 @@ public class AnimationManager : Observer {
 		if(GetComponent<AudioSource>().clip != null)
 		{
 			audioCounter += Time.deltaTime;
-			if(audioCounter >= audioInterval)
+			if(audioCounter >= audioInterval && !GetComponent<AudioSource>().isPlaying)
 			{
 				GetComponent<AudioSource>().Play();
 				audioCounter = 0f;
