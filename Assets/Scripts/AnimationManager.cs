@@ -301,16 +301,20 @@ public class AnimationManager : Observer {
 		bodyPartCustomized[i] = true;
 		return i;
 	}
-
-	public void onSelect (touchInstance t)
+	public void playAudio ()
 	{
-		Debug.Log("caught tap");
 		AudioSource a = GetComponent<AudioSource>();
 		if(a != null && !a.isPlaying)
 		{
 			a.Play();
-			audioCounter = 0f;
 		}
+	}
+	public void onSelect (touchInstance t)
+	{
+		Debug.Log("caught tap");
+		animator.SetTrigger("Talk");
+		audioCounter = 0f;
+		
 	}
 	// Update is called once per frame
 	void Update () {
@@ -319,7 +323,7 @@ public class AnimationManager : Observer {
 			audioCounter += Time.deltaTime;
 			if(audioCounter >= audioInterval && !GetComponent<AudioSource>().isPlaying)
 			{
-				GetComponent<AudioSource>().Play();
+				animator.SetTrigger("Talk");
 				audioCounter = 0f;
 			}
 		}
