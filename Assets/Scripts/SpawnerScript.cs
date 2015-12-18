@@ -336,9 +336,7 @@ public class SpawnerScript : MonoBehaviour {
 			if(needsCharacter(q.getCat()))
 			{
 				newStims[i] = Instantiate (character) as GameObject; //use the secondary character
-				spacing = charStimSpacing;
-				background = newStims[i].GetComponentInChildren<SpriteRenderer>();
-				background.enabled = false;
+				spacing = charStimSpacing;	
 			}
 			else
 			{

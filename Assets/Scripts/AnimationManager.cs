@@ -175,6 +175,7 @@ public class AnimationManager : Observer {
 		if (e.type == eType.Selected || e.type == eType.TimedOut)
 		{
 			animator.ResetTrigger("Landed");
+			animator.SetBool("ShowCard", false);
 			animator.SetTrigger(randomAction());
 			GetComponent<AudioSource>().clip = null;
 			if(e.type == eType.Selected)
@@ -200,21 +201,23 @@ public class AnimationManager : Observer {
 				animator.SetTrigger("Talk");
 			}
 			animator.SetTrigger("Landed");
-			if(square.mainTexture != null)
-			{
-				animator.SetTrigger("ShowCard");
-				squareCard.SetTrigger("ShowCard");
-			}
-			else if (rectangle.mainTexture != null) 
-			{
-				animator.SetTrigger("ShowCard");
-				rectangleCard.SetTrigger("ShowCard");
-				
-			}
+			animator.SetBool("ShowCard", true);
 		}
 	}
 
-	
+	public void startCards()
+	{
+		if(square.mainTexture != null)
+		{
+			squareCard.SetTrigger("ShowCard");
+		}
+		else if (rectangle.mainTexture != null) 
+		{
+			rectangleCard.SetTrigger("ShowCard");
+			
+		}	
+		
+	}	
 	void clearCards ()
 	{
 		square.mainTexture = null;
