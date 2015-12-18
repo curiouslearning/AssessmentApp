@@ -14,10 +14,10 @@ B_Name,audio,Easy,visual,Letter_B,LetterNameID
 B_Sound,audio,Easy,visual,Letter_B,LetterSoundMatching
 Baby,audio,Easy,visual,baby_word,SightWordIdentification
 ballop,audio,Easy,visual,ballop,PseudoWordMatching
-Bed,audio,Easy,,,RhymingWordMatching
+Bed,audio,Easy,audio,Fed,RhymingWordMatching
 Bed_Fed,audio,Easy,,,RhymingWordMatching
 Black-board,audio,Easy,,,BlendingWordIdentification
-Bunny,audio,Easy,,,RhymingWordMatching
+Bunny,audio,Easy,audio,Funny,RhymingWordMatching
 C_Name,audio,Easy,visual,Letter_C,LetterNameID
 C_Sound,audio,Easy,visual,Letter_C,LetterSoundMatching
 Can,audio,Easy,visual,can,CVCWordIdentification
@@ -28,8 +28,8 @@ E_Sound,audio,Easy,visual,Letter_E,LetterSoundMatching
 Eyes,audio,Easy,visual,eyes,SightWordIdentification
 F_Name,audio,Easy,visual,Letter_F,LetterNameID
 F_Sound,audio,Easy,visual,Letter_F,LetterSoundMatching
-Fed,audio,Easy,,,RhymingWordMatching
-Funny,audio,Easy,,,RhymingWordMatching
+Fed,audio,Easy,audio,Bed,RhymingWordMatching
+Funny,audio,Easy,audio,Bunny,RhymingWordMatching
 Funny_Bunny,audio,Easy,,,RhymingWordMatching
 G_Name,audio,Easy,visual,Letter_G,LetterNameID
 G_Sound,audio,Easy,visual,Letter_G,LetterSoundMatching
@@ -39,7 +39,7 @@ Girl_Giant,audio,Easy,,,RhymingWordMatching
 Green,audio,Easy,visual,green_word,SightWordIdentification
 H_Name,audio,Easy,visual,Letter_H,LetterNameID
 H_Sound,audio,Easy,visual,Letter_H,LetterSoundMatching
-Hand,audio,Easy,,,RhymingWordMatching
+Hand,audio,Easy,audio,Sand,RhymingWordMatching
 Hand_Sand,audio,Easy,,,RhymingWordMatching
 Hello,audio,Easy,visual,hello,SightWordIdentification
 Help,audio,Easy,visual,help,SightWordIdentification
@@ -79,7 +79,7 @@ Run,audio,Easy,,,RhymingWordMatching
 Run_Soap,audio,Easy,,,RhymingWordMatching
 S_Name,audio,Hard,visual,Letter_S,LetterNameID
 S_Sound,audio,Hard,visual,Letter_S,LetterSoundMatching
-Sand,audio,Easy,,,RhymingWordMatching
+Sand,audio,Easy,audio,Hand,RhymingWordMatching
 sart,audio,Easy,,,PseudoWordMatching
 Side-walk,audio,Easy,audio,Sidewalk,BlendingWordIdentification
 Soap,audio,Easy,,,RhymingWordMatching
@@ -87,7 +87,7 @@ T_Name,audio,Hard,visual,Letter_T,LetterNameID
 T_Sound,audio,Hard,visual,Letter_T,LetterSoundMatching
 Tap,audio,Easy,visual,tap,CVCWordIdentification
 Tell,audio,Easy,visual,tell,SightWordIdentification
-Top,audio,Easy,,,RhymingWordMatching
+Top,audio,Easy,audio,Hop,RhymingWordMatching
 Top_Hop,audio,Easy,,,RhymingWordMatching
 U_Name,audio,Hard,visual,Letter_U,LetterNameID
 U_Sound,audio,Hard,visual,Letter_U,LetterSoundMatching

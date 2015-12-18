@@ -87,7 +87,13 @@ public class SpawnerScript : MonoBehaviour {
 			data.difficulty = diffParser[vals[2].TrimEnd('\r')];	
 			data.hostStimType = vals[3];
 			data.hostStim = vals[4];  //what the host shows/says when this stimulus is the target
-			data.category = catParser[vals[5].TrimEnd('\r')];
+			try {	
+				data.category = catParser[vals[5].TrimEnd('\r')];			
+				
+			} 
+			catch (System.Exception ex) {
+				Debug.Log ("KeyNotFoundException @ stimulus " +(i+1)+ ", value is " + vals[5]);
+			}
 			stimPool.Add(data);
 		}
 	}
