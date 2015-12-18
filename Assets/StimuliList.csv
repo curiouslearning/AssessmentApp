@@ -75,7 +75,7 @@ R_Sound,audio,Hard,visual,Letter_R,LetterSoundMatching
 Rain-bow,audio,Easy,audio,Rainbow,BlendingWordIdentification
 ral,audio,Easy,,,PseudoWordMatching
 Rub,audio,Easy,visual,rub,CVCWordIdentification
-Run,audio,Easy,audio,,,RhymingWordMatching
+Run,audio,Easy,,,RhymingWordMatching
 Run_Soap,audio,Easy,,,RhymingWordMatching
 S_Name,audio,Hard,visual,Letter_S,LetterNameID
 S_Sound,audio,Hard,visual,Letter_S,LetterSoundMatching

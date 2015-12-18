@@ -30,6 +30,8 @@ public class AnimationManager : Observer {
 	public string [] actionList;
 	float audioCounter;
 	public float audioInterval;
+	public SpriteRenderer talkBubble;
+	public Sprite talkBubbleSprite;
 
 	// Use this for initialization
 	void Awake () {
@@ -193,6 +195,10 @@ public class AnimationManager : Observer {
 		}
 		if (e.type == eType.Ready)
 		{
+			if(GetComponent<AudioSource>().clip != null)
+			{
+				animator.SetTrigger("Talk");
+			}
 			animator.SetTrigger("Landed");
 			if(square.mainTexture != null)
 			{
@@ -322,6 +328,9 @@ public class AnimationManager : Observer {
 	void Update () {
 		if(GetComponent<AudioSource>().clip != null)
 		{
+			if(!(talkBubble.sprite == talkBubbleSprite)){
+				talkBubble.sprite = talkBubbleSprite;
+			}
 			audioCounter += Time.deltaTime;
 			if(audioCounter >= audioInterval && !GetComponent<AudioSource>().isPlaying)
 			{
@@ -329,7 +338,12 @@ public class AnimationManager : Observer {
 				audioCounter = 0f;
 			}
 		}
-		else { audioCounter = 0f;}
+		else {
+			if(!(talkBubble.sprite == null)){
+				talkBubble.sprite = null;
+			}
+			audioCounter = 0f;
+		}
 
 	}
 }
