@@ -56574,7 +56574,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_GenerateMotionCurves: 0
   m_Events:
-  - time: 1.0333333
+  - time: .100000001
     functionName: startCards
     data: 
     objectReferenceParameter: {fileID: 0}

@@ -24,7 +24,7 @@ public class RhymingReceptacle : MonoBehaviour{
 		{
 			if(r2.selected != null)
 			{
-				bool result = (selected.GetComponent<TokenScript>().returnIsCorrect() && r2.selected.GetComponent<TokenScript>().returnIsCorrect());
+				bool result = (selected.GetComponent<TokenScript>().returnIsTarget() && r2.selected.GetComponent<TokenScript>().returnIsTarget());
 				sub.sendBoolEvent(eType.Selected, result);
 				Destroy(selected.gameObject);
 				Destroy(r2.selected.gameObject);

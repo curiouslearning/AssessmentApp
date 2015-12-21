@@ -103,6 +103,8 @@ public class SOOScript : Observer {
 
 	void setWalk(string param)
 	{
+		if(stimArray == null)
+			return;
 		for (int i = 0; i < stimArray.Length; i++)
 		{
 			Animator m = stimArray[i].GetComponent<Animator>();

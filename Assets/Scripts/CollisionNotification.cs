@@ -30,7 +30,7 @@ public class CollisionNotification : MonoBehaviour {
 		selected = col.gameObject;
 		if (dragTag == "Stimulus" && selected.GetComponent<TokenScript>() != null)
 		{
-			sub.sendBoolEvent(eType.Selected, selected.GetComponent<TokenScript>().returnIsCorrect());
+			sub.sendBoolEvent(eType.Selected, selected.GetComponent<TokenScript>().returnIsTarget());
 			Destroy(selected.gameObject);
 		}
 		else

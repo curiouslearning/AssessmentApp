@@ -26,7 +26,6 @@ public class OnscreenObjectList {
 			Debug.Log("returning");
 			return;
 		}
-		Debug.Log("removing " + obj.name);
 		AllTypesOfObjects[objType].Remove(obj);
 	}
 

@@ -73,7 +73,7 @@ public class TouchProcessor : Observer {
 				sendTouch("touchBegin", touch.position);
 				sendEvent(eType.FingerDown); 
 				//search for an object directly under the finger
-				RaycastHit2D touchHit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(touch.position), -Vector2.up);
+				RaycastHit2D touchHit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(touch.position), Vector3.back);
 				if(touchHit.collider != null && touchHit.collider.gameObject.tag != "Suspended") //we got a hit
 				{	
 					selection = touchHit.transform.gameObject; 
@@ -82,7 +82,6 @@ public class TouchProcessor : Observer {
 					{	//TODO: Add functionality to grab token when 2ndary character is selected
 						parentBuffer = selection.transform.parent;  //store and remove the parent to prevent weird parent-child behavior during dragging
 						selection.transform.parent = null;
-						Debug.Log(selection.gameObject.name); //debugger
 						offset= selection.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, screenPoint));
 					}
 					
