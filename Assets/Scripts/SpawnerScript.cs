@@ -112,7 +112,6 @@ public class SpawnerScript : MonoBehaviour {
 				retval++;
 			}
 		}
-		Debug.Log("retval: " + retval);
 		return retval;
 	}
 
@@ -132,6 +131,8 @@ public class SpawnerScript : MonoBehaviour {
 		
 		// the type of stimulus accepted is assigned based on the current category
 		type = setType(cat);
+		if(type == "gameOver")
+			return null;
 		//find and add the target stimulus
 		serStim temp = selectTarget(cat, diffLevel, type);
 		answer.Add (temp);
@@ -164,7 +165,10 @@ public class SpawnerScript : MonoBehaviour {
 	string setType (Category cat)
 	{
 		string type;
-		if (cat.Equals (Category.ReceptiveVocabulary) || cat.Equals(Category.Customization)) 
+		if(cat.Equals(Category.GameOver)){
+			return "gameOver";
+		}
+		if (cat.Equals (Category.ReceptiveVocabulary) || cat.Equals(Category.Customization) || cat.Equals(Category.PseudowordMatching)) 
 		{
 			type = "visual";
 		} else 
@@ -179,13 +183,25 @@ public class SpawnerScript : MonoBehaviour {
 	{
 		serStim s = null;
 		int counter = 0;
+		int resetCounter = 0;
 		bool foundTarget = false;
-		if (checkFreeStims (cat,diffLevel,type) == 0) //if all stimuli have been used as a target (should not happen with full complement of stims)
-		{
-			resetTargets();
-		}
+		if(type == "gameOver")
+			return null;
 		while (foundTarget == false)
 		{
+			if(resetCounter >= 5){
+				if(diffLevel != Difficulty.Easy){
+					GetComponent<ScoreTracker>().resetDifficulty(diffLevel);
+				}
+				else {
+					return null;
+				}
+			}
+			if (checkFreeStims (cat,diffLevel,type) == 0) //if all stimuli have been used as a target (should not happen with full complement of stims)
+			{
+				resetTargets();
+				resetCounter++;
+			}
 			if (counter == stimPool.Count) 
 				counter = 0;
 			s = stimPool[counter]; 
@@ -275,6 +291,8 @@ public class SpawnerScript : MonoBehaviour {
 		else 
 		{
 			List<serStim> temp = findStim(cat, difLevel);
+			if(temp == null)
+				return null;
 			q.init (questionNumber, temp, cat);
 			return spawnSOO(q);
 		}
@@ -336,9 +354,7 @@ public class SpawnerScript : MonoBehaviour {
 			if(needsCharacter(q.getCat()))
 			{
 				newStims[i] = Instantiate (character) as GameObject; //use the secondary character
-				spacing = charStimSpacing;
-				background = newStims[i].GetComponentInChildren<SpriteRenderer>();
-				background.enabled = false;
+				spacing = charStimSpacing;	
 			}
 			else
 			{
@@ -420,6 +436,8 @@ public class SpawnerScript : MonoBehaviour {
 		case Category.ReceptiveVocabulary: //add categories that don't need the SecChar as cases here
 			return false;
 		case Category.Customization:
+			return false;
+		case Category.PseudowordMatching:
 			return false;
 		default:
 			return true;

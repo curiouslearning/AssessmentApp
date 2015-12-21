@@ -15,7 +15,8 @@ public class ScoreTracker : Observer {
 	float startTime;
 	private bool firstTouchHappened;
 	private bool pauseTimer;
-	private bool broadcastSent;
+	private bool touchBroadcastSent;
+	private bool timeOutBroadcastSent;
 	
 	//component variables
 	public GameObject spawner;
@@ -124,6 +125,7 @@ public class ScoreTracker : Observer {
 				firstTouchHappened = true;
 			else{
 				timeLeft = timeLimit;
+				pointTime += 5f;
 			}
 		}
 		if(e.type == eType.Grab)
@@ -177,6 +179,8 @@ public class ScoreTracker : Observer {
 	void endGame ()
 	{
 		eventHandler.sendEvent (eType.EndGame);
+		//display Tap To Restart
+		//Turn off spawner
 		//more endgame here TODO
 	}
 	
@@ -279,7 +283,7 @@ public class ScoreTracker : Observer {
 			case Category.PseudowordMatching:
 				gameOver = true;
 				endGame();
-				return Category.PseudowordMatching;
+				return Category.GameOver;
 		}
 		return Category.Customization;	
 	}
@@ -385,6 +389,10 @@ public class ScoreTracker : Observer {
 		}
 
 		stimOrgOb = spawnHolder.spawnNext(currentCategory,s.returnDifficulty(),questionNumber);
+		if(stimOrgOb == null){
+			endGame();
+			return;
+		}
 		sooHolder = stimOrgOb.GetComponent<SOOScript>();
 		sooHolder.move(0);
 
@@ -401,7 +409,8 @@ public class ScoreTracker : Observer {
 		questionTime = 0;
 		startTime = Time.time;
 		firstTouchHappened = false;
-		broadcastSent = false;
+		touchBroadcastSent = false;
+		timeOutBroadcastSent = false;
 		pointTime = pointInterval;
 	}
 
@@ -427,9 +436,9 @@ public class ScoreTracker : Observer {
 		if(questionTime >= pointTime)
 		{
 			animator.SetTrigger("Point");
-			pointTime = Time.time + 5f;
+			pointTime = Time.time + 10f;
 		}
-		if (timeLeft <= 0f && currentCategory != Category.Customization){ //do not time out on Customization events
+		if (timeLeft <= 0f && currentCategory != Category.Customization && !timeOutBroadcastSent){ //only do this once, do not time out on Customization events
 			startTime = Time.time;
 
 			s.setTimedOut(true);
@@ -438,15 +447,16 @@ public class ScoreTracker : Observer {
 		
 			AndroidBroadcastIntentHandler.BroadcastJSONData ("TimeOut", ("Question Number: " + questionNumber.ToString() + ", Category: " + currentCategory.ToString() + ", Difficulty: " + s.returnDifficulty().ToString()));
 			eventHandler.sendEvent (eType.TimedOut); // temporary fix here
+			timeOutBroadcastSent = true;
 
 			sooHolder.move (1);
 		}
-		else if (firstTouchHappened && !broadcastSent)
+		else if (firstTouchHappened && !touchBroadcastSent)
 		{
 			string value = ("First Touch for Question " + questionNumber.ToString() + " Occurred at " + Time.time.ToString());
 			timeLeft = timeLimit;
 			AndroidBroadcastIntentHandler.BroadcastJSONData("First Touch", value);
-			broadcastSent = true;
+			touchBroadcastSent = true;
 		}
 		//if scene is changing do not process input
 		//otherwise generate input commands and pass them to the proper objects
@@ -652,7 +662,8 @@ public enum Category {Customization,
 	SightWordIdentification, 
 	RhymingWordMatching,
 	BlendingWordIdentification, 
-	PseudowordMatching};
+	PseudowordMatching,
+	GameOver};
 
 /// <summary>
 /// Inidicator for question difficulty.

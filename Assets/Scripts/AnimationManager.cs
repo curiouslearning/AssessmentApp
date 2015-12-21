@@ -67,6 +67,7 @@ public class AnimationManager : Observer {
 		{
 			temp = subjects[i];
 			temp.GetComponent<Subject>().addObserver(new Subject.GameObjectNotify(this.onNotify));
+			temp.GetComponent<Subject>().addObserver(new Subject.boolNotify(this.onNotify));
 			
 		}
 	}	
@@ -174,9 +175,7 @@ public class AnimationManager : Observer {
 		}	
 		if (e.type == eType.Selected || e.type == eType.TimedOut)
 		{
-			animator.ResetTrigger("Landed");
-			animator.SetTrigger(randomAction());
-			GetComponent<AudioSource>().clip = null;
+			startTransition();
 			if(e.type == eType.Selected)
 			{
 				if(e.signaler.GetComponent<StimulusScript>() != null && e.signaler.GetComponent<StimulusScript>().isOption()) //if selected object is a body part
@@ -186,39 +185,73 @@ public class AnimationManager : Observer {
 					Destroy (e.signaler);
 				}
 			}
-			clearCards();
 			return;
 		}
 		if (e.type == eType.Grab)
 		{
 			animator.SetTrigger("Point");
+			return;
 		}
 		if (e.type == eType.Ready)
 		{
+			animator.SetTrigger("Landed");
+			animator.SetTrigger("Throw");
 			if(GetComponent<AudioSource>().clip != null)
 			{
 				animator.SetTrigger("Talk");
 			}
-			animator.SetTrigger("Landed");
-			if(square.mainTexture != null)
+			else if( square.mainTexture != null || rectangle.mainTexture != null)
 			{
-				animator.SetTrigger("ShowCard");
-				squareCard.SetTrigger("ShowCard");
+				animator.SetBool("ShowCard", true);
 			}
-			else if (rectangle.mainTexture != null) 
-			{
-				animator.SetTrigger("ShowCard");
-				rectangleCard.SetTrigger("ShowCard");
-				
-			}
+			return;
 		}
 	}
 
-	
+	public override void onNotify (EventInstance<bool> e)
+	{
+		Debug.Log ("boop boop");
+		if(e.type == eType.Selected)
+		{
+			startTransition();
+			return;	
+		}
+	}
+
+	void startTransition ()
+	{
+		animator.SetBool("ShowCard", false);
+		hideCards();
+		animator.ResetTrigger("Landed");
+		animator.ResetTrigger("Throw");
+		animator.ResetTrigger("Point");
+		animator.SetTrigger(randomAction());
+		GetComponent<AudioSource>().clip = null;
+		clearCards();
+	}
+
+	public void startCards()
+	{
+		if(square.mainTexture != null)
+		{
+			squareCard.SetTrigger("ShowCard");
+		}
+		else if (rectangle.mainTexture != null) 
+		{
+			rectangleCard.SetTrigger("ShowCard");
+			
+		}	
+		
+	}	
 	void clearCards ()
 	{
 		square.mainTexture = null;
 		rectangle.mainTexture = null;
+	}
+	public void hideCards ()
+	{
+		squareCard.SetTrigger("RemoveCard");
+		rectangleCard.SetTrigger("RemoveCard");
 	}
 	void updateHighlighter()
 	{
@@ -310,6 +343,7 @@ public class AnimationManager : Observer {
 	}
 	public void playAudio ()
 	{
+		Debug.Log("play");
 		AudioSource a = GetComponent<AudioSource>();
 		if(a != null && !a.isPlaying)
 		{
@@ -317,11 +351,18 @@ public class AnimationManager : Observer {
 			a.Play();	
 		}
 	}
+	public void resetTalk ()
+	{
+		animator.ResetTrigger ("Talk");
+	}
 	public void onSelect (touchInstance t)
 	{
 		Debug.Log("caught tap");
-		animator.SetTrigger("Talk");
-		audioCounter = 0f;
+		if(GetComponent<AudioSource>().clip != null)
+		{
+			animator.SetTrigger("Talk");
+			audioCounter = 0f;
+		}
 		
 	}
 	// Update is called once per frame

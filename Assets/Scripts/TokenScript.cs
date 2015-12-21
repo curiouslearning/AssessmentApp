@@ -3,12 +3,12 @@ using System.Collections;
 
 public class TokenScript : MonoBehaviour {
 
-	bool isCorrect;
+	bool isTarget;
 	Selectable touchInput;
 	Vector3 startPos;
 	
 	void Start() {
-		isCorrect = false;
+		isTarget = GetComponentInParent<StimulusScript>().returnIsTarget();
 		touchInput = this.GetComponent<Selectable>();
 		if(touchInput == null)
 		{
@@ -26,14 +26,11 @@ public class TokenScript : MonoBehaviour {
 			return;
 		GameObject.Find("Main Camera").GetComponent<ScreenCleaner>().deRegisterObject (this.gameObject, OnscreenObjectList.MyObjectTypes.Token); //deregister with screen cleaner
 	}	
-	public void setIsCorrect (bool val)
-	{
-		isCorrect = val;
-	}
 	
-	public bool returnIsCorrect ()
+	
+	public bool returnIsTarget ()
 	{
-		return isCorrect;
+		return isTarget;
 	}
 	
 	public void onSelect(touchInstance t)

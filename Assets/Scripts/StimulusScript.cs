@@ -9,7 +9,6 @@ using System.Collections;
 /// </summary>
 public class StimulusScript : MonoBehaviour{
 
-	private bool isCorrect; //bool for indicating the correct stimulus response in a question
 	public bool isTarget;
 	private bool hasBeenTarget;
 	private bool option;
@@ -63,9 +62,7 @@ public class StimulusScript : MonoBehaviour{
 	public string returnStimType (){
 		return stimType;
 	}
-	public bool returnIsCorrect() {
-		return isCorrect;
-	}
+	
 	public bool returnHasBeenTarget(){
 		return hasBeenTarget;
 	}
@@ -109,13 +106,7 @@ public class StimulusScript : MonoBehaviour{
 // Setter functions *
 //*******************
 
-	/// <summary>
-	/// Indicate whether or not a specific stimulus is the correct answer.
-	/// </summary>
-	/// <param name="input">Value to set isCorrect to.</param>
-	public void setIsCorrect(bool input) {
-		isCorrect = input;
-	}
+
 
 	/// <summary>
 	/// indicate to object that it is currently being dragged by user.
@@ -150,11 +141,7 @@ public class StimulusScript : MonoBehaviour{
 	}
 
 	public void setIsTarget(bool b) {
-		isTarget = b;
-		if(stimType == "audio")
-		{
-			passTarget(b);
-		}
+		isTarget = b;	
 	}
 
 	public void setHasBeenTarget(bool b) {
@@ -248,10 +235,7 @@ public class StimulusScript : MonoBehaviour{
 			
 	}
 
-	void passTarget(bool b)
-	{
-		token.setIsCorrect(b);
-	}
+	
 	void Update () {
 
 	}
