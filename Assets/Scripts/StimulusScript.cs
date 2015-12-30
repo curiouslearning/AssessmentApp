@@ -9,26 +9,51 @@ using System.Collections;
 /// </summary>
 public class StimulusScript : MonoBehaviour{
 
-	private bool isCorrect; //bool for indicating the correct stimulus response in a question
-	private bool isTarget;
+	public bool isTarget;
 	private bool hasBeenTarget;
 	private bool option;
 	private bool isBeingDragged; 
-	private bool isDraggable;
+	public bool isDraggable;
+	//sizing modifiers
+	public float charMod;
+	public float textureMod;
+	public float stimMod;
 	private string stimType;
 	private string visStim;
 	private Difficulty difficulty;
 	private Vector3 homePos; //snapback functionality
 	private Vector3 startScale; //scaling functionality
-	public Selectable touchInput;
+	Selectable touchInput;
 	private int optionBodyPart;
-	string textureName;	
+	string textureName;
+	public TokenScript token;
 
 	void Start ()
 	{
-		startScale = transform.localScale*0.6f;
+		if(GetComponent<Animator>() != null)
+		{
+			startScale = transform.localScale * charMod;
+		}
+		else if (option)
+		{
+			startScale = transform.localScale * textureMod;
+		}
+		else {
+			startScale = transform.localScale * stimMod;
+		}
+		//other initializations
+		GameObject.Find("Main Camera").GetComponent<ScreenCleaner>().registerObject (this.gameObject, OnscreenObjectList.MyObjectTypes.Stimulus); //register with screen cleaner
 		isBeingDragged = false;
-		touchInput.initP(onSelect);
+		touchInput = GetComponent<Selectable>();
+		if(touchInput != null)
+			touchInput.initP(onSelect); //attach self to input wrapper
+	}
+
+	void OnDestroy ()
+	{
+		if(GameObject.Find("Main Camera") == null)
+			return;
+		GameObject.Find("Main Camera").GetComponent<ScreenCleaner>().deRegisterObject (this.gameObject, OnscreenObjectList.MyObjectTypes.Stimulus); //deregister with screen cleaner
 	}
 
 //*******************
@@ -37,9 +62,7 @@ public class StimulusScript : MonoBehaviour{
 	public string returnStimType (){
 		return stimType;
 	}
-	public bool returnIsCorrect() {
-		return isCorrect;
-	}
+	
 	public bool returnHasBeenTarget(){
 		return hasBeenTarget;
 	}
@@ -83,13 +106,7 @@ public class StimulusScript : MonoBehaviour{
 // Setter functions *
 //*******************
 
-	/// <summary>
-	/// Indicate whether or not a specific stimulus is the correct answer.
-	/// </summary>
-	/// <param name="input">Value to set isCorrect to.</param>
-	public void setIsCorrect(bool input) {
-		isCorrect = input;
-	}
+
 
 	/// <summary>
 	/// indicate to object that it is currently being dragged by user.
@@ -110,6 +127,10 @@ public class StimulusScript : MonoBehaviour{
 	/// </summary>
 	public void setHomePos() {
 		homePos = transform.position;
+		if (token != null) //update the token as well
+		{
+			token.setPos();
+		}
 	}
 	/// <summary>
 	/// Sets the difficulty to the question's difficulty level.
@@ -120,7 +141,7 @@ public class StimulusScript : MonoBehaviour{
 	}
 
 	public void setIsTarget(bool b) {
-		isTarget = b;
+		isTarget = b;	
 	}
 
 	public void setHasBeenTarget(bool b) {
@@ -128,6 +149,11 @@ public class StimulusScript : MonoBehaviour{
 		if (isTarget) {
 			isTarget = false;
 		}
+	}
+
+	public void	toggleBoxCollider(bool b)
+	{
+		GetComponent<BoxCollider2D>().enabled = b;
 	}
 
 //********************
@@ -161,7 +187,8 @@ public class StimulusScript : MonoBehaviour{
 	/// </summary>
 	/// <param name="input">stimulus data.</param>
 	public	void setStim (serStim input) {
-		this.hasBeenTarget = false;
+		this.hasBeenTarget = input.hasBeenTarget;
+		this.isTarget = input.isTarget;
 		this.isDraggable = input.isDraggable;
 		this.difficulty = input.difficulty;
 		if(input.stimType == "visual")
@@ -184,7 +211,11 @@ public class StimulusScript : MonoBehaviour{
 		Sprite textureSprite = input.texture;
 		this.isDraggable = input.isDraggable;
 		this.GetComponent<SpriteRenderer>().sprite = textureSprite;
-		this.textureName = input.texture.name;
+		if(textureSprite != null){	
+			this.textureName = input.texture.name;
+		} else {
+			this.textureName = "blank";
+		}
 		this.optionBodyPart = input.bodyPart;
 		this.option = true;
 	}
@@ -193,12 +224,18 @@ public class StimulusScript : MonoBehaviour{
 	/// </summary>
 	/// <param name="t">touch instance information</param>
 	public void onSelect (touchInstance t)
-	{
-		Debug.Log("successful selection!");
-		Debug.Log("There was a " + t.getType() + " of length " + t.getTime());
-		//Animation stuff here
-		//sound stuff here
+	{	
+		AudioSource audio = GetComponent<AudioSource>();
+		Animator anim = GetComponent<Animator>();
+		if (audio.clip != null)
+		{
+			audio.Play();
+			anim.SetTrigger("Talk");
+		}
+			
 	}
+
+	
 	void Update () {
 
 	}

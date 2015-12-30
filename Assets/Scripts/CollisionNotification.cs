@@ -10,6 +10,7 @@ using System.Collections;
 /// </summary>
 public class CollisionNotification : MonoBehaviour {
 	public Subject sub;
+	ScoreTracker track;
 	public eType type;
 	GameObject selected;
 	public string dragTag;
@@ -17,18 +18,25 @@ public class CollisionNotification : MonoBehaviour {
 	{
 		sub = GetComponent<Subject>();
 	}
-	void OnTriggerEnter2D (Collider2D col){ 
-		Debug.Log("caught: " + col.gameObject.name); //debugger
+	void Start()
+	{
+	}
+	
+	void OnTriggerExit2D(Collider2D col){
+		
 		if(col.gameObject.tag != dragTag){ //prevent unwanted collisions from affecting gameplay
-			Debug.Log("oops!");
 			return;
 		}
 		selected = col.gameObject;
-		EventInstance<GameObject> e = new EventInstance<GameObject>();
-		e.setEvent(type, selected);
-		col.transform.parent = null;
-		sub.notify(e);
-		Debug.Log("notified!");
+		if (dragTag == "Stimulus" && selected.GetComponent<TokenScript>() != null)
+		{
+			sub.sendBoolEvent(eType.Selected, selected.GetComponent<TokenScript>().returnIsTarget());
+			Destroy(selected.gameObject);
+		}
+		else
+		{
+			sub.sendEvent(type, selected);			
+		}
 		selected = null;
 	}
 }

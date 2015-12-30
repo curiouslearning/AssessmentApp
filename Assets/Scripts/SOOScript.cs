@@ -16,11 +16,15 @@ public class SOOScript : Observer {
 	private int questionNumber;
 	bool isDraggable;
 	Vector3 curDest;
+	public float marginOfError;
 	public float speed;
 	bool moving;
+	public Subject eventWrapper;
+	bool movingAlreadyFalse;
 
 	void Start () {
 		isDraggable = false;
+		movingAlreadyFalse = false;
 	}
 
 // Methods for accessing variables
@@ -70,7 +74,21 @@ public class SOOScript : Observer {
 	{
 		transform.position = pos;
 	}
-	
+
+	//method for properly sizing box colliders during customization events
+	public void setBoxColliders ()
+	{
+		for (int i = 0; i < stimArray.Length; i++)
+		{
+			Vector2 boxOrig = stimArray[i].GetComponent<BoxCollider2D>().size;
+			Debug.Log("original size: (" + stimArray[i].GetComponent<BoxCollider2D>().size.x + "," +stimArray[i].GetComponent<BoxCollider2D>().size.y + ")");
+			stimArray[i].GetComponent<BoxCollider2D>().size = new Vector2((boxOrig.x * 3.3333f), (boxOrig.y * 3.3333f));
+			Debug.Log("new size: (" + stimArray[i].GetComponent<BoxCollider2D>().size.x + "," +stimArray[i].GetComponent<BoxCollider2D>().size.y + ")");
+	/*		boxOrig.x = ((boxOrig.x * 100f)/30f);
+			boxOrig.y = ((boxOrig.y * 100f)/30f);
+			stimArray[i].GetComponent<BoxCollider2D>().size.Set(boxOrig.x,boxOrig.y); */
+		}
+	}	
 
 //******************
 // Other functions *
@@ -79,8 +97,9 @@ public class SOOScript : Observer {
 //inherited Observer method
 	public override void onNotify (EventInstance<GameObject> e)
 	{
-		Debug.Log("boo"); //debugger
-		//releaseStim(e.signaler);
+		if(e.type== eType.Grab || e.type == eType.Drag)
+		{
+		}
 	}
 	
 /// <summary>
@@ -90,7 +109,29 @@ public class SOOScript : Observer {
 	public void move(int dest)
 	{
 		moving = true;
+		movingAlreadyFalse = false;
+		setDrag("Suspended");
 		curDest = destArray[dest];
+		setWalk("set");
+	}
+
+	void setWalk(string param)
+	{
+		if(stimArray == null)
+			return;
+		for (int i = 0; i < stimArray.Length; i++)
+		{
+			Animator m = stimArray[i].GetComponent<Animator>();
+			if (m != null)
+			{
+				if(param == "set")
+					m.SetTrigger("Walk_Left");
+				else if (param == "right")
+					m.SetTrigger("Walk_Right");
+				else if (param == "reset")
+					m.SetTrigger("Landed");
+			}
+		}
 	}
 /// <summary>
 /// Tell the stimuli to update homePos to their current position, for snap-back functionality
@@ -100,32 +141,68 @@ public class SOOScript : Observer {
 		for (int i = 0; i < stimArray.Length; i++)
 		{
 			if (stimArray[i] != null)
+			{
 				stimArray[i].GetComponent<StimulusScript>().setHomePos();
+			}
 		}
 	}
+
 	
 /// <summary>
 /// Sets the soo.
 /// </summary>
 /// <param name="array">Array of selectable objects (stimuli or customization options).</param>
 /// <param name="qNum">Question number.</param>
-	public void setSoo (GameObject[] array, int qNum) {
+	public void setSoo (GameObject[] array, int qNum) 
+	{
 		stimArray = array;
 		questionNumber = qNum;
 	}
+	
 
-
+	void setDrag (string draggable)
+	{
+		for (int i = 0; i < stimArray.Length; i++)
+		{
+			if(stimArray[i] == null)
+			{
+				continue;
+			}
+			else if (stimArray[i].GetComponent<StimulusScript>().token != null)
+			{
+				TokenScript token = stimArray[i].GetComponent<StimulusScript>().token; 
+				token.gameObject.tag = draggable;
+			}
+			else
+			{
+				stimArray[i].GetComponent<StimulusScript>().tag = draggable;
+			}
+		}
+	}
+	
 	void Update()
 	{
+		if(moving == false && !movingAlreadyFalse)
+		{		
+			setDrag("Stimulus");
+			if(curDest == destArray[0])
+			{
+				eventWrapper.sendEvent(eType.Ready);
+			}
+			movingAlreadyFalse = true; // only do this once per move
+		}
 		if(moving == true)
 		{
 			transform.position = Vector3.Lerp(transform.position, curDest, Time.deltaTime * speed);
-			updatePos();
 		}
-		if(transform.position == curDest)
+		if(moving == true && ((transform.position.x < curDest.x + marginOfError) && (transform.position.x > curDest.x - marginOfError)))
 		{
+			transform.position = curDest;
+			updatePos();
+			setWalk ("reset");
 			moving = false;
 		}
+		
 	}
 		
 			

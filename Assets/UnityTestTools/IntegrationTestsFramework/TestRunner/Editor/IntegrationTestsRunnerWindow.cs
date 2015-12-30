@@ -93,7 +93,7 @@ namespace UnityTest
 
         public void OnEnable()
         {
-			titleContent = new GUIContent("Integration Tests");
+            title = "Integration Tests";
             s_Instance = this;
 
             m_Settings = ProjectSettingsBase.Load<IntegrationTestsRunnerSettings>();

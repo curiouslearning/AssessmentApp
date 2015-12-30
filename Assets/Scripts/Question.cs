@@ -10,13 +10,16 @@ using System.IO;
 /// </summary>
 [Serializable]
 public class serStim{
-	public bool isCorrect;
+	public bool isTarget;
 	public bool hasBeenTarget;
 	public string audio;
 	public string sprite;
 	public string stimType;
+	public string hostStim;
+	public string hostStimType;
 	public bool isDraggable;
-	public Difficulty difficulty; 
+	public Difficulty difficulty;
+	public Category category; 
 }
 /// <summary>
 /// Serializable class to store customization event data for question data persistance
@@ -50,13 +53,22 @@ public class Question : ScriptableObject {
 	serStim tempStim;
 	serStim prompt;
 	bool customizationEvent;
-	
-	
+	Category cat;
+
 	void Awake ()
 	{
 		customizationEvent = false;
 		stimuli = new List<serStim>();
 		options = new List<serCustomizationOption>();
+	}
+
+	/// <summary>
+	/// returns the question's category.
+	/// </summary>
+	/// <returns>Category cat.</returns>
+	public Category getCat ()
+	{
+		return cat;
 	}
 	
 	/// <summary>
@@ -67,25 +79,20 @@ public class Question : ScriptableObject {
 	/// <param name="sounds">Auditory stimuli</param>
 	/// <param name="correct">Target stimulus</param>
 	/// <param name="cat">Question category</param>
-	public void init (int qNum, List<serStim> stimList, int target, Category cat)
+	public void init (int qNum, List<serStim> stimList, Category c)
 	{
-		Debug.Log("stimList.Count: " + stimList.Count);  
 		questionNumber = qNum;
 		customizationEvent = false;
-		for (int i = 0; i<4; i++)
+		cat = c;
+		
+		stimuli = stimList;
+		for (int i = 0; i<stimuli.Count; i++)
 		{
-		  
-			tempStim = new serStim();
-			tempStim.audio = stimList[i].audio;
-			tempStim.sprite = stimList[i].sprite; 
-			tempStim.stimType = stimList[i].stimType;
-			Debug.Log("sprite: " + tempStim.sprite); // debugger
-			if(i == target) 
-				tempStim.isCorrect = true;
-			else
-				tempStim.isCorrect = false;
-			tempStim.isDraggable = true;
-			stimuli.Add(tempStim);
+			if(stimuli[i] != null)
+				stimuli[i].isDraggable = true;
+			else {
+				Debug.LogError("null stimuli exception");
+			}
 		}
 		
 	}
@@ -99,7 +106,7 @@ public class Question : ScriptableObject {
 	{
 		questionNumber = qNum;
 		customizationEvent = true;
-		for (int i = 0; i<4; i++)
+		for (int i = 0; i<textures.Count; i++)
 		{
 			tempOption = new serCustomizationOption();
 			tempOption.texture = textures[i];
@@ -107,20 +114,55 @@ public class Question : ScriptableObject {
 			tempOption.bodyPart = bodyPart;
 			options.Add(tempOption);
 		}
+		if (options.Count < 4)
+		{
+			addBlanks((4-options.Count));
+		}
 		
+	}
+
+	/// <summary>
+	/// Adds blank options to fully populate SOO.
+	/// </summary>
+	/// <param name="count">4 - the options list count.</param>
+	void addBlanks(int count)
+	{
+		tempOption = new serCustomizationOption();
+		for (int i = 0; i < count; i++)
+		{
+			tempOption.isDraggable = false;
+			options.Add(tempOption);
+		}
 	}
 	/// <summary>
 	/// Gets the indicated stimulus
 	/// </summary>
 	/// <returns>indicated stimulus</returns>
 	/// <param name="index">Index of desired stimulus</param>
-	public serStim getStim (int index) {return stimuli[index];}
+	public serStim getStim (int index) {
+		serStim butts = new serStim();
+		if(stimuli[index] != null)
+			return stimuli[index];
+		else {
+			Debug.LogError("returning blank stim");
+		}
+		return butts;
+	}
 	/// <summary>
 	/// Gets the indicated option.
 	/// </summary>
 	/// <returns>Indicated option.</returns>
 	/// <param name="index">Index of desired option.</param>
 	public serCustomizationOption getOption (int index) {return options[index];}
+	
+	/// <summary>
+	/// Returns the option list count.
+	/// </summary>
+	/// <returns>option list count.</returns>
+	public int countOptions ()
+	{
+		return options.Count;
+	}
 	/// <summary>
 	/// Gets the question number.
 	/// </summary>
