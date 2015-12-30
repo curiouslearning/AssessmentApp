@@ -19,6 +19,7 @@ public class AnimationManager : Observer {
 	const int NUMBODYPARTS = 7;
 	const int NUMOPTIONS = 10;
 	public GameObject[] bodyParts;
+	public Dictionary <int, GameObject> mirrorParts;
 	public Texture2D[][] optionTextures;
 	Dictionary <string, Texture2D> optionDict; //for fast lookup of a selected texture
 	public int defaultPos; //standard index for the default texture for each body part
@@ -37,6 +38,10 @@ public class AnimationManager : Observer {
 	void Awake () {
 		audioCounter = 0;
 		optionDict = new Dictionary<string, Texture2D>();
+		mirrorParts = new Dictionary<int, GameObject>();
+		int[] n = {2,0,6};
+		string [] s = {"MainCharacter:r_antenna","MainCharacter:r_wing","MainCharacter:r_eye"};
+		addMirrorParts (n, s, mirrorParts); 
 		bodyPartCustomized = new bool[NUMBODYPARTS];
 		optionTextures = new Texture2D[NUMBODYPARTS][];
 		for(int i = 0; i < NUMBODYPARTS; i++)
@@ -71,6 +76,15 @@ public class AnimationManager : Observer {
 			
 		}
 	}	
+
+	void addMirrorParts(int[] numbers, string [] parts, Dictionary<int, GameObject> mirror)
+	{
+		for (int i = 0; i < numbers.Length; i++)
+		{
+			GameObject g = GameObject.Find (parts[i]);
+			mirror.Add (numbers[i], g);
+		}
+	}
 	public override void registerGameObjectWithSoo(GameObject SOO)
 	{
 		base.registerGameObjectWithSoo(SOO);
@@ -285,9 +299,16 @@ public class AnimationManager : Observer {
 	/// <param name="newTexture"> Replacement Texture.</param>
 	void changeBodyPart (int part, string newTexture)
 	{
+		if (mirrorParts.ContainsKey(part))
+		{
+			GameObject mirror = mirrorParts[part];
+			mirror.GetComponent<SkinnedMeshRenderer>().material.mainTexture = optionDict[newTexture];
+		}
 		GameObject temp = bodyParts[part];	
 		temp.GetComponent<SkinnedMeshRenderer>().material.mainTexture = optionDict[newTexture];
 	}
+	
+	
 
 	/// <summary>
 	/// Gets the options for the first not-customized body part.

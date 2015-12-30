@@ -168,7 +168,7 @@ public class SpawnerScript : MonoBehaviour {
 		if(cat.Equals(Category.GameOver)){
 			return "gameOver";
 		}
-		if (cat.Equals (Category.ReceptiveVocabulary) || cat.Equals(Category.Customization) || cat.Equals(Category.PseudowordMatching)) 
+		if (cat.Equals (Category.ReceptiveVocabulary) || cat.Equals(Category.Customization) || cat.Equals(Category.BlendingWordIdentification) || cat.Equals(Category.PseudowordMatching)) 
 		{
 			type = "visual";
 		} else 
@@ -417,6 +417,7 @@ public class SpawnerScript : MonoBehaviour {
 		if(q.isCustomizationEvent())
 		{
 			holder.transform.localScale = new Vector3 (scaleTexture,scaleTexture,scaleTexture);
+			holder.setBoxColliders();
 		}
 		else if (needsCharacter(q.getCat()))
 		{
