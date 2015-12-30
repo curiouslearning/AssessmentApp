@@ -133,6 +133,15 @@ public class SpawnerScript : MonoBehaviour {
 		type = setType(cat);
 		if(type == "gameOver")
 			return null;
+        // return null if a complete SOO cannot be created
+            int numMatch = 0;
+            for (int i = 0; i < stimPool.Count; i++)
+            {
+                if (matchesCriteria (cat, diffLevel, type, stimPool[i]))
+                    numMatch++;   
+            }
+            if (numMatch < 4)
+                return null; 
 		//find and add the target stimulus
 		serStim temp = selectTarget(cat, diffLevel, type);
 		answer.Add (temp);
@@ -187,7 +196,16 @@ public class SpawnerScript : MonoBehaviour {
 		bool foundTarget = false;
 		if(type == "gameOver")
 			return null;
-		while (foundTarget == false)
+        // return null if a complete SOO cannot be created
+        int numMatch = 0;
+        for (int i = 0; i < stimPool.Count; i++)
+        {
+            if (matchesCriteria(cat, diffLevel, type, stimPool[i]))
+                numMatch++;
+        }
+        if (numMatch < 1)
+            return null;
+        while (foundTarget == false)
 		{
 			if(resetCounter >= 5){
 				if(diffLevel != Difficulty.Easy){
