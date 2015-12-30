@@ -355,14 +355,11 @@ public class ScoreTracker : Observer {
 				scoreList.Add(s);
 				s = new Score(questionNumber);
 				s.setCategory(currentCategory);
-				s.setDifficulty(temp);
+				s.setDifficulty(temp); 
 				setCategory();
 			}
 		else
 			 {
-				// if the player answers three consecutive questions correctly, numCorrect is
-				// reset and an event notification of type ChangeDifficulty is sent out, which
-				// will be picked up by GameManager.
 				numCorrect = 0;
 				Difficulty temp = s.returnDifficulty();
 				scoreList.Add(s);
