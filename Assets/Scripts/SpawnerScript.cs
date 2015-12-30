@@ -229,7 +229,7 @@ public class SpawnerScript : MonoBehaviour {
 	}
 
 	//check for stimuli that correspond the to the given criteria, and have not been used as a target yet
-	int checkFreeStims (Category cat, Difficulty diffLevel, string type)
+	int checkFreeStims (Category cat, Difficulty diffLevel, string type) // use this to prevent crashes
 	{	
 		int total = 0;
 		for(int i = 0; i< stimPool.Count; i++)

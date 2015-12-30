@@ -53,7 +53,7 @@ public class PickerBehaviorHelper : MonoBehaviour {
 
 		// Read all bytes from image file
 		float start = Time.realtimeSinceStartup;
-		imgBytes = File.ReadAllBytes(path);
+		imgBytes = File.ReadAllBytes(path); // this line of code was giving me an error message - internet recommended I switch from web player to standalone in the build settings
 		Debug.Log("Image bytes read from file in " + (Time.realtimeSinceStartup - start) + " seconds");
 
 		foundTexture = true;
