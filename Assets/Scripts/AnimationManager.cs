@@ -11,6 +11,7 @@ public class AnimationManager : Observer {
 	Animator animator;
 	public Animator squareCard;
 	public Animator rectangleCard;
+	public Animator basketController;
 	ScoreTracker scoreTracker;
 	Material square;
 	Material rectangle;
@@ -135,6 +136,7 @@ public class AnimationManager : Observer {
 		square.mainTexture = null;
 		rectangle.mainTexture = null;
 	}
+
 	void setHostMediaInternal (Sprite s)
 	{
 		if ((s.rect.xMax-s.rect.xMin) >= (s.rect.yMax-s.rect.yMin +50)) //if the texture is a rectangle
@@ -147,6 +149,7 @@ public class AnimationManager : Observer {
 			rectangle.mainTexture = null;
 		}
 	}
+
 	/// <summary>
 	/// Creates atlases for each body part, sets the UVs to default values
 	/// </summary>
@@ -231,6 +234,23 @@ public class AnimationManager : Observer {
 			return;	
 		}
 	}
+
+	void carryBasket ()
+	{
+		basketController.SetBool("Carry", true);
+	}
+	
+	void throwBasket ()
+	{
+		basketController.SetBool("Carry", false);
+		basketController.SetTrigger("Throw");
+	}
+
+	void searchBasket ()
+	{
+		basketController.SetTrigger("Search");
+	}	
+
 
 	void startTransition ()
 	{

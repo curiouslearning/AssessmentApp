@@ -483,6 +483,10 @@ Prefab:
       propertyPath: stop.Array.data[2]
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 11474328, guid: 24cfefb2d97714555a40308930997e64, type: 2}
+      propertyPath: basketController
+      value: 
+      objectReference: {fileID: 1087458061}
     m_RemovedComponents:
     - {fileID: 11484366, guid: 24cfefb2d97714555a40308930997e64, type: 2}
     - {fileID: 6199682, guid: 24cfefb2d97714555a40308930997e64, type: 2}
@@ -929,6 +933,11 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!95 &1087458061 stripped
+Animator:
+  m_PrefabParentObject: {fileID: 9570852, guid: b852f5a2d41de456cb683df79c66aa0a,
+    type: 2}
+  m_PrefabInternal: {fileID: 1363697880}
 --- !u!1 &1158815549
 GameObject:
   m_ObjectHideFlags: 0
@@ -1195,6 +1204,10 @@ Prefab:
     - target: {fileID: 11410576, guid: b852f5a2d41de456cb683df79c66aa0a, type: 2}
       propertyPath: stop.Array.data[2]
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9570852, guid: b852f5a2d41de456cb683df79c66aa0a, type: 2}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b852f5a2d41de456cb683df79c66aa0a, type: 2}
