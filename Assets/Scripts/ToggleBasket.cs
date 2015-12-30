@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class ToggleBasket : Observer{
 
 	public List<Subject> subjects;
-	public Sprite basketSprite;
+	public Texture2D basketTexture;
 	public Sprite noSprite;
 	Category currentCategory;
 	ScoreTracker scoreTracker;
@@ -48,12 +48,12 @@ public class ToggleBasket : Observer{
 		}
 		if (e.type == eType.Selected || e.type == eType.TimedOut)
 		{
-			this.GetComponent<SpriteRenderer>().sprite = null;
+			this.GetComponent<MeshRenderer>().material.mainTexture = null;
 		}
 		if (e.type == eType.Ready && currentCategory != Category.Customization)
 		{
 			highlight.SetActive(true);
-			this.GetComponent<SpriteRenderer>().sprite = basketSprite;
+			this.GetComponent<MeshRenderer>().material.mainTexture = basketTexture;
 		}
 	}
 		

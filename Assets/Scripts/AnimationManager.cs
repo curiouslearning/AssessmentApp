@@ -39,7 +39,7 @@ public class AnimationManager : Observer {
 		audioCounter = 0;
 		optionDict = new Dictionary<string, Texture2D>();
 		mirrorParts = new Dictionary<int, GameObject>();
-		int[] n = {2,0,6};
+		int[] n = {2,5,6};
 		string [] s = {"MainCharacter:r_antenna","MainCharacter:r_wing","MainCharacter:r_eye"};
 		addMirrorParts (n, s, mirrorParts); 
 		bodyPartCustomized = new bool[NUMBODYPARTS];
