@@ -237,11 +237,13 @@ public class AnimationManager : Observer {
 
 	void carryBasket ()
 	{
+		Debug.Log("Carrying");
 		basketController.SetBool("Carry", true);
 	}
 	
 	void throwBasket ()
 	{
+		Debug.Log("throw");
 		basketController.SetBool("Carry", false);
 		basketController.SetTrigger("Throw");
 	}
@@ -340,7 +342,7 @@ public class AnimationManager : Observer {
 		options = new List<Sprite>();
 		int curBodyPart = getNextBodyPart();
 		Texture2D[] textures = optionTextures[curBodyPart];
-		for(int j = 0; j < textures.Length; j++)  //convert and package options
+		for(int j = 1; j < textures.Length; j++)  //convert and package options
 		{
 			if(textures[j] != null)
 			{
