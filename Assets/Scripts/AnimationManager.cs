@@ -320,7 +320,7 @@ public class AnimationManager : Observer {
 	/// <param name="part">Index of the bone to be changed in bodyParts.</param>
 	/// <param name="newTexture"> Replacement Texture.</param>
 	void changeBodyPart (int part, string newTexture)
-	{
+	{    
 		if (mirrorParts.ContainsKey(part))
 		{
 			GameObject mirror = mirrorParts[part];
