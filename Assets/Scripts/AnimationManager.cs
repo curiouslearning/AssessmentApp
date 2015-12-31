@@ -216,7 +216,7 @@ public class AnimationManager : Observer {
 			if(GetComponent<AudioSource>().clip != null)
 			{
 				animator.SetTrigger("Talk");
-			}
+            }
 			else if( square.mainTexture != null || rectangle.mainTexture != null)
 			{
 				animator.SetBool("ShowCard", true);
@@ -386,11 +386,12 @@ public class AnimationManager : Observer {
 	{
 		Debug.Log("play");
 		AudioSource a = GetComponent<AudioSource>();
-		if(a != null && !a.isPlaying)
-		{
-			mainHighlighter.highlightOnce();
-			a.Play();	
-		}
+        if (a != null && !a.isPlaying)
+        {
+            talkBubble.sprite = talkBubbleSprite;
+            mainHighlighter.highlightOnce();
+            a.Play();
+        }
 	}
 	public void resetTalk ()
 	{
@@ -410,9 +411,6 @@ public class AnimationManager : Observer {
 	void Update () {
 		if(GetComponent<AudioSource>().clip != null)
 		{
-			if(!(talkBubble.sprite == talkBubbleSprite)){
-				talkBubble.sprite = talkBubbleSprite;
-			}
 			audioCounter += Time.deltaTime;
 			if(audioCounter >= audioInterval && !GetComponent<AudioSource>().isPlaying)
 			{
