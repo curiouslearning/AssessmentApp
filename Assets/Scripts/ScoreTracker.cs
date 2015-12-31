@@ -386,15 +386,18 @@ public class ScoreTracker : Observer {
 		}
 
 		stimOrgOb = spawnHolder.spawnNext(currentCategory,s.returnDifficulty(),questionNumber);
-		if(stimOrgOb == null){
-            setCategory(); 
+        if (stimOrgOb != null)
+        {
+            sooHolder = stimOrgOb.GetComponent<SOOScript>();
+            sooHolder.move(0);
             // now if a SOO is null, it can also mean that there was not sufficient stimuli for a new question
-			// endGame(); //change this - there should be more specific conditions for ending the game
-			//return;     // rather than running out of input, at least for the time being
-		}
-		sooHolder = stimOrgOb.GetComponent<SOOScript>();
-		sooHolder.move(0);
-
+            // endGame(); //change this - there should be more specific conditions for ending the game
+            //return;     // rather than running out of input, at least for the time being
+        }
+        else {
+            setCategory();
+            changeQuestion();
+        }
 		//data recording
 		eventHandler.sendEvent (eType.NewQuestion);
 		string value = "Question Number: " + questionNumber + ", Category: " + currentCategory + ", Difficulty: " + s.returnDifficulty();
