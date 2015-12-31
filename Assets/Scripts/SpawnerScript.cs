@@ -20,6 +20,7 @@ public class SpawnerScript : MonoBehaviour {
 	public TextAsset stimList;
 	public GameObject sooPrefab;
 	public GameObject stimPrefab;
+	public Texture2D[] secondaryAtlases;
 	//components
 	public GameObject character;
 	public AnimationManager host;
@@ -360,6 +361,19 @@ public class SpawnerScript : MonoBehaviour {
 			h.registerGameObjectWithSoo(soo);
 		}
 	}
+
+//randomly select an atlas to build the 2ndary character
+	Texture2D selectAtlas ()
+	{
+		return secondaryAtlases[Random.Range(0, secondaryAtlases.Length-1)];
+	}
+//add an atlas to the character for texturing
+	void drawCharacter (GameObject c)
+	{
+		SkinnedMeshRenderer r = c.transform.GetChild(0).GetComponentInChildren<SkinnedMeshRenderer>();
+		Material m = r.material;
+		m.mainTexture = selectAtlas ();
+	}
 	
 	void arrangeSOO(Question q)
 	{
@@ -372,6 +386,7 @@ public class SpawnerScript : MonoBehaviour {
 			if(needsCharacter(q.getCat()))
 			{
 				newStims[i] = Instantiate (character) as GameObject; //use the secondary character
+				drawCharacter(newStims[i]);
 				spacing = charStimSpacing;	
 			}
 			else
