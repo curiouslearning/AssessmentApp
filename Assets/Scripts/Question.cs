@@ -106,7 +106,7 @@ public class Question : ScriptableObject {
 	{
 		questionNumber = qNum;
 		customizationEvent = true;
-		for (int i = 0; i<textures.Count; i++)
+		for (int i = 1; i<textures.Count; i++)
 		{
 			tempOption = new serCustomizationOption();
 			tempOption.texture = textures[i];
