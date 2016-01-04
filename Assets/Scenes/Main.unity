@@ -933,7 +933,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_Offset: {x: 0.06, y: 0.06}
   serializedVersion: 2
-  m_Size: {x: 0.21, y: 0.27}
+  m_Size: {x: 0.15, y: 0.27}
 --- !u!50 &1087458059
 Rigidbody2D:
   serializedVersion: 2

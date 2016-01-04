@@ -2,12 +2,9 @@ Name,Type,Difficulty,Host Type,Host Stim,Categories
 Baby,visual,Easy,audio,Baby,ReceptiveVocabulary
 Girl,visual,Easy,audio,Girl,ReceptiveVocabulary
 Duck,visual,Easy,audio,Duck,ReceptiveVocabulary
-Bee,visual,Easy,audio,Bee,ReceptiveVocabulary
 Bee2,visual,Easy,audio,Bee,ReceptiveVocabulary
 Tortoise,visual,Easy,audio,Tortoise,ReceptiveVocabulary
-Bird,visual,Easy,audio,Bird,ReceptiveVocabulary
 Monkey,visual,Easy,audio,Monkey,ReceptiveVocabulary
-Monkey2,visual,Easy,audio,Monkey,ReceptiveVocabulary
 A_Name,audio,Easy,visual,Letter_A,LetterNameID
 A_Sound,audio,Easy,visual,Letter_A,LetterSoundMatching
 B_Name,audio,Easy,visual,Letter_B,LetterNameID
@@ -94,7 +91,6 @@ Z_Name,audio,Hard,visual,Letter_Z,LetterNameID
 Z_Sound,audio,Hard,visual,Letter_Z,LetterSoundMatching
 zid,visual,Easy,audio,zid,PseudoWordMatching
 Beetle,visual,Easy,audio,Beetle,ReceptiveVocabulary
-Beetle2,visual,Easy,audio,Beetle,ReceptiveVocabulary
 Bird2,visual,Easy,audio,Bird,ReceptiveVocabulary
 Blue,visual,Medium,audio,Blue,ReceptiveVocabulary
 Chameleon,visual,Easy,audio,Chameleon,ReceptiveVocabulary
@@ -105,7 +101,6 @@ Eye,visual,Hard,audio,Eye,ReceptiveVocabulary
 Fish,visual,Hard,audio,Fish,ReceptiveVocabulary
 Frog,visual,Easy,audio,Frog,ReceptiveVocabulary
 Goat,visual,Hard,audio,Goat,ReceptiveVocabulary
-Goat2,visual,Hard,audio,Goat,ReceptiveVocabulary
 Green,visual,Medium,audio,Green,ReceptiveVocabulary
 Hippo,visual,Hard,audio,Hippo,ReceptiveVocabulary
 Lion1,visual,Easy,audio,Lion1,ReceptiveVocabulary
@@ -129,5 +124,5 @@ Snake,visual,Hard,audio,Snake,ReceptiveVocabulary
 Splash,visual,Medium,audio,Splash,ReceptiveVocabulary
 Sun,visual,Easy,audio,Sun,ReceptiveVocabulary
 Swim,visual,Easy,audio,Swim,ReceptiveVocabulary
-Wharthog,visual,Hard,audio,Wharthog,ReceptiveVocabulary
+Warthog,visual,Hard,audio,Wharthog,ReceptiveVocabulary
 Wind,visual,Easy,audio,Wind,ReceptiveVocabulary
