@@ -134,21 +134,23 @@ public class SpawnerScript : MonoBehaviour {
 		type = setType(cat);
 		if(type == "gameOver")
 			return null;
-        // return null if a complete SOO cannot be created
+            // return null if a complete SOO cannot be created
             int numMatch = 0;
             for (int i = 0; i < stimPool.Count; i++)
-            {
-                if (matchesCriteria (cat, diffLevel, type, stimPool[i]))
-                    numMatch++;   
-            }
-            if (numMatch < 4)
-                return null; 
+                
+                if (matchesCriteria(cat, diffLevel, type, stimPool[i])) 
+                    numMatch++;
+                
+                if (numMatch < 4)
+                return null;
+            
 		//find and add the target stimulus
 		serStim temp = selectTarget(cat, diffLevel, type);
 		answer.Add (temp);
-		//find and add the remaining stimuli
-		while (answer.Count < 4) 
+        //find and add the remaining stimuli
+        while (answer.Count < 4) 
 		{
+            counter = (int)Random.Range(0, stimPool.Count); // RANDOM STARTING POINT
 			//do revolution counting in a separate function
 			if (counter == stimPool.Count)
 			{
@@ -159,7 +161,7 @@ public class SpawnerScript : MonoBehaviour {
 			 if (matchesCriteria (cat, diffLevel, type, s) && !answer.Contains(s)) 
 			{
 				s.isTarget = false;
-				answer = randomAdd (answer, s); 
+				answer = randomAdd (answer, s);
 			}
 			counter++;
 		}
@@ -192,7 +194,7 @@ public class SpawnerScript : MonoBehaviour {
 	serStim selectTarget (Category cat, Difficulty diffLevel, string type)
 	{
 		serStim s = null;
-		int counter = 0;
+        int counter = (int) Random.Range(0, stimPool.Count); //RANDOM STARTING POINT
 		int resetCounter = 0;
 		bool foundTarget = false;
 		if(type == "gameOver")
@@ -244,7 +246,7 @@ public class SpawnerScript : MonoBehaviour {
 			}
 			counter++;
 		}
-		return s;
+        return s;
 	}
 
 	//check for stimuli that correspond the to the given criteria, and have not been used as a target yet
@@ -274,11 +276,11 @@ public class SpawnerScript : MonoBehaviour {
 		if (f < 1.0f) 
 		{
 			answer.Add(s);
-		}
+        }
 		else if (f > 1.0f && f < 2.0f)
 		{
 			answer.Insert(0, s); //if f is between 1 & 2, insert the stimulus at the beginning. Helps randomize position of target
-		}
+        }
 		return answer;
 	}
 
