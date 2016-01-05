@@ -281,7 +281,7 @@ public class SpawnerScript : MonoBehaviour {
 		{
 			answer.Insert(0, s); //if f is between 1 & 2, insert the stimulus at the beginning. Helps randomize position of target
         }
-		return answer;
+        return answer;
 	}
 
 	//reset targets when all have been used (should be obsolete with full complement of stimuli)
@@ -475,6 +475,8 @@ public class SpawnerScript : MonoBehaviour {
 			return false;
 		case Category.PseudowordMatching:
 			return false;
+        case Category.BlendingWordIdentification:
+            return false;
 		default:
 			return true;
 		}
