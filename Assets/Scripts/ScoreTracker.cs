@@ -252,6 +252,15 @@ public class ScoreTracker : Observer {
 
 	}
 
+    void setCategory(Category cat)
+    {
+        numCorrect = 0;
+        numWrong = 0;
+        numAnswered = 0;
+        currentCategory = cat;
+        s.setDifficulty(Difficulty.Easy);
+    }
+
 	Category getNextCategory (Category last)
 	{
 		switch (last)
@@ -416,7 +425,22 @@ public class ScoreTracker : Observer {
 		pointTime = pointInterval;
 	}
 
-	void Update() 
+   void OnGUI()
+    {
+        if (gameOver)
+        {
+            if (GUI.Button(new Rect(250, 200, 250, 30), "Play Again?"))
+            {
+                gameOver = false;
+                setCategory(Category.ReceptiveVocabulary);
+                totalScore = 0;
+                changeQuestion();
+                // send Notify to animationManager
+            }
+        }
+    }
+
+    void Update() 
 	{
 		if (gameOver) {
 			string junk = "meaningless"; //hack to get around control flow after GameOver
