@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -28,6 +29,8 @@ public class ScoreTracker : Observer {
 	Animator animator;
 	public GameObject rhymeRecep1;
 	public GameObject rhymeRecep2;
+    public Button ReplayButton;
+    public Canvas ButtonCanvas;
 
 	//Event variables
 	public Subject eventHandler;
@@ -166,25 +169,32 @@ public class ScoreTracker : Observer {
 		}
 	}
 
-	public override void onNotify (EventInstance<bool> e)
-	{
-		if (e.type == eType.Selected)
-		{
-			s.addScore(e.signaler);
-		}
-		sooHolder.move (1);
-		return;
-	}
+    public override void onNotify(EventInstance<bool> e)
+    {
+        if (e.type == eType.Selected)
+        {
+            s.addScore(e.signaler);
+        }
+        sooHolder.move(1);
+        return;
+    }
 	
 	void endGame ()
 	{
-		eventHandler.sendEvent (eType.EndGame);
-		//display Tap To Restart
-		//Turn off spawner
-		//more endgame here TODO
-	}
-	
-	public void addTouch (TouchSummary t) // called by TouchProcessor
+        Debug.Log("We are in endGame");
+        eventHandler.sendEvent (eType.EndGame);
+        Button replayButton = Instantiate(ReplayButton);
+        replayButton.transform.SetParent(ButtonCanvas.transform,false);
+        //Turn off spawner
+        //more endgame here TODO
+    }
+
+    public void onClick()
+    {
+        Debug.Log("Button Clicked");
+    }
+
+    public void addTouch (TouchSummary t) // called by TouchProcessor
 	{
 		s.addTouch(t);
 		t = null;
@@ -243,10 +253,22 @@ public class ScoreTracker : Observer {
 		}
 		 //change category and drop difficulty level after 4 wrong answers, 3 correct answers on hard difficulty, or the category total has been reached.	 
 		else  {
-			lastCategory = currentCategory;
-			s.setCategory (Category.Customization);
-			currentCategory = Category.Customization;
-			AndroidBroadcastIntentHandler.BroadcastJSONData("Category Change", "Customization"); //data recording
+            if (s.returnCategory() != Category.PseudowordMatching)
+            {
+                lastCategory = currentCategory;
+                s.setCategory(Category.Customization);
+                currentCategory = Category.Customization;
+                AndroidBroadcastIntentHandler.BroadcastJSONData("Category Change", "Customization"); //data recording
+            }
+            else
+            {
+                numCorrect = 0;
+                numWrong = 0;
+                numAnswered = 0;
+                currentCategory = getNextCategory(currentCategory);
+                AndroidBroadcastIntentHandler.BroadcastJSONData("Category Change", currentCategory.ToString()); //data recording
+            }
+               
 		}
 		
 
@@ -424,21 +446,6 @@ public class ScoreTracker : Observer {
 		timeOutBroadcastSent = false;
 		pointTime = pointInterval;
 	}
-
-   void OnGUI()
-    {
-        if (gameOver)
-        {
-            if (GUI.Button(new Rect(250, 200, 250, 30), "Play Again?"))
-            {
-                gameOver = false;
-                setCategory(Category.ReceptiveVocabulary);
-                totalScore = 0;
-                changeQuestion();
-                // send Notify to animationManager
-            }
-        }
-    }
 
     void Update() 
 	{
