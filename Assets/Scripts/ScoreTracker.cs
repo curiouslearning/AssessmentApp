@@ -30,7 +30,7 @@ public class ScoreTracker : Observer {
 	public GameObject rhymeRecep1;
 	public GameObject rhymeRecep2;
     public Button ReplayButton;
-    public Canvas ButtonCanvas;
+    public Canvas Canvas;
 
 	//Event variables
 	public Subject eventHandler;
@@ -48,7 +48,7 @@ public class ScoreTracker : Observer {
 	int correctCap;
 	int wrongCap;
 	int totalCap;
-	Category currentCategory;
+	public Category currentCategory; // currently a public variable for debugging purposes
 	Category lastCategory;
 	Score s;
 	
@@ -184,7 +184,7 @@ public class ScoreTracker : Observer {
         Debug.Log("We are in endGame");
         eventHandler.sendEvent (eType.EndGame);
         Button replayButton = Instantiate(ReplayButton);
-        replayButton.transform.SetParent(ButtonCanvas.transform,false);
+        replayButton.transform.SetParent(Canvas.transform,false);
         //Turn off spawner
         //more endgame here TODO
     }
