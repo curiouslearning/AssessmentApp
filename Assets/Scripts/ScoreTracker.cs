@@ -29,7 +29,8 @@ public class ScoreTracker : Observer {
 	Animator animator;
 	public GameObject rhymeRecep1;
 	public GameObject rhymeRecep2;
-    public Button ReplayButton;
+    public Button replayButtonPrefab;
+    Button replayButton;
     public Canvas Canvas;
 
 	//Event variables
@@ -183,15 +184,24 @@ public class ScoreTracker : Observer {
 	{
         Debug.Log("We are in endGame");
         eventHandler.sendEvent (eType.EndGame);
-        Button replayButton = Instantiate(ReplayButton);
+        replayButton = Instantiate(replayButtonPrefab); 
         replayButton.transform.SetParent(Canvas.transform,false);
+        replayButton.onClick.AddListener(() => onClick());
         //Turn off spawner
         //more endgame here TODO
     }
 
     public void onClick()
     {
-        Debug.Log("Button Clicked");
+        Debug.Log("Button Clicked"); //debugging
+        DestroyObject(replayButton);
+        totalScore = 0;
+        //gameOver = false; // gameOver is no longer true
+        //currentCategory = Category.Customization;
+        //lastCategory = Category.Customization;
+        // changeQuestion(); // change the question
+        Awake();
+        Start();
     }
 
     public void addTouch (TouchSummary t) // called by TouchProcessor

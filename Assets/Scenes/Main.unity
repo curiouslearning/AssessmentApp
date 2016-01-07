@@ -933,9 +933,10 @@ MonoBehaviour:
   gCollector: {fileID: 1331431048}
   rhymeRecep1: {fileID: 0}
   rhymeRecep2: {fileID: 0}
-  ReplayButton: {fileID: 11426410, guid: aeae1ca98a7c02943a483c0fb4e2399d, type: 2}
+  replayButtonPrefab: {fileID: 11482010, guid: 10493332d5feaae41bcf2735c218bffc, type: 2}
   Canvas: {fileID: 339596391}
   eventHandler: {fileID: 829527127}
+  currentCategory: 0
 --- !u!1 &888977026
 GameObject:
   m_ObjectHideFlags: 0
