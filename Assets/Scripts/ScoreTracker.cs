@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 
 public class ScoreTracker : Observer {
@@ -194,14 +195,16 @@ public class ScoreTracker : Observer {
     public void onClick()
     {
         Debug.Log("Button Clicked"); //debugging
-        DestroyObject(replayButton);
-        totalScore = 0;
+        Destroy(replayButton.gameObject);
+        Debug.Log("Destroyed?: " + replayButton.IsDestroyed());
+        //totalScore = 0;
         //gameOver = false; // gameOver is no longer true
         //currentCategory = Category.Customization;
         //lastCategory = Category.Customization;
         // changeQuestion(); // change the question
-        Awake();
-        Start();
+        //Awake();
+        //Start();
+        SceneManager.LoadScene(0);
     }
 
     public void addTouch (TouchSummary t) // called by TouchProcessor
@@ -378,7 +381,8 @@ public class ScoreTracker : Observer {
 
 		checkAnswer();
 		Debug.Log("numCorrect: " + numCorrect);	
-		Debug.Log("numWrong: " + numWrong);	
+		Debug.Log("numWrong: " + numWrong);
+        Debug.Log("Total Score: " + totalScore);
 
 		
 		if (numCorrect >= correctCap) {
