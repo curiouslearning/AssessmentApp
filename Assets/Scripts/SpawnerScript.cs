@@ -178,12 +178,19 @@ public class SpawnerScript : MonoBehaviour {
 		return answer;
 	}
 
-//********************************
-// HELPER FUNCTIONS FOR findStim *
-//********************************
+    //********************************
+    // HELPER FUNCTIONS FOR findStim *
+    //********************************
 
-	//use the category to set the type of stimulus findStim will search for
-	string setType (Category cat)
+    /// <summary>
+    /// use the category to set the type of stimulus findStim will search for; called by findStim
+    /// </summary>
+    /// <param name ="cat" >current Category </param>
+    /// <returns> 
+    /// string with current type of stimuli needed: visual, audio, or gameOver
+    /// </returns>
+
+    string setType (Category cat)
 	{
 		string type;
 		if(cat.Equals(Category.GameOver)){
@@ -198,9 +205,17 @@ public class SpawnerScript : MonoBehaviour {
 		}	
 		return type;
 	}
-	
-	//select the target stimulus for a given question, according to the given criteria
-	serStim selectTarget (Category cat, Difficulty diffLevel, string type)
+    /// <summary>
+    /// select the target stimulus for a given question, according to the given criteria
+    /// </summary>
+    /// <param name="cat"> current Category</param>
+    /// <param name="diffLevel">current Difficulty</param>
+    /// <param name="type">current type of stimuli needed</param>
+    /// <returns>
+    /// return a single serStim "s" which will be the target stimuli for the next question
+    /// </returns>
+
+    serStim selectTarget (Category cat, Difficulty diffLevel, string type)
 	{
 		serStim s = null;
         int counter = (int) Random.Range(0, stimPool.Count); //RANDOM STARTING POINT
@@ -247,7 +262,7 @@ public class SpawnerScript : MonoBehaviour {
 				float f = Random.Range (0.0f,4.0f);
 				if (f < 1.0f) {
                    // Debug.Log("Sprite: " + s.sprite);
-                    Debug.Log("Audio: " + s.audio);
+                   // Debug.Log("Audio: " + s.audio);
                     stimPool[counter].hasBeenTarget = true;
 					s.isTarget = true;
 					foundTarget = true;
@@ -260,8 +275,17 @@ public class SpawnerScript : MonoBehaviour {
         return s;
 	}
 
-	//check for stimuli that correspond the to the given criteria, and have not been used as a target yet
-	int checkFreeStims (Category cat, Difficulty diffLevel, string type) // use this to prevent crashes
+    /// <summary>
+    /// check for stimuli that correspond the to the given criteria, and have not been used as a target yet; called by selectTarget
+    /// </summary>
+    /// <param name="cat">current Category</param>
+    /// <param name="diffLevel">current Difficulty</param>
+    /// <param name="type">type of stimuli needed</param>
+    /// <returns>
+    /// returns the number of stims in stimPool that are eligible to be used as a target for the next question
+    /// </returns>
+
+    int checkFreeStims (Category cat, Difficulty diffLevel, string type) // use this to prevent crashes
 	{	
 		int total = 0;
 		for(int i = 0; i< stimPool.Count; i++)
@@ -271,36 +295,54 @@ public class SpawnerScript : MonoBehaviour {
 		}
 		return total;
 	}
+    /// <summary>
+    /// check to make sure a stimulus matches the defined criteria
+    /// </summary>
+    /// <param name="cat">currnet Category</param>
+    /// <param name="diff">current Difficulty</param>
+    /// <param name="type">current type of stimuli needed</param>
+    /// <param name="s">an individual serStim</param>
+    /// <returns>
+    /// returns true if s meets the criteria specified by cat, diff, and type; false otherwise
+    /// </returns>
 
-	//check to make sure a stimulus matches the defined criteria
-	bool matchesCriteria (Category cat, Difficulty diff, string type, serStim s)
+    bool matchesCriteria (Category cat, Difficulty diff, string type, serStim s)
 	{
 		return (s.stimType.Equals (type) && 
 			s.difficulty.Equals (diff) &&
 				s.category.Equals(cat));
-	}	
+	}
 
-	//randomly choose whether or not to add the selected stimulus
-	List<serStim> randomAdd(List<serStim> answer, serStim s)
+    /// <summary>
+    /// randomly choose whether or not to add the selected stimulus
+    /// </summary>
+    /// <param name="answer">a list of serStim</param>
+    /// <param name="s">an individual serStim</param>
+    /// <returns>returns answer with or without s attached</returns>
+
+    List<serStim> randomAdd(List<serStim> answer, serStim s)
 	{
 		float f = Random.Range (0.0f,8.0f);
 		if (f < 1.0f) 
 		{
 			answer.Add(s);
             //Debug.Log("Sprite: " + s.sprite);
-            Debug.Log("Audio: " + s.audio);
+            //Debug.Log("Audio: " + s.audio);
         }
 		else if (f > 1.0f && f < 2.0f)
 		{
 			answer.Insert(0, s); //if f is between 1 & 2, insert the stimulus at the beginning. Helps randomize position of target
             //Debug.Log("Sprite: " + s.sprite);
-            Debug.Log("Audio: " + s.audio);
+            //Debug.Log("Audio: " + s.audio);
         }
         return answer;
 	}
 
-	//reset targets when all have been used (should be obsolete with full complement of stimuli)
-	void resetTargets()
+    /// <summary>
+    /// reset targets when all have been used (should be obsolete with full complement of stimuli)
+    /// </summary>
+
+    void resetTargets()
 	{
 	
 		for (int i = 0; i < stimPool.Count; i++)

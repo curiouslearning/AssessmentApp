@@ -189,6 +189,8 @@ public class ScoreTracker : Observer {
         replayButton.transform.SetParent(Canvas.transform,false);
         replayButton.onClick.AddListener(() => onClick());
         //Turn off spawner
+        //Should a notification be sent to AnimationManager so the Main Character stops walking?
+        //Maybe some sort of celebration animation for completing the game?
         //more endgame here TODO
     }
 
