@@ -146,6 +146,7 @@ public class SpawnerScript : MonoBehaviour {
             
 		//find and add the target stimulus
 		serStim temp = selectTarget(cat, diffLevel, type);
+        string hostStim = temp.hostStim;
 		answer.Add (temp);
         //find and add the remaining stimuli
         while (answer.Count < 4) 
@@ -156,14 +157,22 @@ public class SpawnerScript : MonoBehaviour {
 			{
 				counter = 0;	
 			}
-			serStim s = stimPool[counter];	
-			// when a list of 4 serStims is assembled, findStim returns answer
-			 if (matchesCriteria (cat, diffLevel, type, s) && !answer.Contains(s)) 
+			serStim s = stimPool[counter];
+            // when a list of 4 serStims is assembled, findStim returns answer
+            if (matchesCriteria(cat, diffLevel, type, s) && !answer.Contains(s) && (cat != Category.RhymingWordMatching)) // non-rhyming categories
 			{
 				s.isTarget = false;
 				answer = randomAdd (answer, s);
 			}
-			counter++;
+            if (matchesCriteria(cat, diffLevel, type, s) && !answer.Contains(s) && (cat == Category.RhymingWordMatching)) // special case for rhyming
+            {
+                if (s.audio != hostStim)
+                {
+                    s.isTarget = false;
+                    answer = randomAdd(answer, s);
+                }
+            }
+                counter++;
 		}
 		//randomize order here
 		return answer;
@@ -237,7 +246,9 @@ public class SpawnerScript : MonoBehaviour {
 				// stimulus to be the target
 				float f = Random.Range (0.0f,4.0f);
 				if (f < 1.0f) {
-					stimPool[counter].hasBeenTarget = true;
+                   // Debug.Log("Sprite: " + s.sprite);
+                    Debug.Log("Audio: " + s.audio);
+                    stimPool[counter].hasBeenTarget = true;
 					s.isTarget = true;
 					foundTarget = true;
 					host.setHostMedia(s); // pass the target's prompt to the main character
@@ -276,10 +287,14 @@ public class SpawnerScript : MonoBehaviour {
 		if (f < 1.0f) 
 		{
 			answer.Add(s);
+            //Debug.Log("Sprite: " + s.sprite);
+            Debug.Log("Audio: " + s.audio);
         }
 		else if (f > 1.0f && f < 2.0f)
 		{
 			answer.Insert(0, s); //if f is between 1 & 2, insert the stimulus at the beginning. Helps randomize position of target
+            //Debug.Log("Sprite: " + s.sprite);
+            Debug.Log("Audio: " + s.audio);
         }
         return answer;
 	}

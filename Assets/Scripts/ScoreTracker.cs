@@ -382,7 +382,7 @@ public class ScoreTracker : Observer {
 		checkAnswer();
 		Debug.Log("numCorrect: " + numCorrect);	
 		Debug.Log("numWrong: " + numWrong);
-        Debug.Log("Total Score: " + totalScore);
+        Debug.Log("Total Score: " + totalScore); 
 
 		
 		if (numCorrect >= correctCap) {
