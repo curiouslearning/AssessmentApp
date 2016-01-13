@@ -75,8 +75,11 @@ public class SOOScript : Observer {
 		transform.position = pos;
 	}
 
-	//method for properly sizing box colliders during customization events
-	public void setBoxColliders ()
+    /// <summary>
+    /// method for properly sizing box colliders during customization events
+    /// </summary>
+
+    public void setBoxColliders ()
 	{
 		for (int i = 0; i < stimArray.Length; i++)
 		{
@@ -106,6 +109,7 @@ public class SOOScript : Observer {
 /// Move the SOO to the next destination (center of screen or Garbage Collector)
 /// </summary>
 /// <param name="dest">The next Destination.</param>
+
 	public void move(int dest)
 	{
 		moving = true;
@@ -114,6 +118,11 @@ public class SOOScript : Observer {
 		curDest = destArray[dest];
 		setWalk("set");
 	}
+
+    /// <summary>
+    /// sets triggers instructing the main character on where and when to walk
+    /// </summary>
+    /// <param name="param">a string</param>
 
 	void setWalk(string param)
 	{
@@ -133,9 +142,11 @@ public class SOOScript : Observer {
 			}
 		}
 	}
-/// <summary>
-/// Tell the stimuli to update homePos to their current position, for snap-back functionality
-/// </summary>
+
+    /// <summary>
+    /// Tell the stimuli to update homePos to their current position, for snap-back functionality
+    /// </summary>
+    
 	void updatePos()
 	{
 		for (int i = 0; i < stimArray.Length; i++)

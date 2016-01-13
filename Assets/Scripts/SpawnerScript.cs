@@ -420,7 +420,7 @@ public class SpawnerScript : MonoBehaviour {
 //* spawnSOO HELPER FUNCTIONS *
 //*****************************
 	/// <summary>
-    /// needs summary; called by spawnSOO
+    /// call registerGameObjectWithSoo on all observers; called by spawnSOO
     /// </summary>
     /// <param name="soo">a Stimulus Organizational Object</param>
 	void registerObservers (GameObject soo)
@@ -432,7 +432,7 @@ public class SpawnerScript : MonoBehaviour {
 	}
 
     /// <summary>
-    /// needs summary; called by spawnSOO
+    /// registers the highlighter component in the new stimuli; called by spawnSOO
     /// </summary>
     /// <param name="soo">a Stimulus Organizational Object</param>
 
@@ -523,7 +523,7 @@ public class SpawnerScript : MonoBehaviour {
 	}
 	
     /// <summary>
-    /// needs summary; called by arrangeSOO
+    /// initialize new stims; called by arrangeSOO
     /// </summary>
     /// <param name="q">a Question</param>
     /// <param name="i">an int</param>
@@ -547,7 +547,7 @@ public class SpawnerScript : MonoBehaviour {
 	}
 
     /// <summary>
-    /// needs summary; called by spawnSOO
+    /// scales children; called by spawnSOO
     /// </summary>
     /// <param name="q">a Question</param>
     /// <param name="holder">a SOOScript instance</param>

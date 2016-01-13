@@ -35,8 +35,11 @@ public class AnimationManager : Observer {
 	public SpriteRenderer talkBubble;
 	public Sprite talkBubbleSprite;
 
-	// Use this for initialization
-	void Awake () {
+    /// <summary>
+    /// create dictionaries, initialize main character
+    /// </summary>
+
+    void Awake () {
 		audioCounter = 0;
 		optionDict = new Dictionary<string, Texture2D>();
 		mirrorParts = new Dictionary<int, GameObject>();
@@ -54,8 +57,12 @@ public class AnimationManager : Observer {
 		square = squareCard.GetComponent<MeshRenderer>().material;
 		rectangle = rectangleCard.GetComponent<MeshRenderer>().material;
 		initTextures();
-	
 	}
+
+    /// <summary>
+    /// call addSelfToSubjects, ensure scoreTracker finds "Main Camera"
+    /// </summary>
+
 	void Start()
 	{		
 		addSelfToSubjects();
@@ -64,8 +71,10 @@ public class AnimationManager : Observer {
 
 	/// <summary>
 	/// Function for initializing the Observer design pattern.
-	//  NOTE: ANY NEW SUBJECT MUST BE MANUALLY INSERTED INTO THE ARRAY EITHER IN THE EDITOR OR IN START()
+	/// NOTE: ANY NEW SUBJECT MUST BE MANUALLY INSERTED INTO THE ARRAY EITHER IN THE EDITOR OR IN START()
+    /// called by Start()
 	/// </summary>
+    
 	void addSelfToSubjects()
 	{
 		GameObject temp;
@@ -78,6 +87,13 @@ public class AnimationManager : Observer {
 		}
 	}	
 
+    /// <summary>
+    /// needs summary; called in Awake()
+    /// </summary>
+    /// <param name="numbers">array of ints</param>
+    /// <param name="parts">array of strings</param>
+    /// <param name="mirror">Dictionary mapping ints and GameObjects</param>
+
 	void addMirrorParts(int[] numbers, string [] parts, Dictionary<int, GameObject> mirror)
 	{
 		for (int i = 0; i < numbers.Length; i++)
@@ -86,6 +102,7 @@ public class AnimationManager : Observer {
 			mirror.Add (numbers[i], g);
 		}
 	}
+
 	public override void registerGameObjectWithSoo(GameObject SOO)
 	{
 		base.registerGameObjectWithSoo(SOO);
@@ -94,6 +111,7 @@ public class AnimationManager : Observer {
 	/// <summary>
 	/// Parses the optionsList data into the textures array.
 	/// </summary>
+
 	void parseData()
 	{
 		sourceLines = optionsList.text.Split('\n');
@@ -109,6 +127,11 @@ public class AnimationManager : Observer {
 
 		}
 	}
+
+    /// <summary>
+    /// assign appropriate audio or visual media to the main character; called in selectTarget in SpawnerScript
+    /// </summary>
+    /// <param name="m">serStim</param>
 
 	public void setHostMedia (serStim m)
 	{
@@ -129,6 +152,11 @@ public class AnimationManager : Observer {
 		}
 	}
 
+    /// <summary>
+    /// Helper method for setHostMedia
+    /// </summary>
+    /// <param name="a">an AudioClip</param>
+
 	void setHostMediaInternal (AudioClip a)
 	{
 		AudioSource host = GetComponent<AudioSource>();
@@ -136,6 +164,11 @@ public class AnimationManager : Observer {
 		square.mainTexture = null;
 		rectangle.mainTexture = null;
 	}
+
+    /// <summary>
+    /// Helper method  for setHostMedia
+    /// </summary>
+    /// <param name="s">a Sprite</param>
 
 	void setHostMediaInternal (Sprite s)
 	{
@@ -153,6 +186,7 @@ public class AnimationManager : Observer {
 	/// <summary>
 	/// Creates atlases for each body part, sets the UVs to default values
 	/// </summary>
+    
 	void initTextures ()
 	{
 		parseData();
@@ -171,11 +205,11 @@ public class AnimationManager : Observer {
 		}		
 	}
 
-
 	/// <summary>
 	/// Method for handling events this class is listening for
 	/// </summary>
 	/// <param name="e">Event Instance.</param>
+    
 	public override void onNotify (EventInstance<GameObject> e)
 	{
 		if (e.type == eType.NewQuestion)

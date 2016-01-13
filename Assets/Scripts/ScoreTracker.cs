@@ -139,7 +139,7 @@ public class ScoreTracker : Observer {
 	// ********************************************************
 	
     /// <summary>
-    /// handles all notifications 
+    /// handles all received notifications 
     /// </summary>
     /// <param name="e">an Event Instance(GameObject)</param>
 
@@ -421,17 +421,25 @@ public class ScoreTracker : Observer {
 	// startQuestion, changeQuestion, Update
 	// *******************************************************
 
-	// for use at the beginning of the game
+	/// <summary>
+    /// for use at beginning of game; called in Start()
+    /// </summary>
+
 	void startQuestion() {
 		eventHandler.sendEvent(eType.NewQuestion);
 		stimOrgOb = spawnHolder.spawnNext(currentCategory,s.returnDifficulty(),questionNumber);
 		sooHolder = stimOrgOb.GetComponent<SOOScript>();
 		animator.SetTrigger("Success"); //start the character moving	
 		sooHolder.move(0);
-	} 
+	}
 
-	//TODO Refactor this	
-	void changeQuestion () {
+    /// <summary>
+    /// adjusts scorekeeping variables, changes category and difficulty as necessary, destroys old stimuli, spawns
+    /// new stimuli, sends an event, broadcasts data; called in onNotify, changeQuestion
+    /// </summary>
+
+    //TODO Refactor this      	
+    void changeQuestion () {
 		resetTiming();
 		questionNumber++;
 		numAnswered++;
@@ -506,8 +514,11 @@ public class ScoreTracker : Observer {
 		AndroidBroadcastIntentHandler.BroadcastJSONData("New Question", value);
 	}
 
-	//initialize or reset all timekeeping variables for the question timer
-	void resetTiming()
+    /// <summary>
+    /// initialize or reset all timekeeping variables for the question timer; called in Start() and changeQuestion
+    /// </summary>
+
+    void resetTiming()
 	{	
 		timeLeft = timeLimit;
 		questionTime = 0;
@@ -517,6 +528,10 @@ public class ScoreTracker : Observer {
 		timeOutBroadcastSent = false;
 		pointTime = pointInterval;
 	}
+
+    /// <summary>
+    /// updates timekeeping variables, cues certain animations, keeps track of timeouts, sends events, broadcasts data
+    /// </summary>
 
     void Update() 
 	{
@@ -580,17 +595,22 @@ public class ScoreTracker : Observer {
 			scoreList[i].printTouches();
 		}	
 	}
-	
-	// ******************************************************************
-	// Methods for organizing data collected by ScoreTracker and
-	// placing it into strings
-	// ******************************************************************
-	
-	// retrieveStruct is a method needed for averagesBreakdown() to work.  It
-	// retrieves a given DifficultyData instance from an array based on the
-	// input Category. *Note: retrieveStruct assumes that each DifficultyData 
-	// instance in the array is tagged with a unique Category
-	DifficultyData retrieveStruct(DifficultyData[] ddarray, Category cat) {
+
+    // ******************************************************************
+    // Methods for organizing data collected by ScoreTracker and
+    // placing it into strings
+    // ******************************************************************
+
+    /// <summary>
+    /// retrieveStruct is a method needed for averagesBreakdown() to work.  It
+    /// retrieves a given DifficultyData instance from an array based on the
+    /// input Category. *Note: retrieveStruct assumes that each DifficultyData 
+    /// instance in the array is tagged with a unique Category.
+    /// </summary>
+    /// <param name="ddarray">DifficultyData array</param>
+    /// <param name="cat">a Category</param>
+
+    DifficultyData retrieveStruct(DifficultyData[] ddarray, Category cat) {
 		int length = ddarray.Length;
 		for (int i = 0; i < length; i++) {
 			if (ddarray[i].categoryMatch(cat)) { 
@@ -599,13 +619,16 @@ public class ScoreTracker : Observer {
 		}
 		throw new System.ArgumentException ("Variable of type Category not found in ddarray");
 	}
-	
-	// averagesBreakdown creates an array of DifficultyData variables, one for each
-	// category in the Category enum.  It then adds each score in scoreList to the 
-	// apropriate DifficultyData variable, using retrieveStruct to select the correct
-	// variable from the DifficultyData array.  It then prints out a string containing
-	// all the data that has been added to each DifficultyData variable.
-	string averagesBreakdown() {
+
+    /// <summary>
+    /// averagesBreakdown creates an array of DifficultyData variables, one for each
+    /// category in the Category enum.  It then adds each score in scoreList to the 
+    /// apropriate DifficultyData variable, using retrieveStruct to select the correct
+    /// variable from the DifficultyData array.  It then prints out a string containing
+    /// all the data that has been added to each DifficultyData variable.
+    /// </summary>
+
+    string averagesBreakdown() {
 		
 		DifficultyData[] ddarray = new DifficultyData[9];
 		Category cat = Category.Customization;
@@ -626,10 +649,13 @@ public class ScoreTracker : Observer {
 		}
 		return answer;
 	}
-	
-	// averageTime prints out the average time taken per question across all
-	// categories and difficulties.
-	string averageTime() {
+
+    /// <summary>
+    /// averageTime prints out the average time taken per question across all
+    /// categories and difficulties.
+    /// </summary>
+
+    string averageTime() {
 		float timeSum = 0f;
 		int numQuestions = 0;
 		for (int i = 0; i < scoreList.Count; i++) {
@@ -639,7 +665,11 @@ public class ScoreTracker : Observer {
 		return ("average question time across all categories and difficulties: " + timeSum / numQuestions);
 	}
 	
-	string printListString () //for broadcasts
+    /// <summary>
+    /// collects all data from a playthrough, returns it in a single string
+    /// </summary>
+
+	string printListString () 
 	{
 		string st = "";
 		st = (st + "TOTAL SCORE: " + totalScore + "\n\n");
@@ -755,6 +785,7 @@ public class Score {
 // is included as a category so the character customization
 // at the beginning of gameplay will be recognized as its
 // own kind of activity;
+
 /// <summary>
 /// Enum containing all possible kinds of questions that the app may ask a student.
 /// </summary>
@@ -772,6 +803,7 @@ public enum Category {Customization,
 /// <summary>
 /// Inidicator for question difficulty.
 /// </summary>
+/// 
 public enum Difficulty {Easy, Medium, Hard};
 
 
@@ -818,11 +850,15 @@ public class DifficultyData {
 	
 	float totalTimeAverage;
 	
-	Category cat; 
+	Category cat;
 
-	// Constructor takes an instance of the Category enum so that instances
-	// of DifficultyData are tagged with their corresponding Category
-	public DifficultyData(Category category) {
+    /// <summary>
+    /// Constructor takes an instance of the Category enum so that instances
+    /// of DifficultyData are tagged with their corresponding Category
+    /// </summary>
+    /// <param name="category">a Category</param>
+
+    public DifficultyData(Category category) {
 		easyScore = 0f;
 		mediumScore = 0f;
 		hardScore = 0f;
@@ -835,9 +871,13 @@ public class DifficultyData {
 		this.cat = category;
 	}
 
-	// addScore increments variables based on what difficulty
-	// the given Score variable is tagged with
-	public void addScore (Score s) {
+    /// <summary>
+    /// addScore increments variables based on what difficulty
+    /// the given Score variable is tagged with
+    /// </summary>
+    /// <param name="s">a Score variable</param>
+
+    public void addScore (Score s) {
 		Difficulty diff = s.returnDifficulty();
 		float time = s.getTime();
 		int score;
@@ -860,18 +900,26 @@ public class DifficultyData {
 		}
 	}
 
-	// categoryMatch returns a bool indicating whether the given category
-	// matches the category of the current DifficultyData instance
-	public bool categoryMatch(Category category) {
+    /// <summary>
+    /// categoryMatch returns a bool indicating whether the given category
+    /// matches the category of the current DifficultyData instance
+    /// </summary>
+    /// <param name="category">a Category</param>
+
+    public bool categoryMatch(Category category) {
 		return (cat.Equals (category));
 	}
 
-	// toString assigns the average-holding variables their correct values
-	// with a series of if statements (to prevent divide-by-zero errors) and then
-	// uses the average-holding variables to create a long string containing all the
-	// data collected by the DifficultyData instance.
 
-	public string toString() {
+    /// <summary>
+    /// toString assigns the average-holding variables their correct values
+    /// with a series of if statements (to prevent divide-by-zero errors) and then
+    /// uses the average-holding variables to create a long string containing all the
+    /// data collected by the DifficultyData instance.
+    /// </summary>
+
+
+    public string toString() {
 
 		if (numEasy > 0) 
 			easyScoreAverage = easyScore / numEasy;
