@@ -60,6 +60,10 @@ public class ScoreTracker : Observer {
 	// Initialization - Awake and Start
 	// ***********************************************
 
+    /// <summary>
+    /// sets beginning difficulty and category variables, begins scorekeeping tasks
+    /// </summary>
+
 	void Awake ()
 	{
         s = new Score(questionNumber);	
@@ -68,7 +72,12 @@ public class ScoreTracker : Observer {
 		s.setCategory (Category.Customization);
 		currentCategory = s.returnCategory ();
 		lastCategory = currentCategory;
-	}	
+	}
+    
+    /// <summary>
+    /// add subjects, set timing, ready animations, start first questions
+    /// </summary>
+    	
 	void Start () {	
 		animator = GameObject.Find ("MainCharacter").GetComponent<Animator>();
 		gameOver = false;
@@ -80,6 +89,10 @@ public class ScoreTracker : Observer {
 		setCaps();
 		startQuestion ();
 	}
+
+    /// <summary>
+    /// set caps for right, wrong, and total number of questions; only called in Start()
+    /// </summary>
 
 	void setCaps()
 	{
@@ -103,6 +116,10 @@ public class ScoreTracker : Observer {
 		}
 	}
 
+    /// <summary>
+    /// add Subjects; called in Start()
+    /// </summary>
+
 	void addSubjects ()
 	{
 		gOObserver = new Subject.GameObjectNotify (this.onNotify);
@@ -121,6 +138,11 @@ public class ScoreTracker : Observer {
 	// onNotify and endGame
 	// ********************************************************
 	
+    /// <summary>
+    /// handles all notifications 
+    /// </summary>
+    /// <param name="e">an Event Instance(GameObject)</param>
+
 	public override void onNotify (EventInstance<GameObject> e)
 	{
 		//s.addTime(questionTime);	
@@ -171,6 +193,11 @@ public class ScoreTracker : Observer {
 		}
 	}
 
+    /// <summary>
+    /// handles "selected" notifications
+    /// </summary>
+    /// <param name="e">an Event Instance (bool)</param>
+
     public override void onNotify(EventInstance<bool> e)
     {
         if (e.type == eType.Selected)
@@ -181,6 +208,11 @@ public class ScoreTracker : Observer {
         return;
     }
 	
+    /// <summary>
+    /// called when PseudoWord Category is completed; sends EndGame event notification, instantiates 
+    /// replay button prefab
+    /// </summary>
+
 	void endGame ()
 	{
         Debug.Log("We are in endGame");
@@ -194,29 +226,34 @@ public class ScoreTracker : Observer {
         //more endgame here TODO
     }
 
+    /// <summary>
+    /// reloads scene, destroys replay button; called only when replay button is clicked
+    /// </summary>
+
     public void onClick()
     {
         Debug.Log("Button Clicked"); //debugging
         Destroy(replayButton.gameObject);
         Debug.Log("Destroyed?: " + replayButton.IsDestroyed());
-        //totalScore = 0;
-        //gameOver = false; // gameOver is no longer true
-        //currentCategory = Category.Customization;
-        //lastCategory = Category.Customization;
-        // changeQuestion(); // change the question
-        //Awake();
-        //Start();
         SceneManager.LoadScene(0);
     }
 
-    public void addTouch (TouchSummary t) // called by TouchProcessor
+    /// <summary>
+    /// called in onNotify in TouchProcessor
+    /// </summary>
+    /// <param name="t">TouchSummary</param>
+
+    public void addTouch (TouchSummary t) 
 	{
 		s.addTouch(t);
 		t = null;
 		//changeQuestion();
 	}
 	
-		
+	/// <summary>
+    /// increments score variables, broadcasts data; called in changeQuestion()
+    /// </summary>
+    	
 	void checkAnswer()
 	{
 		string response;
@@ -236,6 +273,11 @@ public class ScoreTracker : Observer {
 		value = ("Question: " + s.getNum().ToString() + ", Result: " + response + ", time: " + s.getTime().ToString() + ", total score: " + totalScore);
 		AndroidBroadcastIntentHandler.BroadcastJSONData("Question Answer", value);
 	}
+
+    /// <summary>
+    /// changes the difficulty of the questions being generated; called in changeQuestion
+    /// </summary>
+
 	void updateDifficulty()
 	{
 		if (s.returnDifficulty().Equals(Difficulty.Easy) || s.returnCategory().Equals (Difficulty.Medium)) {
@@ -250,11 +292,17 @@ public class ScoreTracker : Observer {
 	/// <summary>
 	/// Returns the current category
 	/// </summary>
-	/// <returns>The category.</returns>
+    
 	public Category queryCategory ()
 	{
 		return currentCategory;
 	}
+
+    /// <summary>
+    /// Increments the category  of the game, resets score variables, and broadcasts data.  Ensures that
+    /// there is a customization section between each different category; called in changeQuestion
+    /// </summary>
+
 	void setCategory()
 	{
 		if (s.returnCategory().Equals(Category.Customization)) {//only ever spend one question in customization 	
@@ -282,21 +330,16 @@ public class ScoreTracker : Observer {
                 numAnswered = 0;
                 currentCategory = getNextCategory(currentCategory);
                 AndroidBroadcastIntentHandler.BroadcastJSONData("Category Change", currentCategory.ToString()); //data recording
-            }
-               
+            }       
 		}
-		
-
 	}
 
-    void setCategory(Category cat)
-    {
-        numCorrect = 0;
-        numWrong = 0;
-        numAnswered = 0;
-        currentCategory = cat;
-        s.setDifficulty(Difficulty.Easy);
-    }
+    /// <summary>
+    /// returns the next category the game must progress to based on the current category
+    /// called in changeQuestion, averagesBreakdown
+    /// </summary>
+    /// <param name="last">the last Category</param>
+    /// <returns>the next Category</returns>
 
 	Category getNextCategory (Category last)
 	{
@@ -334,6 +377,12 @@ public class ScoreTracker : Observer {
 		return Category.Customization;	
 	}
 
+    /// <summary>
+    /// returns the next difficulty the game must progress to based on the current difficulty; called in updateDifficulty
+    /// </summary>
+    /// <param name="curDiff">current Difficulty</param>
+    /// <returns>the next Difficulty</returns>
+
 	Difficulty getNextDifficulty(Difficulty curDiff)
 	{
 		switch(curDiff)
@@ -347,6 +396,12 @@ public class ScoreTracker : Observer {
 		}
 		return curDiff;
 	}
+
+    /// <summary>
+    /// reset difficulty to easy if in easy or medium, set to medium if in hard; called in selectTarget in SpawnerScript
+    /// </summary>
+    /// <param name="curDiff">current Difficulty</param>
+    /// <returns>reset Difficulty</returns>
 
 	public Difficulty resetDifficulty (Difficulty curDiff)
 	{	

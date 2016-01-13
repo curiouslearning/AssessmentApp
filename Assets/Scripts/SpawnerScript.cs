@@ -40,9 +40,12 @@ public class SpawnerScript : MonoBehaviour {
 	Vector3[] positions;
 	public Sprite noSprite;
 	public Sprite visStimSprite;
-	
-	// Use this for initialization
-	void Awake () 
+
+    /// <summary>
+    /// Used for initialization; creates stimPool, parses data
+    /// </summary>
+
+    void Awake () 
 	{
 		diffParser = new Dictionary<string, Difficulty>();
 		diffParser.Add ("Easy", Difficulty.Easy);
@@ -54,6 +57,10 @@ public class SpawnerScript : MonoBehaviour {
 		stimPool = new List<serStim>();
 		parseData();
 	}
+
+    /// <summary>
+    /// creates a dictionary for the different Categories; called in Awake()
+    /// </summary>
 
 	void initCatParser()	
 	{
@@ -68,6 +75,11 @@ public class SpawnerScript : MonoBehaviour {
 		catParser.Add("RhymingWordMatching",Category.RhymingWordMatching);
 		catParser.Add("SightWordIdentification",Category.SightWordIdentification);
 	}
+
+    /// <summary>
+    /// parses data stored in StimuliList.csv; called in Awake()
+    /// </summary>
+
 	void parseData()
 	{ 
 		string[] sourceLines = stimList.text.Split('\n');
@@ -351,6 +363,9 @@ public class SpawnerScript : MonoBehaviour {
 			stimPool[i].isTarget = false;
 		}
 	}
+    // ********************************
+    // spawnNext and spawnSOO
+    // ******************************** 
 
 	/// <summary>
 	/// Randomly create a question or customization event based on the category and current difficulty level
@@ -404,7 +419,10 @@ public class SpawnerScript : MonoBehaviour {
 //*****************************
 //* spawnSOO HELPER FUNCTIONS *
 //*****************************
-	
+	/// <summary>
+    /// needs summary; called by spawnSOO
+    /// </summary>
+    /// <param name="soo">a Stimulus Organizational Object</param>
 	void registerObservers (GameObject soo)
 	{
 		for (int i = 0; i < observers.Count; i++)
@@ -412,6 +430,12 @@ public class SpawnerScript : MonoBehaviour {
 			observers[i].registerGameObjectWithSoo(soo);
 		}
 	}
+
+    /// <summary>
+    /// needs summary; called by spawnSOO
+    /// </summary>
+    /// <param name="soo">a Stimulus Organizational Object</param>
+
 	void registerChildren (GameObject soo)
 	{
 		for (int i =0; i < newStims.Length; i++)
@@ -421,19 +445,31 @@ public class SpawnerScript : MonoBehaviour {
 		}
 	}
 
-//randomly select an atlas to build the 2ndary character
-	Texture2D selectAtlas ()
+    /// <summary>
+    /// randomly select an atlas to build the secondary character
+    /// </summary>
+
+    Texture2D selectAtlas ()
 	{
 		return secondaryAtlases[Random.Range(0, secondaryAtlases.Length-1)];
 	}
-//add an atlas to the character for texturing
-	void drawCharacter (GameObject c)
+    /// <summary>
+    /// add an atlas to the character for texturing
+    /// </summary>
+    /// <param name="c">GameObject</param>
+
+    void drawCharacter (GameObject c)
 	{
 		SkinnedMeshRenderer r = c.transform.GetChild(0).GetComponentInChildren<SkinnedMeshRenderer>();
 		Material m = r.material;
 		m.mainTexture = selectAtlas ();
 	}
 	
+    /// <summary>
+    /// handles proper positioning of stimuli within SOO; called by spawnSOO
+    /// </summary>
+    /// <param name="q">Question</param>
+
 	void arrangeSOO(Question q)
 	{
 			SpriteRenderer background;
@@ -486,6 +522,12 @@ public class SpawnerScript : MonoBehaviour {
 		}
 	}
 	
+    /// <summary>
+    /// needs summary; called by arrangeSOO
+    /// </summary>
+    /// <param name="q">a Question</param>
+    /// <param name="i">an int</param>
+
 	void initChild (Question q, int i)
 	{
 		if(q.isCustomizationEvent())
@@ -504,6 +546,13 @@ public class SpawnerScript : MonoBehaviour {
 		}		
 	}
 
+    /// <summary>
+    /// needs summary; called by spawnSOO
+    /// </summary>
+    /// <param name="q">a Question</param>
+    /// <param name="holder">a SOOScript instance</param>
+    /// <returns></returns>
+
 	SOOScript scaleChildren (Question q, SOOScript holder)
 	{
 		if(q.isCustomizationEvent())
@@ -521,6 +570,13 @@ public class SpawnerScript : MonoBehaviour {
 		}
 		return holder;
 	}
+
+    /// <summary>
+    /// returns true if the current category requires secondary characters, false otherwise
+    /// called by spawnSOO
+    /// </summary>
+    /// <param name="cat">the current category</param>
+    /// <returns>a bool</returns>
 
 	bool needsCharacter (Category cat)
 	{
