@@ -33,6 +33,11 @@ public class ScoreTracker : Observer {
     public Button replayButtonPrefab;
     Button replayButton;
     public Canvas Canvas;
+    public Text scoreText;
+    public GameObject coinPrefab;
+    GameObject coin;
+    int numCoins;
+    Vector3 coinTransform;
 
 	//Event variables
 	public Subject eventHandler;
@@ -81,6 +86,7 @@ public class ScoreTracker : Observer {
 	void Start () {	
 		animator = GameObject.Find ("MainCharacter").GetComponent<Animator>();
 		gameOver = false;
+        numCoins = 0;
 		scoreList = new List<Score>();
 		addSubjects();
 		questionNumber = 0;
@@ -260,11 +266,24 @@ public class ScoreTracker : Observer {
 		string value;
 		if (s.isCorrect()) {
 			totalScore++;
+            scoreText.text = "Score: " + totalScore;
+            if (totalScore != 0 && totalScore % 10 == 0)
+            {
+                scoreText.color = Color.yellow;
+                coin = Instantiate(coinPrefab);     
+                coin.transform.SetParent(Canvas.transform, false);
+                coin.GetComponent<RectTransform>().anchoredPosition = new Vector2 (-275 + (50 * numCoins), 175); 
+                numCoins++;
+            }
+             else
+            {
+                scoreText.color = Color.black;
+            }
 			numCorrect++;
 			numWrong = 0; 
 			response = "correct";
 		} else {
-			totalScore--;
+			//totalScore--; add 0 when answer is wrong in feedback version
 			numWrong++; 
 			numCorrect = 0;
 			response = "incorrect";
