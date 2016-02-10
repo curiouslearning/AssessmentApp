@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Animation manager Extends Observer.
@@ -40,6 +41,7 @@ public class AnimationManager : Observer {
     /// </summary>
 
     void Awake () {
+		Application.targetFrameRate = 15;
 		audioCounter = 0;
 		optionDict = new Dictionary<string, Texture2D>();
 		mirrorParts = new Dictionary<int, GameObject>();
