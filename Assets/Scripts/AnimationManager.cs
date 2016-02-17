@@ -405,6 +405,10 @@ public class AnimationManager : Observer {
 			return i-1;
 		return i;
 	}
+	/// <summary>
+	/// Gets the next body part in the customization line, and marks it as customized.
+	/// </summary>
+	/// <returns>The next body part.</returns>
 	int getNextBodyPart()
 	{
 		int i =0;

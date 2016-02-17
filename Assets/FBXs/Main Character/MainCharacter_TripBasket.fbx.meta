@@ -3,7 +3,7 @@ guid: d1e78981f389d44048657511f9e80f94
 timeCreated: 1447704981
 licenseType: Free
 ModelImporter:
-  serializedVersion: 18
+  serializedVersion: 19
   fileIDToRecycleName:
     100000: MainCharacter:antenna_parent_joint
     100002: MainCharacter:body
@@ -375,7 +375,7 @@ ModelImporter:
     4300046: MainCharacter:mouth
     4300048: MainCharacter:l_eye
     4300050: MainCharacter:r_eye
-    7400000: Take 001
+    7400000: TripBasket
     9500000: //RootNode
     13700000: MainCharacter:body
     13700002: MainCharacter:eyes
@@ -410,6 +410,7 @@ ModelImporter:
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
+    resampleRotations: 1
     optimizeGameObjects: 0
     motionNodeName: 
     animationImportErrors: 
@@ -417,12 +418,384 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     animationCompression: 1
-    animationRotationError: .5
-    animationPositionError: .5
-    animationScaleError: .5
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: TripBasket
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 181
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: MainCharacter:Mesh
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:body
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:eyes
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:hat
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:head
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:l_antenna
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:l_arm
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:l_brow
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:l_eye
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:l_finger_1
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:l_finger_2
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:l_finger_3
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:l_finger_4
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:l_leg
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:l_wing
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:mouth
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:nose
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:r_antenna
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:r_arm
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:r_brow
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:r_eye
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:r_finger_1
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:r_finger_2
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:r_finger_3
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:r_finger_4
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:r_leg
+        weight: 1
+      - path: MainCharacter:Mesh/MainCharacter:r_wing
+        weight: 1
+      - path: MainCharacter:Skeleton
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:antenna_parent_joint
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:antenna_parent_joint/MainCharacter:l_antenna_joint_01
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:antenna_parent_joint/MainCharacter:l_antenna_joint_01/MainCharacter:l_antenna_joint_02
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:antenna_parent_joint/MainCharacter:l_antenna_joint_01/MainCharacter:l_antenna_joint_02/MainCharacter:l_antenna_joint_03
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:antenna_parent_joint/MainCharacter:l_antenna_joint_01/MainCharacter:l_antenna_joint_02/MainCharacter:l_antenna_joint_03/MainCharacter:l_antenna_joint_04
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:antenna_parent_joint/MainCharacter:l_antenna_joint_01/MainCharacter:l_antenna_joint_02/MainCharacter:l_antenna_joint_03/MainCharacter:l_antenna_joint_04/MainCharacter:l_antenna_joint_05
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:antenna_parent_joint/MainCharacter:l_antenna_joint_01/MainCharacter:l_antenna_joint_02/MainCharacter:l_antenna_joint_03/MainCharacter:l_antenna_joint_04/MainCharacter:l_antenna_joint_05/MainCharacter:l_antenna_joint_06
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:antenna_parent_joint/MainCharacter:l_antenna_joint_01/MainCharacter:l_antenna_joint_02/MainCharacter:l_antenna_joint_03/MainCharacter:l_antenna_joint_04/MainCharacter:l_antenna_joint_05/MainCharacter:l_antenna_joint_06/MainCharacter:l_antenna_joint_07
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:antenna_parent_joint/MainCharacter:l_antenna_joint_01/MainCharacter:l_antenna_joint_02/MainCharacter:l_antenna_joint_03/MainCharacter:l_antenna_joint_04/MainCharacter:l_antenna_joint_05/MainCharacter:l_antenna_joint_06/MainCharacter:l_antenna_joint_07/MainCharacter:l_antenna_joint_08
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:antenna_parent_joint/MainCharacter:l_antenna_joint_01/MainCharacter:l_antenna_joint_02/MainCharacter:l_antenna_joint_03/MainCharacter:l_antenna_joint_04/MainCharacter:l_antenna_joint_05/MainCharacter:l_antenna_joint_06/MainCharacter:l_antenna_joint_07/MainCharacter:l_antenna_joint_08/MainCharacter:l_antenna_joint_09
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:antenna_parent_joint/MainCharacter:l_antenna_joint_01/MainCharacter:l_antenna_joint_02/MainCharacter:l_antenna_joint_03/MainCharacter:l_antenna_joint_04/MainCharacter:l_antenna_joint_05/MainCharacter:l_antenna_joint_06/MainCharacter:l_antenna_joint_07/MainCharacter:l_antenna_joint_08/MainCharacter:l_antenna_joint_09/MainCharacter:l_antenna_joint_010
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:antenna_parent_joint/MainCharacter:r_antenna_joint_01
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:antenna_parent_joint/MainCharacter:r_antenna_joint_01/MainCharacter:r_antenna_joint_02
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:antenna_parent_joint/MainCharacter:r_antenna_joint_01/MainCharacter:r_antenna_joint_02/MainCharacter:r_antenna_joint_03
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:antenna_parent_joint/MainCharacter:r_antenna_joint_01/MainCharacter:r_antenna_joint_02/MainCharacter:r_antenna_joint_03/MainCharacter:r_antenna_joint_04
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:antenna_parent_joint/MainCharacter:r_antenna_joint_01/MainCharacter:r_antenna_joint_02/MainCharacter:r_antenna_joint_03/MainCharacter:r_antenna_joint_04/MainCharacter:r_antenna_joint_05
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:antenna_parent_joint/MainCharacter:r_antenna_joint_01/MainCharacter:r_antenna_joint_02/MainCharacter:r_antenna_joint_03/MainCharacter:r_antenna_joint_04/MainCharacter:r_antenna_joint_05/MainCharacter:r_antenna_joint_06
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:antenna_parent_joint/MainCharacter:r_antenna_joint_01/MainCharacter:r_antenna_joint_02/MainCharacter:r_antenna_joint_03/MainCharacter:r_antenna_joint_04/MainCharacter:r_antenna_joint_05/MainCharacter:r_antenna_joint_06/MainCharacter:r_antenna_joint_07
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:antenna_parent_joint/MainCharacter:r_antenna_joint_01/MainCharacter:r_antenna_joint_02/MainCharacter:r_antenna_joint_03/MainCharacter:r_antenna_joint_04/MainCharacter:r_antenna_joint_05/MainCharacter:r_antenna_joint_06/MainCharacter:r_antenna_joint_07/MainCharacter:r_antenna_joint_08
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:antenna_parent_joint/MainCharacter:r_antenna_joint_01/MainCharacter:r_antenna_joint_02/MainCharacter:r_antenna_joint_03/MainCharacter:r_antenna_joint_04/MainCharacter:r_antenna_joint_05/MainCharacter:r_antenna_joint_06/MainCharacter:r_antenna_joint_07/MainCharacter:r_antenna_joint_08/MainCharacter:r_antenna_joint_09
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:antenna_parent_joint/MainCharacter:r_antenna_joint_01/MainCharacter:r_antenna_joint_02/MainCharacter:r_antenna_joint_03/MainCharacter:r_antenna_joint_04/MainCharacter:r_antenna_joint_05/MainCharacter:r_antenna_joint_06/MainCharacter:r_antenna_joint_07/MainCharacter:r_antenna_joint_08/MainCharacter:r_antenna_joint_09/MainCharacter:r_antenna_joint_010
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:brow_parent_joint
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:brow_parent_joint/MainCharacter:l_brow_parent_joint
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:brow_parent_joint/MainCharacter:l_brow_parent_joint/MainCharacter:l_brow_joint_01
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:brow_parent_joint/MainCharacter:l_brow_parent_joint/MainCharacter:l_brow_joint_02
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:brow_parent_joint/MainCharacter:l_brow_parent_joint/MainCharacter:l_brow_joint_03
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:brow_parent_joint/MainCharacter:l_brow_parent_joint/MainCharacter:l_brow_joint_04
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:brow_parent_joint/MainCharacter:r_brow_parent_joint
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:brow_parent_joint/MainCharacter:r_brow_parent_joint/MainCharacter:r_brow_joint_01
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:brow_parent_joint/MainCharacter:r_brow_parent_joint/MainCharacter:r_brow_joint_02
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:brow_parent_joint/MainCharacter:r_brow_parent_joint/MainCharacter:r_brow_joint_03
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:brow_parent_joint/MainCharacter:r_brow_parent_joint/MainCharacter:r_brow_joint_04
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:COG_joint
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:eyes_joint
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:eyes_joint/MainCharacter:l_eye_joint
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:eyes_joint/MainCharacter:r_eye_joint
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:hat_joint
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:head_joint
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:hip_parent_joint
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:hip_parent_joint/MainCharacter:l_hip
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:hip_parent_joint/MainCharacter:l_hip/MainCharacter:l_knee
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:hip_parent_joint/MainCharacter:l_hip/MainCharacter:l_knee/MainCharacter:l_ankle
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:hip_parent_joint/MainCharacter:l_hip/MainCharacter:l_knee/MainCharacter:l_ankle/MainCharacter:l_ball
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:hip_parent_joint/MainCharacter:l_hip/MainCharacter:l_knee/MainCharacter:l_ankle/MainCharacter:l_ball/MainCharacter:l_toe
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:hip_parent_joint/MainCharacter:r_hip
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:hip_parent_joint/MainCharacter:r_hip/MainCharacter:r_knee
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:hip_parent_joint/MainCharacter:r_hip/MainCharacter:r_knee/MainCharacter:r_ankle
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:hip_parent_joint/MainCharacter:r_hip/MainCharacter:r_knee/MainCharacter:r_ankle/MainCharacter:r_ball
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:hip_parent_joint/MainCharacter:r_hip/MainCharacter:r_knee/MainCharacter:r_ankle/MainCharacter:r_ball/MainCharacter:r_toe
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_01
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_01/MainCharacter:l_arm_ribbon_joint_01
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_02
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_02/MainCharacter:l_arm_ribbon_joint_02
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_03
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_03/MainCharacter:l_arm_ribbon_joint_03
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_04
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_04/MainCharacter:l_arm_ribbon_joint_04
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_05
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_05/MainCharacter:l_arm_ribbon_joint_05
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_06
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_06/MainCharacter:l_arm_ribbon_joint_06
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_07
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_07/MainCharacter:l_arm_ribbon_joint_07
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_08
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_08/MainCharacter:l_arm_ribbon_joint_08
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_09
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_09/MainCharacter:l_arm_ribbon_joint_09
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_10
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_10/MainCharacter:l_arm_ribbon_joint_10
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_11
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_11/MainCharacter:l_arm_ribbon_joint_11
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_12
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_12/MainCharacter:l_arm_ribbon_joint_12
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_13
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_arm_ribbon_follicle_13/MainCharacter:l_arm_ribbon_joint_13
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_wrist_joint
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_wrist_joint/MainCharacter:l_finger_1_joint_01
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_wrist_joint/MainCharacter:l_finger_1_joint_01/MainCharacter:l_finger_1_joint_02
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_wrist_joint/MainCharacter:l_finger_1_joint_01/MainCharacter:l_finger_1_joint_02/MainCharacter:l_finger_1_joint_03
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_wrist_joint/MainCharacter:l_finger_2_joint_01
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_wrist_joint/MainCharacter:l_finger_2_joint_01/MainCharacter:l_finger_2_joint_02
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_wrist_joint/MainCharacter:l_finger_2_joint_01/MainCharacter:l_finger_2_joint_02/MainCharacter:l_finger_2_joint_03
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_wrist_joint/MainCharacter:l_finger_3_joint_01
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_wrist_joint/MainCharacter:l_finger_3_joint_01/MainCharacter:l_finger_3_joint_02
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_wrist_joint/MainCharacter:l_finger_3_joint_01/MainCharacter:l_finger_3_joint_02/MainCharacter:l_finger_3_joint_03
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_wrist_joint/MainCharacter:l_finger_4_joint_01
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_wrist_joint/MainCharacter:l_finger_4_joint_01/MainCharacter:l_finger_4_joint_02
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:l_wrist_joint/MainCharacter:l_finger_4_joint_01/MainCharacter:l_finger_4_joint_02/MainCharacter:l_finger_4_joint_03
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:mouth_parent_joint
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:mouth_parent_joint/MainCharacter:mouth_bottom_joint_01
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:mouth_parent_joint/MainCharacter:mouth_bottom_joint_02
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:mouth_parent_joint/MainCharacter:mouth_bottom_joint_03
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:mouth_parent_joint/MainCharacter:mouth_bottom_joint_04
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:mouth_parent_joint/MainCharacter:mouth_bottom_joint_05
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:mouth_parent_joint/MainCharacter:mouth_top_joint_01
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:mouth_parent_joint/MainCharacter:mouth_top_joint_02
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:mouth_parent_joint/MainCharacter:mouth_top_joint_03
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:mouth_parent_joint/MainCharacter:mouth_top_joint_04
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:mouth_parent_joint/MainCharacter:mouth_top_joint_05
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:nose_joint
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_01
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_01/MainCharacter:r_arm_ribbon_joint_01
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_02
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_02/MainCharacter:r_arm_ribbon_joint_02
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_03
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_03/MainCharacter:r_arm_ribbon_joint_03
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_04
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_04/MainCharacter:r_arm_ribbon_joint_04
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_05
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_05/MainCharacter:r_arm_ribbon_joint_05
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_06
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_06/MainCharacter:r_arm_ribbon_joint_06
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_07
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_07/MainCharacter:r_arm_ribbon_joint_07
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_08
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_08/MainCharacter:r_arm_ribbon_joint_08
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_09
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_09/MainCharacter:r_arm_ribbon_joint_09
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_10
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_10/MainCharacter:r_arm_ribbon_joint_10
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_11
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_11/MainCharacter:r_arm_ribbon_joint_11
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_12
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_12/MainCharacter:r_arm_ribbon_joint_12
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_13
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_arm_ribbon_follicle_13/MainCharacter:r_arm_ribbon_joint_13
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_wrist_joint
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_wrist_joint/MainCharacter:r_finger_1_joint_01
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_wrist_joint/MainCharacter:r_finger_1_joint_01/MainCharacter:r_finger_1_joint_02
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_wrist_joint/MainCharacter:r_finger_1_joint_01/MainCharacter:r_finger_1_joint_02/MainCharacter:r_finger_1_joint_03
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_wrist_joint/MainCharacter:r_finger_2_joint_01
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_wrist_joint/MainCharacter:r_finger_2_joint_01/MainCharacter:r_finger_2_joint_02
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_wrist_joint/MainCharacter:r_finger_2_joint_01/MainCharacter:r_finger_2_joint_02/MainCharacter:r_finger_2_joint_03
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_wrist_joint/MainCharacter:r_finger_3_joint_01
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_wrist_joint/MainCharacter:r_finger_3_joint_01/MainCharacter:r_finger_3_joint_02
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_wrist_joint/MainCharacter:r_finger_3_joint_01/MainCharacter:r_finger_3_joint_02/MainCharacter:r_finger_3_joint_03
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_wrist_joint/MainCharacter:r_finger_4_joint_01
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_wrist_joint/MainCharacter:r_finger_4_joint_01/MainCharacter:r_finger_4_joint_02
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:r_wrist_joint/MainCharacter:r_finger_4_joint_01/MainCharacter:r_finger_4_joint_02/MainCharacter:r_finger_4_joint_03
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:spine_joint
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:wing_parent_joint
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:wing_parent_joint/MainCharacter:l_wing_joint
+        weight: 1
+      - path: MainCharacter:Skeleton/MainCharacter:wing_parent_joint/MainCharacter:r_wing_joint
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
@@ -443,24 +816,25 @@ ModelImporter:
     useFileScale: 1
   tangentSpace:
     normalSmoothAngle: 60
-    splitTangentsAcrossUV: 1
     normalImportMode: 0
-    tangentImportMode: 1
+    tangentImportMode: 4
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
     human: []
     skeleton: []
-    armTwist: .5
-    foreArmTwist: .5
-    upperLegTwist: .5
-    legTwist: .5
-    armStretch: .0500000007
-    legStretch: .0500000007
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
+    hasTranslationDoF: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 2
+  humanoidOversampling: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
