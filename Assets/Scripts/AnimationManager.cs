@@ -297,7 +297,7 @@ public class AnimationManager : Observer {
 		animator.ResetTrigger("Landed");
 		animator.ResetTrigger("Throw");
 		animator.ResetTrigger("Point");
-		animator.SetTrigger(randomAction());
+		animator.SetTrigger(randomAnimation(actionList));
 		GetComponent<AudioSource>().clip = null;
 		clearCards();
 	}
@@ -345,10 +345,10 @@ public class AnimationManager : Observer {
 			bodyParts[i].transform.GetChild(0).gameObject.SetActive(false);
 		}
 	}
-	string randomAction ()
+	string randomAnimation (string[] s)
 	{
-		int val = Random.Range(0, actionList.Length);
-		return actionList[val];
+		int val = Random.Range(0, s.Length);
+		return s[val];
 	}
 	/// <summary>
 	/// Changes the body part.
