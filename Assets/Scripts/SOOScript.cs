@@ -130,15 +130,18 @@ public class SOOScript : Observer {
 			return;
 		for (int i = 0; i < stimArray.Length; i++)
 		{
-			Animator m = stimArray[i].GetComponent<Animator>();
-			if (m != null)
+			if(stimArray[i] != null)
 			{
-				if(param == "set")
-					m.SetTrigger("Walk_Left");
-				else if (param == "right")
-					m.SetTrigger("Walk_Right");
-				else if (param == "reset")
-					m.SetTrigger("Landed");
+				Animator m = stimArray[i].GetComponent<Animator>();
+				if (m != null)
+				{
+					if(param == "set")
+						m.SetTrigger("Walk_Left");
+					else if (param == "right")
+						m.SetTrigger("Walk_Right");
+					else if (param == "reset")
+						m.SetTrigger("Landed");
+				}
 			}
 		}
 	}

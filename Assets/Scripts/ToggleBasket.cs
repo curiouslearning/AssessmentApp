@@ -48,7 +48,7 @@ public class ToggleBasket : Observer{
 		}
 		if (e.type == eType.Selected || e.type == eType.TimedOut)
 		{
-			this.GetComponent<MeshRenderer>().material.mainTexture = null;
+			//this.GetComponent<MeshRenderer>().material.mainTexture = null;
 		}
 		if (e.type == eType.Ready && currentCategory != Category.Customization)
 		{

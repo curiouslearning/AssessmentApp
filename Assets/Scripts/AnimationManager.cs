@@ -10,6 +10,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class AnimationManager : Observer {
 	Animator animator;
+	Subject eventHandler;
 	public Animator squareCard;
 	public Animator rectangleCard;
 	public Animator basketController;
@@ -67,7 +68,8 @@ public class AnimationManager : Observer {
     /// </summary>
 
 	void Start()
-	{		
+	{	
+		eventHandler = GetComponent<Subject> ();	
 		addSelfToSubjects();
 		scoreTracker = GameObject.Find("Main Camera").GetComponent<ScoreTracker>();
 	}
@@ -227,20 +229,22 @@ public class AnimationManager : Observer {
 				hideHighlighter();
 			}
 		}	
-		if (e.type == eType.Selected || e.type == eType.TimedOut)
+		if (e.type == eType.TimedOut) {
+			startTransition ();
+			return;
+		}
+		if(e.type == eType.Selected)
 		{
 			startPayoff();
-			if(e.type == eType.Selected)
+			if(e.signaler.GetComponent<StimulusScript>() != null && e.signaler.GetComponent<StimulusScript>().isOption()) //if selected object is a body part
 			{
-				if(e.signaler.GetComponent<StimulusScript>() != null && e.signaler.GetComponent<StimulusScript>().isOption()) //if selected object is a body part
-				{
-					StimulusScript s = e.signaler.GetComponent<StimulusScript>();
-					changeBodyPart(s.getBodyPart(), s.getTextureName());
-					Destroy (e.signaler);
-				}
+				StimulusScript s = e.signaler.GetComponent<StimulusScript>();
+				changeBodyPart(s.getBodyPart(), s.getTextureName());
+				Destroy (e.signaler);
 			}
 			return;
 		}
+
 		if (e.type == eType.Grab)
 		{
 			animator.SetTrigger("Point");
@@ -298,10 +302,13 @@ public class AnimationManager : Observer {
 		animator.ResetTrigger ("Throw");
 		animator.ResetTrigger ("Point");
 		animator.SetTrigger (randomAnimation (payoffList));
+		GetComponent<AudioSource>().clip = null;
+		clearCards();
 	}	
 
 	void startTransition ()
 	{
+		eventHandler.sendEvent (eType.Transition);
 		animator.SetBool("ShowCard", false);
 		hideCards();
 		animator.ResetTrigger("Landed");
@@ -477,6 +484,5 @@ public class AnimationManager : Observer {
 			}
 			audioCounter = 0f;
 		}
-
 	}
 }

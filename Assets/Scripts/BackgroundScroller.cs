@@ -32,14 +32,14 @@ public class BackgroundScroller : Observer {
 		{ 
 			toggleScroll(false);
 		}
-		else if (e.type == eType.Selected || e.type == eType.TimedOut)
+		else if (e.type == eType.Transition|| e.type == eType.TimedOut)
 		{
 			toggleScroll(true);
 		}
 	} 
 	public override void onNotify (EventInstance<bool> e)
 	{
-		if(e.type == eType.Selected)
+		if(e.type == eType.Transition)
 			toggleScroll(true);
 	}
 

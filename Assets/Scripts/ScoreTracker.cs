@@ -28,6 +28,7 @@ public class ScoreTracker : Observer {
 	GameObject stimOrgOb;
 	SOOScript sooHolder;
 	Animator animator;
+	public Subject mainChar;
 	public GameObject rhymeRecep1;
 	public GameObject rhymeRecep2;
     public Button replayButtonPrefab;
@@ -132,6 +133,7 @@ public class ScoreTracker : Observer {
 		trashHolder = gCollector.GetComponent<CollisionNotification>();	
 		trashHolder.sub.addObserver(new Subject.GameObjectNotify(this.onNotify));
 		this.GetComponent<TouchProcessor>().eventWrapper.addObserver(new Subject.GameObjectNotify(this.onNotify));
+		mainChar.addObserver (new Subject.GameObjectNotify (this.onNotify));
 	}
 
 	// ********************************************************
@@ -159,36 +161,36 @@ public class ScoreTracker : Observer {
 		{
 			pauseTimer = true;
 		}
-		if(e.type == eType.FingerUp)
-		{
+		if (e.type == eType.FingerUp) {
 			pauseTimer = false;
-		}
-		else if (e.type == eType.Trashed)
-		{
-			s.addTime(questionTime);
-
-			Destroy(e.signaler);
+		} 
+		else if (e.type == eType.Trashed) {
+			s.addTime (questionTime);
+			pauseTimer = false;
+			Destroy (e.signaler);
 			//don't end the world
 			
 			//figure out how to make this happen after score tracker updates category
-			changeQuestion();
+			changeQuestion ();
 			return; //prevent repeated action on same event
-		}
-		else if (e.type == eType.Selected)
-		{
-			if(e.signaler.GetComponent<StimulusScript>() != null && e.signaler.GetComponent<StimulusScript>().returnIsTarget())
-			{
-				s.addScore(true);
+		} 
+		else if (e.type == eType.Selected) {
+			pauseTimer = true;
+			if (e.signaler.GetComponent<StimulusScript> () != null && e.signaler.GetComponent<StimulusScript> ().returnIsTarget ()) {
+				s.addScore (true);
+			} else {
+				s.addScore (false);
 			}
-			else{s.addScore(false);}
 
-			if( e.signaler.GetComponent<StimulusScript>().isOption()){
-				e.signaler.gameObject.SetActive(false);
-			}
-			else {
+			if (e.signaler.GetComponent<StimulusScript> ().isOption ()) {
+				e.signaler.gameObject.SetActive (false);
+			} else {
 				Destroy (e.signaler);
 			}
-			sooHolder.move(1);
+			return;
+		} else if (e.type == eType.Transition) {
+			Debug.Log ("transition!");
+			sooHolder.move (1);
 			return;
 		}
 	}
