@@ -229,7 +229,7 @@ public class AnimationManager : Observer {
 		}	
 		if (e.type == eType.Selected || e.type == eType.TimedOut)
 		{
-			startTransition();
+			startPayoff();
 			if(e.type == eType.Selected)
 			{
 				if(e.signaler.GetComponent<StimulusScript>() != null && e.signaler.GetComponent<StimulusScript>().isOption()) //if selected object is a body part
@@ -358,6 +358,7 @@ public class AnimationManager : Observer {
 	string randomAnimation (string[] s)
 	{
 		int val = Random.Range(0, s.Length);
+		Debug.Log ("using animation: " + s [val]);
 		return s[val];
 	}
 	/// <summary>
