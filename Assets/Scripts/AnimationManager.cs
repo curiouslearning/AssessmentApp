@@ -31,6 +31,7 @@ public class AnimationManager : Observer {
 	Animator partHighlighter;
 	public Highlighter mainHighlighter;
 	public string [] actionList;
+	public string [] payoffList;
 	float audioCounter;
 	public float audioInterval;
 	public SpriteRenderer talkBubble;
@@ -289,6 +290,15 @@ public class AnimationManager : Observer {
 		basketController.SetTrigger("Search");
 	}	
 
+	void startPayoff()
+	{
+		animator.SetBool ("ShowCard", false);
+		hideCards ();
+		animator.ResetTrigger ("Landed");
+		animator.ResetTrigger ("Throw");
+		animator.ResetTrigger ("Point");
+		animator.SetTrigger (randomAnimation (payoffList));
+	}	
 
 	void startTransition ()
 	{
