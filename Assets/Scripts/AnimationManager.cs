@@ -14,6 +14,7 @@ public class AnimationManager : Observer {
 	public Animator squareCard;
 	public Animator rectangleCard;
 	public Animator basketController;
+	public Animator rakeController;
 	ScoreTracker scoreTracker;
 	Material square;
 	Material rectangle;
@@ -293,6 +294,10 @@ public class AnimationManager : Observer {
 	{
 		basketController.SetTrigger("Search");
 	}	
+	void startRake ()
+	{
+		rakeController.SetTrigger ("Rake");
+	}
 
 	void startPayoff()
 	{
