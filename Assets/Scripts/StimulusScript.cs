@@ -234,6 +234,11 @@ public class StimulusScript : MonoBehaviour{
 		}
 			
 	}
+	void tokenTalk ()
+	{
+		token.talk ();
+	}
+
 
 	
 	void Update () {

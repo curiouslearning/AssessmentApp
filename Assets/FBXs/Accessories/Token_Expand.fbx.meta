@@ -52,7 +52,7 @@ ModelImporter:
     400042: Token_Joint_20
     400044: token_joint_group
     4300000: token
-    7400000: Take 001
+    7400000: Speak
     9500000: //RootNode
     13700000: token
   materials:
@@ -75,7 +75,81 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Speak
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 91
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: token
+        weight: 1
+      - path: Token_Joint_19
+        weight: 1
+      - path: token_joint_group
+        weight: 1
+      - path: token_joint_group/Token_Joint_01
+        weight: 1
+      - path: token_joint_group/Token_Joint_02
+        weight: 1
+      - path: token_joint_group/Token_Joint_03
+        weight: 1
+      - path: token_joint_group/Token_Joint_04
+        weight: 1
+      - path: token_joint_group/Token_Joint_05
+        weight: 1
+      - path: token_joint_group/Token_Joint_06
+        weight: 1
+      - path: token_joint_group/Token_Joint_07
+        weight: 1
+      - path: token_joint_group/Token_Joint_08
+        weight: 1
+      - path: token_joint_group/Token_Joint_09
+        weight: 1
+      - path: token_joint_group/Token_Joint_10
+        weight: 1
+      - path: token_joint_group/Token_Joint_11
+        weight: 1
+      - path: token_joint_group/Token_Joint_12
+        weight: 1
+      - path: token_joint_group/Token_Joint_13
+        weight: 1
+      - path: token_joint_group/Token_Joint_14
+        weight: 1
+      - path: token_joint_group/Token_Joint_15
+        weight: 1
+      - path: token_joint_group/Token_Joint_16
+        weight: 1
+      - path: token_joint_group/Token_Joint_17
+        weight: 1
+      - path: token_joint_group/Token_Joint_18
+        weight: 1
+      - path: token_joint_group/Token_Joint_20
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []

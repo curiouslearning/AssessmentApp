@@ -7,8 +7,8 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: tokenballoon-color
-  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: _ALPHAPREMULTIPLY_ON
+  m_Shader: {fileID: 4800000, guid: 3b7e49b46c864864fa02d6800488b982, type: 3}
+  m_ShaderKeywords: _ALPHAPREMULTIPLY_ON _MULTIPLYMODE
   m_LightmapFlags: 5
   m_CustomRenderQueue: 3000
   stringTagMap:
@@ -83,11 +83,11 @@ Material:
       data:
         first:
           name: _SrcBlend
-        second: 1
+        second: 2
       data:
         first:
           name: _DstBlend
-        second: 10
+        second: 0
       data:
         first:
           name: _Cutoff
@@ -123,10 +123,18 @@ Material:
       data:
         first:
           name: _Mode
-        second: 3
+        second: 1
       data:
         first:
           name: _Metallic
+        second: 0
+      data:
+        first:
+          name: _AlphaFactor
+        second: 1.5
+      data:
+        first:
+          name: _QueueOffset
         second: 0
     m_Colors:
       data:

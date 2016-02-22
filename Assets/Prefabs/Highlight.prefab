@@ -26,8 +26,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 172994}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.416229665, y: .336587638, z: -.585015595}
-  m_LocalScale: {x: .0277120639, y: .0277120713, z: .415681005}
+  m_LocalPosition: {x: -0.41622967, y: 0.33658764, z: -0.5850156}
+  m_LocalScale: {x: 0.027712064, y: 0.027712071, z: 0.415681}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -49,8 +49,10 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
   m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_AutoUVMaxDistance: .5
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
@@ -90,6 +92,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e585498dc15e642b8b2f87e27a250ad0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  subjects: []
+  start: 
+  stop: 
+  tex: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -105,6 +111,10 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: cebba0dce71994d51aa0009d49af6f12, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 172994}

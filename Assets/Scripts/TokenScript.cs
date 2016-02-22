@@ -43,6 +43,12 @@ public class TokenScript : MonoBehaviour {
 		GetComponent<Animator>().enabled = true;
 		GetComponent<Animator>().SetBool("Selected", false);
 	}
+	public void talk()
+	{
+		GetComponent<Animator> ().enabled = false;
+		GetComponent<Animator> ().SetTrigger ("Speak");
+	}
+
 	public void setPos ()
 	{
 		startPos = transform.position;
