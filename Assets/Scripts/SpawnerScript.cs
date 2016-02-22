@@ -176,15 +176,15 @@ public class SpawnerScript : MonoBehaviour {
 				s.isTarget = false;
 				answer = randomAdd (answer, s);
 			}
-            if (matchesCriteria(cat, diffLevel, type, s) && !answer.Contains(s) && (cat == Category.RhymingWordMatching)) // special case for rhyming
+            /*if (matchesCriteria(cat, diffLevel, type, s) && !answer.Contains(s) && (cat == Category.RhymingWordMatching)) // special case for rhyming
             {
                 if (s.audio != hostStim)
                 {
                     s.isTarget = false;
                     answer = randomAdd(answer, s);
                 }
-            }
-                counter++;
+            }*/
+            counter++;
 		}
 		//randomize order here
 		return answer;

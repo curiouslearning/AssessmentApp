@@ -363,9 +363,6 @@ public class ScoreTracker : Observer {
 				return Category.SightWordIdentification;
 
 			case Category.SightWordIdentification:
-				return Category.RhymingWordMatching;
-
-			case Category.RhymingWordMatching:
 				return Category.BlendingWordIdentification;
 
 			case Category.BlendingWordIdentification:
