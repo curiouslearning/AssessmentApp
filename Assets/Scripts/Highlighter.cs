@@ -39,7 +39,7 @@ public class Highlighter : Observer {
 	}
 	bool isPlaying ()
 	{
-		return (controller.GetCurrentAnimatorStateInfo(0).shortNameHash == Animator.StringToHash("Highlight")|| controller.GetAnimatorTransitionInfo(0).anyState);
+		return (controller.GetCurrentAnimatorStateInfo(0).shortNameHash == Animator.StringToHash("Highlight80")|| controller.GetAnimatorTransitionInfo(0).anyState);
 	}
 	/// <summary>
 	/// Begin cycling the highlight animation.
@@ -54,7 +54,7 @@ public class Highlighter : Observer {
 		else
 		{
 			this.GetComponent<MeshRenderer>().material.mainTexture = tex;
-			controller.SetBool("Highlight", true);
+			controller.SetBool("Highlight80", true);
 		}
 		
 	}
@@ -70,7 +70,7 @@ public class Highlighter : Observer {
 		else
 		{
 			t = tex;
-			controller.SetTrigger("OneHighlight");
+			controller.SetTrigger("OneHighlight80");
 		}
 	}
 	
@@ -79,7 +79,7 @@ public class Highlighter : Observer {
 	/// </summary>
 	public void reset () 
 	{
-		controller.SetBool("Highlight", false);
+		controller.SetBool("Highlight80", false);
 		this.GetComponent<MeshRenderer>().material.mainTexture = null;
 		//this.gameObject.SetActive(false);
 	}

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Animation manager Extends Observer.
@@ -9,8 +10,11 @@ using System.Collections.Generic;
 /// </summary>
 public class AnimationManager : Observer {
 	Animator animator;
+	Subject eventHandler;
 	public Animator squareCard;
 	public Animator rectangleCard;
+	public Animator basketController;
+	public Animator rakeController;
 	ScoreTracker scoreTracker;
 	Material square;
 	Material rectangle;
@@ -19,6 +23,7 @@ public class AnimationManager : Observer {
 	const int NUMBODYPARTS = 7;
 	const int NUMOPTIONS = 10;
 	public GameObject[] bodyParts;
+	public Dictionary <int, GameObject> mirrorParts;
 	public Texture2D[][] optionTextures;
 	Dictionary <string, Texture2D> optionDict; //for fast lookup of a selected texture
 	public int defaultPos; //standard index for the default texture for each body part
@@ -28,15 +33,24 @@ public class AnimationManager : Observer {
 	Animator partHighlighter;
 	public Highlighter mainHighlighter;
 	public string [] actionList;
+	public string [] payoffList;
 	float audioCounter;
 	public float audioInterval;
 	public SpriteRenderer talkBubble;
 	public Sprite talkBubbleSprite;
 
-	// Use this for initialization
-	void Awake () {
+    /// <summary>
+    /// create dictionaries, initialize main character
+    /// </summary>
+
+    void Awake () {
+		Application.targetFrameRate = 15;
 		audioCounter = 0;
 		optionDict = new Dictionary<string, Texture2D>();
+		mirrorParts = new Dictionary<int, GameObject>();
+		int[] n = {2,5,6};
+		string [] s = {"MainCharacter:r_antenna","MainCharacter:r_wing","MainCharacter:r_eye"};
+		addMirrorParts (n, s, mirrorParts); 
 		bodyPartCustomized = new bool[NUMBODYPARTS];
 		optionTextures = new Texture2D[NUMBODYPARTS][];
 		for(int i = 0; i < NUMBODYPARTS; i++)
@@ -48,18 +62,25 @@ public class AnimationManager : Observer {
 		square = squareCard.GetComponent<MeshRenderer>().material;
 		rectangle = rectangleCard.GetComponent<MeshRenderer>().material;
 		initTextures();
-	
 	}
+
+    /// <summary>
+    /// call addSelfToSubjects, ensure scoreTracker finds "Main Camera"
+    /// </summary>
+
 	void Start()
-	{		
+	{	
+		eventHandler = GetComponent<Subject> ();	
 		addSelfToSubjects();
 		scoreTracker = GameObject.Find("Main Camera").GetComponent<ScoreTracker>();
 	}
 
 	/// <summary>
 	/// Function for initializing the Observer design pattern.
-	//  NOTE: ANY NEW SUBJECT MUST BE MANUALLY INSERTED INTO THE ARRAY EITHER IN THE EDITOR OR IN START()
+	/// NOTE: ANY NEW SUBJECT MUST BE MANUALLY INSERTED INTO THE ARRAY EITHER IN THE EDITOR OR IN START()
+    /// called by Start()
 	/// </summary>
+    
 	void addSelfToSubjects()
 	{
 		GameObject temp;
@@ -71,6 +92,23 @@ public class AnimationManager : Observer {
 			
 		}
 	}	
+
+    /// <summary>
+    /// needs summary; called in Awake()
+    /// </summary>
+    /// <param name="numbers">array of ints</param>
+    /// <param name="parts">array of strings</param>
+    /// <param name="mirror">Dictionary mapping ints and GameObjects</param>
+
+	void addMirrorParts(int[] numbers, string [] parts, Dictionary<int, GameObject> mirror)
+	{
+		for (int i = 0; i < numbers.Length; i++)
+		{
+			GameObject g = GameObject.Find (parts[i]);
+			mirror.Add (numbers[i], g);
+		}
+	}
+
 	public override void registerGameObjectWithSoo(GameObject SOO)
 	{
 		base.registerGameObjectWithSoo(SOO);
@@ -79,6 +117,7 @@ public class AnimationManager : Observer {
 	/// <summary>
 	/// Parses the optionsList data into the textures array.
 	/// </summary>
+
 	void parseData()
 	{
 		sourceLines = optionsList.text.Split('\n');
@@ -94,6 +133,11 @@ public class AnimationManager : Observer {
 
 		}
 	}
+
+    /// <summary>
+    /// assign appropriate audio or visual media to the main character; called in selectTarget in SpawnerScript
+    /// </summary>
+    /// <param name="m">serStim</param>
 
 	public void setHostMedia (serStim m)
 	{
@@ -114,6 +158,11 @@ public class AnimationManager : Observer {
 		}
 	}
 
+    /// <summary>
+    /// Helper method for setHostMedia
+    /// </summary>
+    /// <param name="a">an AudioClip</param>
+
 	void setHostMediaInternal (AudioClip a)
 	{
 		AudioSource host = GetComponent<AudioSource>();
@@ -121,6 +170,12 @@ public class AnimationManager : Observer {
 		square.mainTexture = null;
 		rectangle.mainTexture = null;
 	}
+
+    /// <summary>
+    /// Helper method  for setHostMedia
+    /// </summary>
+    /// <param name="s">a Sprite</param>
+
 	void setHostMediaInternal (Sprite s)
 	{
 		if ((s.rect.xMax-s.rect.xMin) >= (s.rect.yMax-s.rect.yMin +50)) //if the texture is a rectangle
@@ -133,9 +188,11 @@ public class AnimationManager : Observer {
 			rectangle.mainTexture = null;
 		}
 	}
+
 	/// <summary>
 	/// Creates atlases for each body part, sets the UVs to default values
 	/// </summary>
+    
 	void initTextures ()
 	{
 		parseData();
@@ -154,11 +211,11 @@ public class AnimationManager : Observer {
 		}		
 	}
 
-
 	/// <summary>
 	/// Method for handling events this class is listening for
 	/// </summary>
 	/// <param name="e">Event Instance.</param>
+    
 	public override void onNotify (EventInstance<GameObject> e)
 	{
 		if (e.type == eType.NewQuestion)
@@ -173,20 +230,22 @@ public class AnimationManager : Observer {
 				hideHighlighter();
 			}
 		}	
-		if (e.type == eType.Selected || e.type == eType.TimedOut)
+		if (e.type == eType.TimedOut) {
+			startTransition ();
+			return;
+		}
+		if(e.type == eType.Selected)
 		{
-			startTransition();
-			if(e.type == eType.Selected)
+			startPayoff();
+			if(e.signaler.GetComponent<StimulusScript>() != null && e.signaler.GetComponent<StimulusScript>().isOption()) //if selected object is a body part
 			{
-				if(e.signaler.GetComponent<StimulusScript>() != null && e.signaler.GetComponent<StimulusScript>().isOption()) //if selected object is a body part
-				{
-					StimulusScript s = e.signaler.GetComponent<StimulusScript>();
-					changeBodyPart(s.getBodyPart(), s.getTextureName());
-					Destroy (e.signaler);
-				}
+				StimulusScript s = e.signaler.GetComponent<StimulusScript>();
+				changeBodyPart(s.getBodyPart(), s.getTextureName());
+				Destroy (e.signaler);
 			}
 			return;
 		}
+
 		if (e.type == eType.Grab)
 		{
 			animator.SetTrigger("Point");
@@ -199,7 +258,7 @@ public class AnimationManager : Observer {
 			if(GetComponent<AudioSource>().clip != null)
 			{
 				animator.SetTrigger("Talk");
-			}
+            }
 			else if( square.mainTexture != null || rectangle.mainTexture != null)
 			{
 				animator.SetBool("ShowCard", true);
@@ -218,14 +277,49 @@ public class AnimationManager : Observer {
 		}
 	}
 
+	void carryBasket ()
+	{
+		Debug.Log("Carrying");
+		basketController.SetBool("Carry", true);
+	}
+	
+	void throwBasket ()
+	{
+		Debug.Log("throw");
+		basketController.SetBool("Carry", false);
+		basketController.SetTrigger("Throw");
+	}
+
+	void searchBasket ()
+	{
+		basketController.SetTrigger("Search");
+	}	
+	void startRake ()
+	{
+		rakeController.SetTrigger ("Rake");
+	}
+
+	void startPayoff()
+	{
+		animator.SetBool ("ShowCard", false);
+		hideCards ();
+		animator.ResetTrigger ("Landed");
+		animator.ResetTrigger ("Throw");
+		animator.ResetTrigger ("Point");
+		animator.SetTrigger (randomAnimation (payoffList));
+		GetComponent<AudioSource>().clip = null;
+		clearCards();
+	}	
+
 	void startTransition ()
 	{
+		eventHandler.sendEvent (eType.Transition);
 		animator.SetBool("ShowCard", false);
 		hideCards();
 		animator.ResetTrigger("Landed");
 		animator.ResetTrigger("Throw");
 		animator.ResetTrigger("Point");
-		animator.SetTrigger(randomAction());
+		animator.SetTrigger(randomAnimation(actionList));
 		GetComponent<AudioSource>().clip = null;
 		clearCards();
 	}
@@ -273,10 +367,11 @@ public class AnimationManager : Observer {
 			bodyParts[i].transform.GetChild(0).gameObject.SetActive(false);
 		}
 	}
-	string randomAction ()
+	string randomAnimation (string[] s)
 	{
-		int val = Random.Range(0, actionList.Length);
-		return actionList[val];
+		int val = Random.Range(0, s.Length);
+		Debug.Log ("using animation: " + s [val]);
+		return s[val];
 	}
 	/// <summary>
 	/// Changes the body part.
@@ -284,10 +379,17 @@ public class AnimationManager : Observer {
 	/// <param name="part">Index of the bone to be changed in bodyParts.</param>
 	/// <param name="newTexture"> Replacement Texture.</param>
 	void changeBodyPart (int part, string newTexture)
-	{
+	{    
+		if (mirrorParts.ContainsKey(part))
+		{
+			GameObject mirror = mirrorParts[part];
+			mirror.GetComponent<SkinnedMeshRenderer>().material.mainTexture = optionDict[newTexture];
+		}
 		GameObject temp = bodyParts[part];	
 		temp.GetComponent<SkinnedMeshRenderer>().material.mainTexture = optionDict[newTexture];
 	}
+	
+	
 
 	/// <summary>
 	/// Gets the options for the first not-customized body part.
@@ -299,7 +401,7 @@ public class AnimationManager : Observer {
 		options = new List<Sprite>();
 		int curBodyPart = getNextBodyPart();
 		Texture2D[] textures = optionTextures[curBodyPart];
-		for(int j = 0; j < textures.Length; j++)  //convert and package options
+		for(int j = 1; j < textures.Length; j++)  //convert and package options
 		{
 			if(textures[j] != null)
 			{
@@ -326,6 +428,10 @@ public class AnimationManager : Observer {
 			return i-1;
 		return i;
 	}
+	/// <summary>
+	/// Gets the next body part in the customization line, and marks it as customized.
+	/// </summary>
+	/// <returns>The next body part.</returns>
 	int getNextBodyPart()
 	{
 		int i =0;
@@ -345,11 +451,12 @@ public class AnimationManager : Observer {
 	{
 		Debug.Log("play");
 		AudioSource a = GetComponent<AudioSource>();
-		if(a != null && !a.isPlaying)
-		{
-			mainHighlighter.highlightOnce();
-			a.Play();	
-		}
+        if (a != null && !a.isPlaying)
+        {
+            talkBubble.sprite = talkBubbleSprite;
+            mainHighlighter.highlightOnce();
+            a.Play();
+        }
 	}
 	public void resetTalk ()
 	{
@@ -369,9 +476,6 @@ public class AnimationManager : Observer {
 	void Update () {
 		if(GetComponent<AudioSource>().clip != null)
 		{
-			if(!(talkBubble.sprite == talkBubbleSprite)){
-				talkBubble.sprite = talkBubbleSprite;
-			}
 			audioCounter += Time.deltaTime;
 			if(audioCounter >= audioInterval && !GetComponent<AudioSource>().isPlaying)
 			{
@@ -385,6 +489,5 @@ public class AnimationManager : Observer {
 			}
 			audioCounter = 0f;
 		}
-
 	}
 }

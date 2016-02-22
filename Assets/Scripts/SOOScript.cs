@@ -74,7 +74,24 @@ public class SOOScript : Observer {
 	{
 		transform.position = pos;
 	}
-	
+
+    /// <summary>
+    /// method for properly sizing box colliders during customization events
+    /// </summary>
+
+    public void setBoxColliders ()
+	{
+		for (int i = 0; i < stimArray.Length; i++)
+		{
+			Vector2 boxOrig = stimArray[i].GetComponent<BoxCollider2D>().size;
+			Debug.Log("original size: (" + stimArray[i].GetComponent<BoxCollider2D>().size.x + "," +stimArray[i].GetComponent<BoxCollider2D>().size.y + ")");
+			stimArray[i].GetComponent<BoxCollider2D>().size = new Vector2((boxOrig.x * 3.3333f), (boxOrig.y * 3.3333f));
+			Debug.Log("new size: (" + stimArray[i].GetComponent<BoxCollider2D>().size.x + "," +stimArray[i].GetComponent<BoxCollider2D>().size.y + ")");
+	/*		boxOrig.x = ((boxOrig.x * 100f)/30f);
+			boxOrig.y = ((boxOrig.y * 100f)/30f);
+			stimArray[i].GetComponent<BoxCollider2D>().size.Set(boxOrig.x,boxOrig.y); */
+		}
+	}	
 
 //******************
 // Other functions *
@@ -92,6 +109,7 @@ public class SOOScript : Observer {
 /// Move the SOO to the next destination (center of screen or Garbage Collector)
 /// </summary>
 /// <param name="dest">The next Destination.</param>
+
 	public void move(int dest)
 	{
 		moving = true;
@@ -101,27 +119,37 @@ public class SOOScript : Observer {
 		setWalk("set");
 	}
 
+    /// <summary>
+    /// sets triggers instructing the main character on where and when to walk
+    /// </summary>
+    /// <param name="param">a string</param>
+
 	void setWalk(string param)
 	{
 		if(stimArray == null)
 			return;
 		for (int i = 0; i < stimArray.Length; i++)
 		{
-			Animator m = stimArray[i].GetComponent<Animator>();
-			if (m != null)
+			if(stimArray[i] != null)
 			{
-				if(param == "set")
-					m.SetTrigger("Walk_Left");
-				else if (param == "right")
-					m.SetTrigger("Walk_Right");
-				else if (param == "reset")
-					m.SetTrigger("Landed");
+				Animator m = stimArray[i].GetComponent<Animator>();
+				if (m != null)
+				{
+					if(param == "set")
+						m.SetTrigger("Walk_Left");
+					else if (param == "right")
+						m.SetTrigger("Walk_Right");
+					else if (param == "reset")
+						m.SetTrigger("Landed");
+				}
 			}
 		}
 	}
-/// <summary>
-/// Tell the stimuli to update homePos to their current position, for snap-back functionality
-/// </summary>
+
+    /// <summary>
+    /// Tell the stimuli to update homePos to their current position, for snap-back functionality
+    /// </summary>
+    
 	void updatePos()
 	{
 		for (int i = 0; i < stimArray.Length; i++)

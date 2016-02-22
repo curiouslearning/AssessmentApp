@@ -20,6 +20,7 @@ public class SpawnerScript : MonoBehaviour {
 	public TextAsset stimList;
 	public GameObject sooPrefab;
 	public GameObject stimPrefab;
+	public Texture2D[] secondaryAtlases;
 	//components
 	public GameObject character;
 	public AnimationManager host;
@@ -39,9 +40,12 @@ public class SpawnerScript : MonoBehaviour {
 	Vector3[] positions;
 	public Sprite noSprite;
 	public Sprite visStimSprite;
-	
-	// Use this for initialization
-	void Awake () 
+
+    /// <summary>
+    /// Used for initialization; creates stimPool, parses data
+    /// </summary>
+
+    void Awake () 
 	{
 		diffParser = new Dictionary<string, Difficulty>();
 		diffParser.Add ("Easy", Difficulty.Easy);
@@ -53,6 +57,10 @@ public class SpawnerScript : MonoBehaviour {
 		stimPool = new List<serStim>();
 		parseData();
 	}
+
+    /// <summary>
+    /// creates a dictionary for the different Categories; called in Awake()
+    /// </summary>
 
 	void initCatParser()	
 	{
@@ -67,6 +75,11 @@ public class SpawnerScript : MonoBehaviour {
 		catParser.Add("RhymingWordMatching",Category.RhymingWordMatching);
 		catParser.Add("SightWordIdentification",Category.SightWordIdentification);
 	}
+
+    /// <summary>
+    /// parses data stored in StimuliList.csv; called in Awake()
+    /// </summary>
+
 	void parseData()
 	{ 
 		string[] sourceLines = stimList.text.Split('\n');
@@ -133,42 +146,69 @@ public class SpawnerScript : MonoBehaviour {
 		type = setType(cat);
 		if(type == "gameOver")
 			return null;
+            // return null if a complete SOO cannot be created
+            int numMatch = 0;
+            for (int i = 0; i < stimPool.Count; i++)
+                
+                if (matchesCriteria(cat, diffLevel, type, stimPool[i])) 
+                    numMatch++;
+                
+                if (numMatch < 4)
+                return null;
+            
 		//find and add the target stimulus
 		serStim temp = selectTarget(cat, diffLevel, type);
+        string hostStim = temp.hostStim;
 		answer.Add (temp);
-		//find and add the remaining stimuli
-		while (answer.Count < 4) 
+        //find and add the remaining stimuli
+        while (answer.Count < 4) 
 		{
+            counter = (int)Random.Range(0, stimPool.Count); // RANDOM STARTING POINT
 			//do revolution counting in a separate function
 			if (counter == stimPool.Count)
 			{
 				counter = 0;	
 			}
-			serStim s = stimPool[counter];	
-			// when a list of 4 serStims is assembled, findStim returns answer
-			 if (matchesCriteria (cat, diffLevel, type, s) && !answer.Contains(s)) 
+			serStim s = stimPool[counter];
+            // when a list of 4 serStims is assembled, findStim returns answer
+            if (matchesCriteria(cat, diffLevel, type, s) && !answer.Contains(s) && (cat != Category.RhymingWordMatching)) // non-rhyming categories
 			{
 				s.isTarget = false;
-				answer = randomAdd (answer, s); 
+				answer = randomAdd (answer, s);
 			}
-			counter++;
+            /*if (matchesCriteria(cat, diffLevel, type, s) && !answer.Contains(s) && (cat == Category.RhymingWordMatching)) // special case for rhyming
+            {
+                if (s.audio != hostStim)
+                {
+                    s.isTarget = false;
+                    answer = randomAdd(answer, s);
+                }
+            }*/
+            counter++;
 		}
 		//randomize order here
 		return answer;
 	}
 
-//********************************
-// HELPER FUNCTIONS FOR findStim *
-//********************************
+    //********************************
+    // HELPER FUNCTIONS FOR findStim *
+    //********************************
 
-	//use the category to set the type of stimulus findStim will search for
-	string setType (Category cat)
+    /// <summary>
+    /// use the category to set the type of stimulus findStim will search for; called by findStim
+    /// </summary>
+    /// <param name ="cat" >current Category </param>
+    /// <returns> 
+    /// string with current type of stimuli needed: visual, audio, or gameOver
+    /// </returns>
+
+    string setType (Category cat)
 	{
 		string type;
 		if(cat.Equals(Category.GameOver)){
 			return "gameOver";
 		}
-		if (cat.Equals (Category.ReceptiveVocabulary) || cat.Equals(Category.Customization) || cat.Equals(Category.PseudowordMatching)) 
+		if (cat.Equals (Category.ReceptiveVocabulary) || cat.Equals(Category.Customization) || cat.Equals(Category.BlendingWordIdentification) || cat.Equals(Category.PseudowordMatching)) 
 		{
 			type = "visual";
 		} else 
@@ -177,17 +217,34 @@ public class SpawnerScript : MonoBehaviour {
 		}	
 		return type;
 	}
-	
-	//select the target stimulus for a given question, according to the given criteria
-	serStim selectTarget (Category cat, Difficulty diffLevel, string type)
+    /// <summary>
+    /// select the target stimulus for a given question, according to the given criteria
+    /// </summary>
+    /// <param name="cat"> current Category</param>
+    /// <param name="diffLevel">current Difficulty</param>
+    /// <param name="type">current type of stimuli needed</param>
+    /// <returns>
+    /// return a single serStim "s" which will be the target stimuli for the next question
+    /// </returns>
+
+    serStim selectTarget (Category cat, Difficulty diffLevel, string type)
 	{
 		serStim s = null;
-		int counter = 0;
+        int counter = (int) Random.Range(0, stimPool.Count); //RANDOM STARTING POINT
 		int resetCounter = 0;
 		bool foundTarget = false;
 		if(type == "gameOver")
 			return null;
-		while (foundTarget == false)
+        // return null if a complete SOO cannot be created
+        int numMatch = 0;
+        for (int i = 0; i < stimPool.Count; i++)
+        {
+            if (matchesCriteria(cat, diffLevel, type, stimPool[i]))
+                numMatch++;
+        }
+        if (numMatch < 1)
+            return null;
+        while (foundTarget == false)
 		{
 			if(resetCounter >= 5){
 				if(diffLevel != Difficulty.Easy){
@@ -216,7 +273,9 @@ public class SpawnerScript : MonoBehaviour {
 				// stimulus to be the target
 				float f = Random.Range (0.0f,4.0f);
 				if (f < 1.0f) {
-					stimPool[counter].hasBeenTarget = true;
+                   // Debug.Log("Sprite: " + s.sprite);
+                   // Debug.Log("Audio: " + s.audio);
+                    stimPool[counter].hasBeenTarget = true;
 					s.isTarget = true;
 					foundTarget = true;
 					host.setHostMedia(s); // pass the target's prompt to the main character
@@ -225,11 +284,20 @@ public class SpawnerScript : MonoBehaviour {
 			}
 			counter++;
 		}
-		return s;
+        return s;
 	}
 
-	//check for stimuli that correspond the to the given criteria, and have not been used as a target yet
-	int checkFreeStims (Category cat, Difficulty diffLevel, string type)
+    /// <summary>
+    /// check for stimuli that correspond the to the given criteria, and have not been used as a target yet; called by selectTarget
+    /// </summary>
+    /// <param name="cat">current Category</param>
+    /// <param name="diffLevel">current Difficulty</param>
+    /// <param name="type">type of stimuli needed</param>
+    /// <returns>
+    /// returns the number of stims in stimPool that are eligible to be used as a target for the next question
+    /// </returns>
+
+    int checkFreeStims (Category cat, Difficulty diffLevel, string type) // use this to prevent crashes
 	{	
 		int total = 0;
 		for(int i = 0; i< stimPool.Count; i++)
@@ -239,32 +307,54 @@ public class SpawnerScript : MonoBehaviour {
 		}
 		return total;
 	}
+    /// <summary>
+    /// check to make sure a stimulus matches the defined criteria
+    /// </summary>
+    /// <param name="cat">currnet Category</param>
+    /// <param name="diff">current Difficulty</param>
+    /// <param name="type">current type of stimuli needed</param>
+    /// <param name="s">an individual serStim</param>
+    /// <returns>
+    /// returns true if s meets the criteria specified by cat, diff, and type; false otherwise
+    /// </returns>
 
-	//check to make sure a stimulus matches the defined criteria
-	bool matchesCriteria (Category cat, Difficulty diff, string type, serStim s)
+    bool matchesCriteria (Category cat, Difficulty diff, string type, serStim s)
 	{
 		return (s.stimType.Equals (type) && 
 			s.difficulty.Equals (diff) &&
 				s.category.Equals(cat));
-	}	
+	}
 
-	//randomly choose whether or not to add the selected stimulus
-	List<serStim> randomAdd(List<serStim> answer, serStim s)
+    /// <summary>
+    /// randomly choose whether or not to add the selected stimulus
+    /// </summary>
+    /// <param name="answer">a list of serStim</param>
+    /// <param name="s">an individual serStim</param>
+    /// <returns>returns answer with or without s attached</returns>
+
+    List<serStim> randomAdd(List<serStim> answer, serStim s)
 	{
 		float f = Random.Range (0.0f,8.0f);
 		if (f < 1.0f) 
 		{
 			answer.Add(s);
-		}
+            //Debug.Log("Sprite: " + s.sprite);
+            //Debug.Log("Audio: " + s.audio);
+        }
 		else if (f > 1.0f && f < 2.0f)
 		{
 			answer.Insert(0, s); //if f is between 1 & 2, insert the stimulus at the beginning. Helps randomize position of target
-		}
-		return answer;
+            //Debug.Log("Sprite: " + s.sprite);
+            //Debug.Log("Audio: " + s.audio);
+        }
+        return answer;
 	}
 
-	//reset targets when all have been used (should be obsolete with full complement of stimuli)
-	void resetTargets()
+    /// <summary>
+    /// reset targets when all have been used (should be obsolete with full complement of stimuli)
+    /// </summary>
+
+    void resetTargets()
 	{
 	
 		for (int i = 0; i < stimPool.Count; i++)
@@ -273,6 +363,9 @@ public class SpawnerScript : MonoBehaviour {
 			stimPool[i].isTarget = false;
 		}
 	}
+    // ********************************
+    // spawnNext and spawnSOO
+    // ******************************** 
 
 	/// <summary>
 	/// Randomly create a question or customization event based on the category and current difficulty level
@@ -326,7 +419,10 @@ public class SpawnerScript : MonoBehaviour {
 //*****************************
 //* spawnSOO HELPER FUNCTIONS *
 //*****************************
-	
+	/// <summary>
+    /// call registerGameObjectWithSoo on all observers; called by spawnSOO
+    /// </summary>
+    /// <param name="soo">a Stimulus Organizational Object</param>
 	void registerObservers (GameObject soo)
 	{
 		for (int i = 0; i < observers.Count; i++)
@@ -334,6 +430,12 @@ public class SpawnerScript : MonoBehaviour {
 			observers[i].registerGameObjectWithSoo(soo);
 		}
 	}
+
+    /// <summary>
+    /// registers the highlighter component in the new stimuli; called by spawnSOO
+    /// </summary>
+    /// <param name="soo">a Stimulus Organizational Object</param>
+
 	void registerChildren (GameObject soo)
 	{
 		for (int i =0; i < newStims.Length; i++)
@@ -342,7 +444,32 @@ public class SpawnerScript : MonoBehaviour {
 			h.registerGameObjectWithSoo(soo);
 		}
 	}
+
+    /// <summary>
+    /// randomly select an atlas to build the secondary character
+    /// </summary>
+
+    Texture2D selectAtlas ()
+	{
+		return secondaryAtlases[Random.Range(0, secondaryAtlases.Length-1)];
+	}
+    /// <summary>
+    /// add an atlas to the character for texturing
+    /// </summary>
+    /// <param name="c">GameObject</param>
+
+    void drawCharacter (GameObject c)
+	{
+		SkinnedMeshRenderer r = c.transform.GetChild(0).GetComponentInChildren<SkinnedMeshRenderer>();
+		Material m = r.material;
+		m.mainTexture = selectAtlas ();
+	}
 	
+    /// <summary>
+    /// handles proper positioning of stimuli within SOO; called by spawnSOO
+    /// </summary>
+    /// <param name="q">Question</param>
+
 	void arrangeSOO(Question q)
 	{
 			SpriteRenderer background;
@@ -354,6 +481,7 @@ public class SpawnerScript : MonoBehaviour {
 			if(needsCharacter(q.getCat()))
 			{
 				newStims[i] = Instantiate (character) as GameObject; //use the secondary character
+				drawCharacter(newStims[i]);
 				spacing = charStimSpacing;	
 			}
 			else
@@ -394,6 +522,12 @@ public class SpawnerScript : MonoBehaviour {
 		}
 	}
 	
+    /// <summary>
+    /// initialize new stims; called by arrangeSOO
+    /// </summary>
+    /// <param name="q">a Question</param>
+    /// <param name="i">an int</param>
+
 	void initChild (Question q, int i)
 	{
 		if(q.isCustomizationEvent())
@@ -412,11 +546,19 @@ public class SpawnerScript : MonoBehaviour {
 		}		
 	}
 
+    /// <summary>
+    /// scales children; called by spawnSOO
+    /// </summary>
+    /// <param name="q">a Question</param>
+    /// <param name="holder">a SOOScript instance</param>
+    /// <returns></returns>
+
 	SOOScript scaleChildren (Question q, SOOScript holder)
 	{
 		if(q.isCustomizationEvent())
 		{
 			holder.transform.localScale = new Vector3 (scaleTexture,scaleTexture,scaleTexture);
+			holder.setBoxColliders();
 		}
 		else if (needsCharacter(q.getCat()))
 		{
@@ -429,6 +571,13 @@ public class SpawnerScript : MonoBehaviour {
 		return holder;
 	}
 
+    /// <summary>
+    /// returns true if the current category requires secondary characters, false otherwise
+    /// called by spawnSOO
+    /// </summary>
+    /// <param name="cat">the current category</param>
+    /// <returns>a bool</returns>
+
 	bool needsCharacter (Category cat)
 	{
 		switch (cat)
@@ -439,6 +588,8 @@ public class SpawnerScript : MonoBehaviour {
 			return false;
 		case Category.PseudowordMatching:
 			return false;
+        case Category.BlendingWordIdentification:
+            return false;
 		default:
 			return true;
 		}

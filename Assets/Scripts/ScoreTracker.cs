@@ -1,6 +1,8 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 
 public class ScoreTracker : Observer {
@@ -26,8 +28,12 @@ public class ScoreTracker : Observer {
 	GameObject stimOrgOb;
 	SOOScript sooHolder;
 	Animator animator;
+	public Subject mainChar;
 	public GameObject rhymeRecep1;
 	public GameObject rhymeRecep2;
+    public Button replayButtonPrefab;
+    Button replayButton;
+    public Canvas Canvas;
 
 	//Event variables
 	public Subject eventHandler;
@@ -45,7 +51,7 @@ public class ScoreTracker : Observer {
 	int correctCap;
 	int wrongCap;
 	int totalCap;
-	Category currentCategory;
+	public Category currentCategory; // currently a public variable for debugging purposes
 	Category lastCategory;
 	Score s;
 	
@@ -55,6 +61,10 @@ public class ScoreTracker : Observer {
 	// Initialization - Awake and Start
 	// ***********************************************
 
+    /// <summary>
+    /// sets beginning difficulty and category variables, begins scorekeeping tasks
+    /// </summary>
+
 	void Awake ()
 	{
         s = new Score(questionNumber);	
@@ -63,7 +73,12 @@ public class ScoreTracker : Observer {
 		s.setCategory (Category.Customization);
 		currentCategory = s.returnCategory ();
 		lastCategory = currentCategory;
-	}	
+	}
+    
+    /// <summary>
+    /// add subjects, set timing, ready animations, start first questions
+    /// </summary>
+    	
 	void Start () {	
 		animator = GameObject.Find ("MainCharacter").GetComponent<Animator>();
 		gameOver = false;
@@ -75,6 +90,10 @@ public class ScoreTracker : Observer {
 		setCaps();
 		startQuestion ();
 	}
+
+    /// <summary>
+    /// set caps for right, wrong, and total number of questions; only called in Start()
+    /// </summary>
 
 	void setCaps()
 	{
@@ -98,6 +117,10 @@ public class ScoreTracker : Observer {
 		}
 	}
 
+    /// <summary>
+    /// add Subjects; called in Start()
+    /// </summary>
+
 	void addSubjects ()
 	{
 		gOObserver = new Subject.GameObjectNotify (this.onNotify);
@@ -110,12 +133,18 @@ public class ScoreTracker : Observer {
 		trashHolder = gCollector.GetComponent<CollisionNotification>();	
 		trashHolder.sub.addObserver(new Subject.GameObjectNotify(this.onNotify));
 		this.GetComponent<TouchProcessor>().eventWrapper.addObserver(new Subject.GameObjectNotify(this.onNotify));
+		mainChar.addObserver (new Subject.GameObjectNotify (this.onNotify));
 	}
 
 	// ********************************************************
 	// onNotify and endGame
 	// ********************************************************
 	
+    /// <summary>
+    /// handles all received notifications 
+    /// </summary>
+    /// <param name="e">an Event Instance(GameObject)</param>
+
 	public override void onNotify (EventInstance<GameObject> e)
 	{
 		//s.addTime(questionTime);	
@@ -132,66 +161,101 @@ public class ScoreTracker : Observer {
 		{
 			pauseTimer = true;
 		}
-		if(e.type == eType.FingerUp)
-		{
+		if (e.type == eType.FingerUp) {
 			pauseTimer = false;
-		}
-		else if (e.type == eType.Trashed)
-		{
-			s.addTime(questionTime);
-
-			Destroy(e.signaler);
+		} 
+		else if (e.type == eType.Trashed) {
+			s.addTime (questionTime);
+			pauseTimer = false;
+			Destroy (e.signaler);
 			//don't end the world
 			
 			//figure out how to make this happen after score tracker updates category
-			changeQuestion();
+			changeQuestion ();
 			return; //prevent repeated action on same event
-		}
-		else if (e.type == eType.Selected)
-		{
-			if(e.signaler.GetComponent<StimulusScript>() != null && e.signaler.GetComponent<StimulusScript>().returnIsTarget())
-			{
-				s.addScore(true);
+		} 
+		else if (e.type == eType.Selected) {
+			pauseTimer = true;
+			if (e.signaler.GetComponent<StimulusScript> () != null && e.signaler.GetComponent<StimulusScript> ().returnIsTarget ()) {
+				s.addScore (true);
+			} else {
+				s.addScore (false);
 			}
-			else{s.addScore(false);}
 
-			if( e.signaler.GetComponent<StimulusScript>().isOption()){
-				e.signaler.gameObject.SetActive(false);
-			}
-			else {
+			if (e.signaler.GetComponent<StimulusScript> ().isOption ()) {
+				e.signaler.gameObject.SetActive (false);
+			} else {
 				Destroy (e.signaler);
 			}
-			sooHolder.move(1);
+			return;
+		} else if (e.type == eType.Transition) {
+			Debug.Log ("transition!");
+			sooHolder.move (1);
 			return;
 		}
 	}
 
-	public override void onNotify (EventInstance<bool> e)
-	{
-		if (e.type == eType.Selected)
-		{
-			s.addScore(e.signaler);
-		}
-		sooHolder.move (1);
-		return;
-	}
+    /// <summary>
+    /// handles "selected" notifications
+    /// </summary>
+    /// <param name="e">an Event Instance (bool)</param>
+
+    public override void onNotify(EventInstance<bool> e)
+    {
+        if (e.type == eType.Selected)
+        {
+            s.addScore(e.signaler);
+        }
+        sooHolder.move(1);
+        return;
+    }
 	
+    /// <summary>
+    /// called when PseudoWord Category is completed; sends EndGame event notification, instantiates 
+    /// replay button prefab
+    /// </summary>
+
 	void endGame ()
 	{
-		eventHandler.sendEvent (eType.EndGame);
-		//display Tap To Restart
-		//Turn off spawner
-		//more endgame here TODO
-	}
-	
-	public void addTouch (TouchSummary t) // called by TouchProcessor
+        Debug.Log("We are in endGame");
+        eventHandler.sendEvent (eType.EndGame);
+        replayButton = Instantiate(replayButtonPrefab); 
+        replayButton.transform.SetParent(Canvas.transform,false);
+        replayButton.onClick.AddListener(() => onClick());
+        //Turn off spawner
+        //Should a notification be sent to AnimationManager so the Main Character stops walking?
+        //Maybe some sort of celebration animation for completing the game?
+        //more endgame here TODO
+    }
+
+    /// <summary>
+    /// reloads scene, destroys replay button; called only when replay button is clicked
+    /// </summary>
+
+    public void onClick()
+    {
+        Debug.Log("Button Clicked"); //debugging
+        Destroy(replayButton.gameObject);
+        Debug.Log("Destroyed?: " + replayButton.IsDestroyed());
+        SceneManager.LoadScene(0);
+    }
+
+    /// <summary>
+    /// called in onNotify in TouchProcessor
+    /// </summary>
+    /// <param name="t">TouchSummary</param>
+
+    public void addTouch (TouchSummary t) 
 	{
 		s.addTouch(t);
 		t = null;
 		//changeQuestion();
 	}
 	
-		
+	/// <summary>
+    /// increments score variables, broadcasts data; called in changeQuestion()
+    /// </summary>
+    	
 	void checkAnswer()
 	{
 		string response;
@@ -211,6 +275,11 @@ public class ScoreTracker : Observer {
 		value = ("Question: " + s.getNum().ToString() + ", Result: " + response + ", time: " + s.getTime().ToString() + ", total score: " + totalScore);
 		AndroidBroadcastIntentHandler.BroadcastJSONData("Question Answer", value);
 	}
+
+    /// <summary>
+    /// changes the difficulty of the questions being generated; called in changeQuestion
+    /// </summary>
+
 	void updateDifficulty()
 	{
 		if (s.returnDifficulty().Equals(Difficulty.Easy) || s.returnCategory().Equals (Difficulty.Medium)) {
@@ -225,11 +294,17 @@ public class ScoreTracker : Observer {
 	/// <summary>
 	/// Returns the current category
 	/// </summary>
-	/// <returns>The category.</returns>
+    
 	public Category queryCategory ()
 	{
 		return currentCategory;
 	}
+
+    /// <summary>
+    /// Increments the category  of the game, resets score variables, and broadcasts data.  Ensures that
+    /// there is a customization section between each different category; called in changeQuestion
+    /// </summary>
+
 	void setCategory()
 	{
 		if (s.returnCategory().Equals(Category.Customization)) {//only ever spend one question in customization 	
@@ -243,14 +318,30 @@ public class ScoreTracker : Observer {
 		}
 		 //change category and drop difficulty level after 4 wrong answers, 3 correct answers on hard difficulty, or the category total has been reached.	 
 		else  {
-			lastCategory = currentCategory;
-			s.setCategory (Category.Customization);
-			currentCategory = Category.Customization;
-			AndroidBroadcastIntentHandler.BroadcastJSONData("Category Change", "Customization"); //data recording
+            if (s.returnCategory() != Category.PseudowordMatching)
+            {
+                lastCategory = currentCategory;
+                s.setCategory(Category.Customization);
+                currentCategory = Category.Customization;
+                AndroidBroadcastIntentHandler.BroadcastJSONData("Category Change", "Customization"); //data recording
+            }
+            else
+            {
+                numCorrect = 0;
+                numWrong = 0;
+                numAnswered = 0;
+                currentCategory = getNextCategory(currentCategory);
+                AndroidBroadcastIntentHandler.BroadcastJSONData("Category Change", currentCategory.ToString()); //data recording
+            }       
 		}
-		
-
 	}
+
+    /// <summary>
+    /// returns the next category the game must progress to based on the current category
+    /// called in changeQuestion, averagesBreakdown
+    /// </summary>
+    /// <param name="last">the last Category</param>
+    /// <returns>the next Category</returns>
 
 	Category getNextCategory (Category last)
 	{
@@ -272,9 +363,6 @@ public class ScoreTracker : Observer {
 				return Category.SightWordIdentification;
 
 			case Category.SightWordIdentification:
-				return Category.RhymingWordMatching;
-
-			case Category.RhymingWordMatching:
 				return Category.BlendingWordIdentification;
 
 			case Category.BlendingWordIdentification:
@@ -287,6 +375,12 @@ public class ScoreTracker : Observer {
 		}
 		return Category.Customization;	
 	}
+
+    /// <summary>
+    /// returns the next difficulty the game must progress to based on the current difficulty; called in updateDifficulty
+    /// </summary>
+    /// <param name="curDiff">current Difficulty</param>
+    /// <returns>the next Difficulty</returns>
 
 	Difficulty getNextDifficulty(Difficulty curDiff)
 	{
@@ -301,6 +395,12 @@ public class ScoreTracker : Observer {
 		}
 		return curDiff;
 	}
+
+    /// <summary>
+    /// reset difficulty to easy if in easy or medium, set to medium if in hard; called in selectTarget in SpawnerScript
+    /// </summary>
+    /// <param name="curDiff">current Difficulty</param>
+    /// <returns>reset Difficulty</returns>
 
 	public Difficulty resetDifficulty (Difficulty curDiff)
 	{	
@@ -320,24 +420,33 @@ public class ScoreTracker : Observer {
 	// startQuestion, changeQuestion, Update
 	// *******************************************************
 
-	// for use at the beginning of the game
+	/// <summary>
+    /// for use at beginning of game; called in Start()
+    /// </summary>
+
 	void startQuestion() {
 		eventHandler.sendEvent(eType.NewQuestion);
 		stimOrgOb = spawnHolder.spawnNext(currentCategory,s.returnDifficulty(),questionNumber);
 		sooHolder = stimOrgOb.GetComponent<SOOScript>();
 		animator.SetTrigger("Success"); //start the character moving	
 		sooHolder.move(0);
-	} 
+	}
 
-	//TODO Refactor this	
-	void changeQuestion () {
+    /// <summary>
+    /// adjusts scorekeeping variables, changes category and difficulty as necessary, destroys old stimuli, spawns
+    /// new stimuli, sends an event, broadcasts data; called in onNotify, changeQuestion
+    /// </summary>
+
+    //TODO Refactor this      	
+    void changeQuestion () {
 		resetTiming();
 		questionNumber++;
 		numAnswered++;
 
 		checkAnswer();
 		Debug.Log("numCorrect: " + numCorrect);	
-		Debug.Log("numWrong: " + numWrong);	
+		Debug.Log("numWrong: " + numWrong);
+        Debug.Log("Total Score: " + totalScore); 
 
 		
 		if (numCorrect >= correctCap) {
@@ -355,14 +464,11 @@ public class ScoreTracker : Observer {
 				scoreList.Add(s);
 				s = new Score(questionNumber);
 				s.setCategory(currentCategory);
-				s.setDifficulty(temp);
+				s.setDifficulty(temp); 
 				setCategory();
 			}
 		else
 			 {
-				// if the player answers three consecutive questions correctly, numCorrect is
-				// reset and an event notification of type ChangeDifficulty is sent out, which
-				// will be picked up by GameManager.
 				numCorrect = 0;
 				Difficulty temp = s.returnDifficulty();
 				scoreList.Add(s);
@@ -389,21 +495,29 @@ public class ScoreTracker : Observer {
 		}
 
 		stimOrgOb = spawnHolder.spawnNext(currentCategory,s.returnDifficulty(),questionNumber);
-		if(stimOrgOb == null){
-			endGame();
-			return;
-		}
-		sooHolder = stimOrgOb.GetComponent<SOOScript>();
-		sooHolder.move(0);
-
+        if (stimOrgOb != null)
+        {
+            sooHolder = stimOrgOb.GetComponent<SOOScript>();
+            sooHolder.move(0);
+            // now if a SOO is null, it can also mean that there was not sufficient stimuli for a new question
+            // endGame(); //change this - there should be more specific conditions for ending the game
+            //return;     // rather than running out of input, at least for the time being
+        }
+        else {
+            setCategory();
+            changeQuestion();
+        }
 		//data recording
 		eventHandler.sendEvent (eType.NewQuestion);
 		string value = "Question Number: " + questionNumber + ", Category: " + currentCategory + ", Difficulty: " + s.returnDifficulty();
 		AndroidBroadcastIntentHandler.BroadcastJSONData("New Question", value);
 	}
 
-	//initialize or reset all timekeeping variables for the question timer
-	void resetTiming()
+    /// <summary>
+    /// initialize or reset all timekeeping variables for the question timer; called in Start() and changeQuestion
+    /// </summary>
+
+    void resetTiming()
 	{	
 		timeLeft = timeLimit;
 		questionTime = 0;
@@ -414,7 +528,11 @@ public class ScoreTracker : Observer {
 		pointTime = pointInterval;
 	}
 
-	void Update() 
+    /// <summary>
+    /// updates timekeeping variables, cues certain animations, keeps track of timeouts, sends events, broadcasts data
+    /// </summary>
+
+    void Update() 
 	{
 		if (gameOver) {
 			string junk = "meaningless"; //hack to get around control flow after GameOver
@@ -476,17 +594,22 @@ public class ScoreTracker : Observer {
 			scoreList[i].printTouches();
 		}	
 	}
-	
-	// ******************************************************************
-	// Methods for organizing data collected by ScoreTracker and
-	// placing it into strings
-	// ******************************************************************
-	
-	// retrieveStruct is a method needed for averagesBreakdown() to work.  It
-	// retrieves a given DifficultyData instance from an array based on the
-	// input Category. *Note: retrieveStruct assumes that each DifficultyData 
-	// instance in the array is tagged with a unique Category
-	DifficultyData retrieveStruct(DifficultyData[] ddarray, Category cat) {
+
+    // ******************************************************************
+    // Methods for organizing data collected by ScoreTracker and
+    // placing it into strings
+    // ******************************************************************
+
+    /// <summary>
+    /// retrieveStruct is a method needed for averagesBreakdown() to work.  It
+    /// retrieves a given DifficultyData instance from an array based on the
+    /// input Category. *Note: retrieveStruct assumes that each DifficultyData 
+    /// instance in the array is tagged with a unique Category.
+    /// </summary>
+    /// <param name="ddarray">DifficultyData array</param>
+    /// <param name="cat">a Category</param>
+
+    DifficultyData retrieveStruct(DifficultyData[] ddarray, Category cat) {
 		int length = ddarray.Length;
 		for (int i = 0; i < length; i++) {
 			if (ddarray[i].categoryMatch(cat)) { 
@@ -495,13 +618,16 @@ public class ScoreTracker : Observer {
 		}
 		throw new System.ArgumentException ("Variable of type Category not found in ddarray");
 	}
-	
-	// averagesBreakdown creates an array of DifficultyData variables, one for each
-	// category in the Category enum.  It then adds each score in scoreList to the 
-	// apropriate DifficultyData variable, using retrieveStruct to select the correct
-	// variable from the DifficultyData array.  It then prints out a string containing
-	// all the data that has been added to each DifficultyData variable.
-	string averagesBreakdown() {
+
+    /// <summary>
+    /// averagesBreakdown creates an array of DifficultyData variables, one for each
+    /// category in the Category enum.  It then adds each score in scoreList to the 
+    /// apropriate DifficultyData variable, using retrieveStruct to select the correct
+    /// variable from the DifficultyData array.  It then prints out a string containing
+    /// all the data that has been added to each DifficultyData variable.
+    /// </summary>
+
+    string averagesBreakdown() {
 		
 		DifficultyData[] ddarray = new DifficultyData[9];
 		Category cat = Category.Customization;
@@ -522,10 +648,13 @@ public class ScoreTracker : Observer {
 		}
 		return answer;
 	}
-	
-	// averageTime prints out the average time taken per question across all
-	// categories and difficulties.
-	string averageTime() {
+
+    /// <summary>
+    /// averageTime prints out the average time taken per question across all
+    /// categories and difficulties.
+    /// </summary>
+
+    string averageTime() {
 		float timeSum = 0f;
 		int numQuestions = 0;
 		for (int i = 0; i < scoreList.Count; i++) {
@@ -535,7 +664,11 @@ public class ScoreTracker : Observer {
 		return ("average question time across all categories and difficulties: " + timeSum / numQuestions);
 	}
 	
-	string printListString () //for broadcasts
+    /// <summary>
+    /// collects all data from a playthrough, returns it in a single string
+    /// </summary>
+
+	string printListString () 
 	{
 		string st = "";
 		st = (st + "TOTAL SCORE: " + totalScore + "\n\n");
@@ -651,6 +784,7 @@ public class Score {
 // is included as a category so the character customization
 // at the beginning of gameplay will be recognized as its
 // own kind of activity;
+
 /// <summary>
 /// Enum containing all possible kinds of questions that the app may ask a student.
 /// </summary>
@@ -668,6 +802,7 @@ public enum Category {Customization,
 /// <summary>
 /// Inidicator for question difficulty.
 /// </summary>
+/// 
 public enum Difficulty {Easy, Medium, Hard};
 
 
@@ -714,11 +849,15 @@ public class DifficultyData {
 	
 	float totalTimeAverage;
 	
-	Category cat; 
+	Category cat;
 
-	// Constructor takes an instance of the Category enum so that instances
-	// of DifficultyData are tagged with their corresponding Category
-	public DifficultyData(Category category) {
+    /// <summary>
+    /// Constructor takes an instance of the Category enum so that instances
+    /// of DifficultyData are tagged with their corresponding Category
+    /// </summary>
+    /// <param name="category">a Category</param>
+
+    public DifficultyData(Category category) {
 		easyScore = 0f;
 		mediumScore = 0f;
 		hardScore = 0f;
@@ -731,9 +870,13 @@ public class DifficultyData {
 		this.cat = category;
 	}
 
-	// addScore increments variables based on what difficulty
-	// the given Score variable is tagged with
-	public void addScore (Score s) {
+    /// <summary>
+    /// addScore increments variables based on what difficulty
+    /// the given Score variable is tagged with
+    /// </summary>
+    /// <param name="s">a Score variable</param>
+
+    public void addScore (Score s) {
 		Difficulty diff = s.returnDifficulty();
 		float time = s.getTime();
 		int score;
@@ -756,18 +899,26 @@ public class DifficultyData {
 		}
 	}
 
-	// categoryMatch returns a bool indicating whether the given category
-	// matches the category of the current DifficultyData instance
-	public bool categoryMatch(Category category) {
+    /// <summary>
+    /// categoryMatch returns a bool indicating whether the given category
+    /// matches the category of the current DifficultyData instance
+    /// </summary>
+    /// <param name="category">a Category</param>
+
+    public bool categoryMatch(Category category) {
 		return (cat.Equals (category));
 	}
 
-	// toString assigns the average-holding variables their correct values
-	// with a series of if statements (to prevent divide-by-zero errors) and then
-	// uses the average-holding variables to create a long string containing all the
-	// data collected by the DifficultyData instance.
 
-	public string toString() {
+    /// <summary>
+    /// toString assigns the average-holding variables their correct values
+    /// with a series of if statements (to prevent divide-by-zero errors) and then
+    /// uses the average-holding variables to create a long string containing all the
+    /// data collected by the DifficultyData instance.
+    /// </summary>
+
+
+    public string toString() {
 
 		if (numEasy > 0) 
 			easyScoreAverage = easyScore / numEasy;
