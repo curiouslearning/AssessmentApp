@@ -6,8 +6,14 @@ public class TokenScript : MonoBehaviour {
 	bool isTarget;
 	Selectable touchInput;
 	Vector3 startPos;
+	Animator animator;
 	
+
 	void Start() {
+		animator = this.GetComponent<Animator> ();
+		if (animator == null) {
+			Debug.Log ("empty animator!");
+		}
 		isTarget = GetComponentInParent<StimulusScript>().returnIsTarget();
 		touchInput = this.GetComponent<Selectable>();
 		if(touchInput == null)
@@ -35,8 +41,9 @@ public class TokenScript : MonoBehaviour {
 	
 	public void onSelect(touchInstance t)
 	{
-		GetComponent<Animator>().enabled =false;
-		GetComponent<Animator>().SetBool("Selected", true);
+//		GetComponent<Animator>().enabled =false;
+		animator.SetTrigger ("Speak");
+//		GetComponent<Animator>().SetBool("Selected", true);
 	}
 	public void offSelect(touchInstance t)
 	{
@@ -45,8 +52,6 @@ public class TokenScript : MonoBehaviour {
 	}
 	public void talk()
 	{
-		GetComponent<Animator> ().enabled = false;
-		GetComponent<Animator> ().SetTrigger ("Speak");
 	}
 
 	public void setPos ()
