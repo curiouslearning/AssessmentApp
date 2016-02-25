@@ -29,8 +29,6 @@ public class ScoreTracker : Observer {
 	SOOScript sooHolder;
 	Animator animator;
 	public Subject mainChar;
-	public GameObject rhymeRecep1;
-	public GameObject rhymeRecep2;
     public Button replayButtonPrefab;
     Button replayButton;
     public Canvas Canvas;

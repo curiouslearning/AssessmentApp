@@ -24,7 +24,6 @@ public class SpawnerScript : MonoBehaviour {
 	//components
 	public GameObject character;
 	public AnimationManager host;
-	public ToggleBasket receptacle;
 	public BackgroundScroller background;
 	public List<Observer> observers;
 	//placement modifiers for stimulus positions
@@ -409,7 +408,6 @@ public class SpawnerScript : MonoBehaviour {
 		holder.setDestArray(destinations);
 		holder = scaleChildren(q, holder);  //scale size to screen	
 		//host.registerGameObjectWithSoo(newSoo);
-		//receptacle.registerGameObjectWithSoo(newSoo);
 		//background.registerGameObjectWithSoo(newSoo);
 		registerObservers(newSoo);
 		registerChildren(newSoo);

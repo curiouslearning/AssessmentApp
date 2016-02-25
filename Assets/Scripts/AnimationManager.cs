@@ -36,8 +36,8 @@ public class AnimationManager : Observer {
 	public string [] payoffList;
 	float audioCounter;
 	public float audioInterval;
-	public SpriteRenderer talkBubble;
-	public Sprite talkBubbleSprite;
+//	public SpriteRenderer talkBubble;
+//	public Sprite talkBubbleSprite;
 
     /// <summary>
     /// create dictionaries, initialize main character
@@ -453,7 +453,7 @@ public class AnimationManager : Observer {
 		AudioSource a = GetComponent<AudioSource>();
         if (a != null && !a.isPlaying)
         {
-            talkBubble.sprite = talkBubbleSprite;
+            //talkBubble.sprite = talkBubbleSprite;
             mainHighlighter.highlightOnce();
             a.Play();
         }
@@ -484,9 +484,9 @@ public class AnimationManager : Observer {
 			}
 		}
 		else {
-			if(!(talkBubble.sprite == null)){
+			/*if(!(talkBubble.sprite == null)){
 				talkBubble.sprite = null;
-			}
+			}*/
 			audioCounter = 0f;
 		}
 	}
