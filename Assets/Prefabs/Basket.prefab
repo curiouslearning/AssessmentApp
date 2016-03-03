@@ -48,8 +48,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 119566}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.416229665, y: .336587638, z: -.585015595}
-  m_LocalScale: {x: .0277120639, y: .0277120713, z: .415681005}
+  m_LocalPosition: {x: -0.41622967, y: 0.33658764, z: -0.5850156}
+  m_LocalScale: {x: 0.027712064, y: 0.027712071, z: 0.415681}
   m_Children: []
   m_Father: {fileID: 487064}
   m_RootOrder: 0
@@ -59,9 +59,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 125664}
-  m_LocalRotation: {x: -.000382296275, y: .999999106, z: .00130867714, w: 3.37382573e-07}
-  m_LocalPosition: {x: 3.43000007, y: -.409999996, z: 10.7799997}
-  m_LocalScale: {x: 21.9722042, y: 21.9721851, z: 21.9721851}
+  m_LocalRotation: {x: -0.00038229628, y: 0.9999991, z: 0.0013086771, w: 0.00000033738257}
+  m_LocalPosition: {x: 3.43, y: -0.41, z: 10.78}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 468794}
   m_Father: {fileID: 0}
@@ -84,8 +84,10 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
   m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_AutoUVMaxDistance: .5
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
@@ -108,8 +110,10 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
   m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_AutoUVMaxDistance: .5
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
@@ -174,7 +178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   subjects: []
-  basketSprite: {fileID: 0}
+  basketTexture: {fileID: 0}
   noSprite: {fileID: 0}
   s: {fileID: 0}
   m: {fileID: 0}
@@ -235,7 +239,19 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_LocalScale.z
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 125664}

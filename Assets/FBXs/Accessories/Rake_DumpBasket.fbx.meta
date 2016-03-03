@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: b28bd2df8b5b941f0b35cbc246f2f93d
-timeCreated: 1455034071
+guid: b6aba09b845db49d7af3cd531a356a3c
+timeCreated: 1457032151
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -37,7 +37,7 @@ ModelImporter:
       name: Rake
       takeName: Take 001
       firstFrame: 1
-      lastFrame: 281
+      lastFrame: 301
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

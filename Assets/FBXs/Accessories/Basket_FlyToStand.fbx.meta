@@ -1,16 +1,20 @@
 fileFormatVersion: 2
-guid: 72139da59c077409d9b38a8c0d4f28ba
-timeCreated: 1455034026
+guid: 3ff05422632154512a1caeec2414bb8a
+timeCreated: 1457032136
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
+    100000: Basket:basket
+    100002: Basket:rot_180
+    100004: //RootNode
+    400000: Basket:basket
+    400002: Basket:rot_180
+    400004: //RootNode
+    2300000: Basket:basket
+    3300000: Basket:basket
     4300000: Basket:basket
-    7400000: Take 001
+    7400000: FlyToStand
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -32,7 +36,41 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: FlyToStand
+      takeName: Take 001
+      firstFrame: 85
+      lastFrame: 148
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Basket:rot_180
+        weight: 1
+      - path: Basket:rot_180/Basket:basket
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
