@@ -29,11 +29,11 @@ public class CameraGrab : MonoBehaviour {
 			counter++;
 		}
 		Texture2D photo = new Texture2D (tex.width, tex.height);
-		photo.SetPixels (tex.GetPixels());
-		photo.Apply ();
-		byte[] bytes = photo.EncodeToPNG();
 		pictureCount++;
 		if (pictureCount >= 4) { //hack to prevent black photos
+			photo.SetPixels (tex.GetPixels());
+			photo.Apply ();
+			byte[] bytes = photo.EncodeToPNG();
 			Debug.Log ("writing to: " + Application.persistentDataPath);
 			File.WriteAllBytes (Application.persistentDataPath + "/startupPhoto" + pictureCount + ".png", bytes);
 			tookPicture = true;
