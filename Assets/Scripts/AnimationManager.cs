@@ -253,8 +253,8 @@ public class AnimationManager : Observer {
 		}
 		if (e.type == eType.Ready)
 		{
-			animator.SetTrigger("Landed");
-			animator.SetTrigger("Throw");
+			animator.ResetTrigger("Landed");
+			animator.ResetTrigger("Throw");
 			if(GetComponent<AudioSource>().clip != null)
 			{
 				animator.SetTrigger("Talk");
@@ -277,40 +277,71 @@ public class AnimationManager : Observer {
 		}
 	}
 
-	void carryBasket ()
+	public void carryBasket ()
 	{
-		Debug.Log("Carrying");
+		animator.SetBool ("Carry", true);
 		basketController.SetBool("Carry", true);
 	}
 	
-	void throwBasket ()
+	public void throwBasket ()
 	{
-		Debug.Log("throw");
+		animator.SetBool ("Carry", false);		
 		basketController.SetBool("Carry", false);
+		animator.SetTrigger ("Throw");
 		basketController.SetTrigger("Throw");
 	}
 
-	void searchBasket ()
+	public void flyBasket()
 	{
+		animator.SetTrigger ("Fly");
+		basketController.SetBool("Fly", true);
+	}
+	public void flyToStand()
+	{
+		basketController.SetBool ("Fly", false);
+	}
+	public void searchBasket ()
+	{
+		animator.SetTrigger ("Search");
 		basketController.SetTrigger("Search");
 	}
-	void dumpBasket()
+	public void dumpBasket()
 	{
+		animator.SetTrigger ("Dump");
 		basketController.SetTrigger ("Dump");
-	}
-	void startRake ()
-	{
 		rakeController.SetTrigger ("Rake");
 	}
 
-	void startPayoff()
+	public void rideBasket()
+	{
+		animator.SetBool ("Ride", true);
+		basketController.SetBool ("Ride", true);
+	}
+
+	public void endRide ()
+	{
+		animator.SetBool ("Ride", false);
+		basketController.SetBool ("Ride", false);
+	}
+	public void skipBasket ()
+	{
+		animator.SetTrigger ("Skip");
+		//basketController.SetTrigger ("Skip"); TODO: WAITING ON COMPLETION
+	}
+
+	public void tripBasket()
+	{
+		animator.SetTrigger ("Trip");
+		basketController.SetTrigger ("Trip");
+	}
+	public void startPayoff()
 	{
 		animator.SetBool ("ShowCard", false);
 		hideCards ();
 		animator.ResetTrigger ("Landed");
 		animator.ResetTrigger ("Throw");
 		animator.ResetTrigger ("Point");
-		animator.SetTrigger (randomAnimation (payoffList));
+		randomAnimation (payoffList);
 		GetComponent<AudioSource>().clip = null;
 		clearCards();
 	}	
@@ -323,7 +354,7 @@ public class AnimationManager : Observer {
 		animator.ResetTrigger("Landed");
 		animator.ResetTrigger("Throw");
 		animator.ResetTrigger("Point");
-		animator.SetTrigger(randomAnimation(actionList));
+		randomAnimation(actionList);
 		GetComponent<AudioSource>().clip = null;
 		clearCards();
 	}
@@ -371,11 +402,41 @@ public class AnimationManager : Observer {
 			bodyParts[i].transform.GetChild(0).gameObject.SetActive(false);
 		}
 	}
-	string randomAnimation (string[] s)
+	void randomAnimation (string[] s)
 	{
 		int val = Random.Range(0, s.Length);
 		Debug.Log ("using animation: " + s [val]);
-		return s[val];
+		startAnimation (s [val]);
+		return;
+	}
+	void startAnimation(string s)
+	{
+		switch (s) {
+		case "Dump":
+			dumpBasket ();
+			break;
+		case "Throw":
+			throwBasket ();
+			break;
+		case "Fly":
+			flyBasket ();
+			break;
+		case "Ride":
+			rideBasket (); 
+			break;
+		case "Search":
+			searchBasket ();
+			break;
+		case "Trip":
+			tripBasket ();
+			break;
+		case "Carry":
+			carryBasket ();
+			break;
+		case "Skip": 
+			//skipBasket (); TODO: write this function
+			break;
+		}
 	}
 	/// <summary>
 	/// Changes the body part.
