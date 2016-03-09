@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 121b343898e914dafbe819cea547d7d6
-timeCreated: 1456872488
+guid: 424f3709cd5284441bb377a7497ad8f1
+timeCreated: 1457552077
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -375,7 +375,7 @@ ModelImporter:
     4300046: MainCharacter:mouth
     4300048: MainCharacter:l_eye
     4300050: MainCharacter:r_eye
-    7400000: SearchBasket
+    7400000: MainSearchBasket
     9500000: //RootNode
     13700000: MainCharacter:body
     13700002: MainCharacter:eyes
@@ -425,7 +425,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: SearchBasket
+      name: MainSearchBasket
       takeName: Take 001
       firstFrame: 1
       lastFrame: 421

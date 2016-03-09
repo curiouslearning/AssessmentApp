@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 0dfa6cd8d44254abb9ef10e7035e8445
-timeCreated: 1455033890
+guid: 4d2f47762e1c44ab8a4d08ba130d649b
+timeCreated: 1457552078
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -375,7 +375,7 @@ ModelImporter:
     4300046: MainCharacter:mouth
     4300048: MainCharacter:l_eye
     4300050: MainCharacter:r_eye
-    7400000: FlyToStand
+    7400000: MainFlyToStand
     9500000: //RootNode
     13700000: MainCharacter:body
     13700002: MainCharacter:eyes
@@ -425,7 +425,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: FlyToStand
+      name: MainFlyToStand
       takeName: Take 001
       firstFrame: 85
       lastFrame: 148

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: d1e78981f389d44048657511f9e80f94
-timeCreated: 1447704981
+guid: 959545f19b6da4c7581cce4a998f34e5
+timeCreated: 1457552080
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -375,7 +375,7 @@ ModelImporter:
     4300046: MainCharacter:mouth
     4300048: MainCharacter:l_eye
     4300050: MainCharacter:r_eye
-    7400000: TripBasket
+    7400000: MainTripBasket
     9500000: //RootNode
     13700000: MainCharacter:body
     13700002: MainCharacter:eyes
@@ -425,7 +425,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: TripBasket
+      name: MainTripBasket
       takeName: Take 001
       firstFrame: 1
       lastFrame: 181
@@ -817,7 +817,7 @@ ModelImporter:
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
-    tangentImportMode: 4
+    tangentImportMode: 3
   importAnimation: 1
   copyAvatar: 0
   humanDescription:

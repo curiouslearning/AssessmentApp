@@ -293,7 +293,11 @@ public class AnimationManager : Observer {
 	void searchBasket ()
 	{
 		basketController.SetTrigger("Search");
-	}	
+	}
+	void dumpBasket()
+	{
+		basketController.SetTrigger ("Dump");
+	}
 	void startRake ()
 	{
 		rakeController.SetTrigger ("Rake");
