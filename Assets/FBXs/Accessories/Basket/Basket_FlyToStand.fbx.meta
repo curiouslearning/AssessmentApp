@@ -1,17 +1,24 @@
 fileFormatVersion: 2
-guid: 72139da59c077409d9b38a8c0d4f28ba
-timeCreated: 1455034026
+guid: 4255ff9ca6fa0415f8c2629d709cdffd
+timeCreated: 1457550162
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
+    100000: Basket:basket
+    100002: Basket:basket_joint
+    100004: Basket:Mesh
+    100006: Basket:Skeleton
+    100008: //RootNode
+    400000: Basket:basket
+    400002: Basket:basket_joint
+    400004: Basket:Mesh
+    400006: Basket:Skeleton
+    400008: //RootNode
     4300000: Basket:basket
-    7400000: Take 001
+    7400000: BasketFlyToStand
     9500000: //RootNode
+    13700000: Basket:basket
   materials:
     importMaterials: 1
     materialName: 0
@@ -32,7 +39,45 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: BasketFlyToStand
+      takeName: Take 001
+      firstFrame: 85
+      lastFrame: 148
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Basket:Mesh
+        weight: 1
+      - path: Basket:Mesh/Basket:basket
+        weight: 1
+      - path: Basket:Skeleton
+        weight: 1
+      - path: Basket:Skeleton/Basket:basket_joint
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []

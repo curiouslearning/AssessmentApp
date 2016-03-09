@@ -1,17 +1,24 @@
 fileFormatVersion: 2
-guid: bfb3e2be27d1a4bc5957395f3406bf8c
-timeCreated: 1446564672
+guid: 076c86e7f303e4009ac6a06f6020ab32
+timeCreated: 1457550161
 licenseType: Free
 ModelImporter:
-  serializedVersion: 18
+  serializedVersion: 19
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
+    100000: Basket:basket
+    100002: Basket:basket_joint
+    100004: Basket:Mesh
+    100006: Basket:Skeleton
+    100008: //RootNode
+    400000: Basket:basket
+    400002: Basket:basket_joint
+    400004: Basket:Mesh
+    400006: Basket:Skeleton
+    400008: //RootNode
     4300000: Basket:basket
-    7400000: Throw
+    7400000: CarryToStand
     9500000: //RootNode
+    13700000: Basket:basket
   materials:
     importMaterials: 1
     materialName: 0
@@ -19,6 +26,7 @@ ModelImporter:
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
+    resampleRotations: 1
     optimizeGameObjects: 0
     motionNodeName: 
     animationImportErrors: 
@@ -26,22 +34,23 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     animationCompression: 1
-    animationRotationError: .5
-    animationPositionError: .5
-    animationScaleError: .5
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: Throw
+      name: CarryToStand
       takeName: Take 001
-      firstFrame: 1
-      lastFrame: 73
+      firstFrame: 61
+      lastFrame: 105
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
+      hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
@@ -58,8 +67,17 @@ ModelImporter:
       transformMask:
       - path: 
         weight: 1
+      - path: Basket:Mesh
+        weight: 1
+      - path: Basket:Mesh/Basket:basket
+        weight: 1
+      - path: Basket:Skeleton
+        weight: 1
+      - path: Basket:Skeleton/Basket:basket_joint
+        weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
@@ -80,24 +98,25 @@ ModelImporter:
     useFileScale: 1
   tangentSpace:
     normalSmoothAngle: 60
-    splitTangentsAcrossUV: 1
     normalImportMode: 0
-    tangentImportMode: 1
+    tangentImportMode: 3
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
     human: []
     skeleton: []
-    armTwist: .5
-    foreArmTwist: .5
-    upperLegTwist: .5
-    legTwist: .5
-    armStretch: .0500000007
-    legStretch: .0500000007
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
+    hasTranslationDoF: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 2
+  humanoidOversampling: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
