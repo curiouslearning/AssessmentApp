@@ -253,8 +253,8 @@ public class AnimationManager : Observer {
 		}
 		if (e.type == eType.Ready)
 		{
-			animator.ResetTrigger("Landed");
-			animator.ResetTrigger("Throw");
+			animator.SetTrigger("Landed");
+			animator.SetTrigger("Throw");
 			if(GetComponent<AudioSource>().clip != null)
 			{
 				animator.SetTrigger("Talk");
@@ -279,7 +279,7 @@ public class AnimationManager : Observer {
 
 	public void carryBasket ()
 	{
-		animator.SetBool ("Carry", true);
+		animator.SetTrigger ("GrabBasket");
 		basketController.SetBool("Carry", true);
 	}
 	
@@ -296,6 +296,8 @@ public class AnimationManager : Observer {
 		animator.SetTrigger ("Fly");
 		basketController.SetBool("Fly", true);
 	}
+
+
 	public void flyToStand()
 	{
 		basketController.SetBool ("Fly", false);
@@ -326,7 +328,7 @@ public class AnimationManager : Observer {
 	public void skipBasket ()
 	{
 		animator.SetTrigger ("Skip");
-		//basketController.SetTrigger ("Skip"); TODO: WAITING ON COMPLETION
+		basketController.SetTrigger ("Skip"); 
 	}
 
 	public void tripBasket()
@@ -430,11 +432,11 @@ public class AnimationManager : Observer {
 		case "Trip":
 			tripBasket ();
 			break;
-		case "Carry":
-			carryBasket ();
-			break;
 		case "Skip": 
-			//skipBasket (); TODO: write this function
+			skipBasket (); 
+			break;
+		case "GrabBasket":
+			carryBasket ();
 			break;
 		}
 	}

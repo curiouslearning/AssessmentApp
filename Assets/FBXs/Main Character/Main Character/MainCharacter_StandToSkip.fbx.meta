@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 0218a863453f54517aa71dc141d222be
-timeCreated: 1457553450
+guid: d0f3154a4ddf840ae9b7b7efddfa3446
+timeCreated: 1457637438
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -375,7 +375,7 @@ ModelImporter:
     4300046: MainCharacter:mouth
     4300048: MainCharacter:l_eye
     4300050: MainCharacter:r_eye
-    7400000: MainSkip
+    7400000: MainStandToSkip
     9500000: //RootNode
     13700000: MainCharacter:body
     13700002: MainCharacter:eyes
@@ -425,10 +425,10 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: MainSkip
+      name: MainStandToSkip
       takeName: Take 001
       firstFrame: 1
-      lastFrame: 37
+      lastFrame: 41
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
