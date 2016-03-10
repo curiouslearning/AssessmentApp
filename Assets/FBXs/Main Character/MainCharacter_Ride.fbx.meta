@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 0f020de6b541342d79f0c353aa9b4f2f
-timeCreated: 1455746646
+guid: ac3961f25af9c4040bbe1d2ba7a83674
+timeCreated: 1457633345
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -375,7 +375,7 @@ ModelImporter:
     4300046: MainCharacter:mouth
     4300048: MainCharacter:l_eye
     4300050: MainCharacter:r_eye
-    7400000: Ride
+    7400000: MainRide
     9500000: //RootNode
     13700000: MainCharacter:body
     13700002: MainCharacter:eyes
@@ -425,7 +425,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: Ride
+      name: MainRide
       takeName: Take 001
       firstFrame: 61
       lastFrame: 121
