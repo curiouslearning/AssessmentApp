@@ -84,9 +84,9 @@ public class SOOScript : Observer {
 		for (int i = 0; i < stimArray.Length; i++)
 		{
 			Vector2 boxOrig = stimArray[i].GetComponent<BoxCollider2D>().size;
-			Debug.Log("original size: (" + stimArray[i].GetComponent<BoxCollider2D>().size.x + "," +stimArray[i].GetComponent<BoxCollider2D>().size.y + ")");
+			//Debug.Log("original size: (" + stimArray[i].GetComponent<BoxCollider2D>().size.x + "," +stimArray[i].GetComponent<BoxCollider2D>().size.y + ")");
 			stimArray[i].GetComponent<BoxCollider2D>().size = new Vector2((boxOrig.x * 3.3333f), (boxOrig.y * 3.3333f));
-			Debug.Log("new size: (" + stimArray[i].GetComponent<BoxCollider2D>().size.x + "," +stimArray[i].GetComponent<BoxCollider2D>().size.y + ")");
+			//Debug.Log("new size: (" + stimArray[i].GetComponent<BoxCollider2D>().size.x + "," +stimArray[i].GetComponent<BoxCollider2D>().size.y + ")");
 	/*		boxOrig.x = ((boxOrig.x * 100f)/30f);
 			boxOrig.y = ((boxOrig.y * 100f)/30f);
 			stimArray[i].GetComponent<BoxCollider2D>().size.Set(boxOrig.x,boxOrig.y); */

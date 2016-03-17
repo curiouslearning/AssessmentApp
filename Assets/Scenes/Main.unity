@@ -549,6 +549,10 @@ Prefab:
       propertyPath: actionList.Array.data[3]
       value: Ride
       objectReference: {fileID: 0}
+    - target: {fileID: 8284884, guid: 24cfefb2d97714555a40308930997e64, type: 2}
+      propertyPath: BypassListenerEffects
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11484366, guid: 24cfefb2d97714555a40308930997e64, type: 2}
     - {fileID: 6199682, guid: 24cfefb2d97714555a40308930997e64, type: 2}

@@ -254,7 +254,13 @@ public class AnimationManager : Observer {
 		if (e.type == eType.Ready)
 		{
 			animator.SetTrigger("Landed");
-			animator.SetTrigger("Throw");
+			if (basketController.GetBool ("Carry")) { //throw the basket if it's being carried
+				throwBasket ();
+			}
+			basketController.SetBool ("Carry", false);
+			basketController.SetBool ("Ride", false);
+			basketController.SetBool ("Skip", false);
+			basketController.SetBool ("Fly", false);
 			if(GetComponent<AudioSource>().clip != null)
 			{
 				animator.SetTrigger("Talk");
@@ -304,6 +310,7 @@ public class AnimationManager : Observer {
 	}
 	public void searchBasket ()
 	{
+		Debug.Log ("called search");
 		animator.SetTrigger ("Search");
 		basketController.SetTrigger("Search");
 	}
@@ -328,7 +335,8 @@ public class AnimationManager : Observer {
 	public void skipBasket ()
 	{
 		animator.SetTrigger ("Skip");
-		basketController.SetTrigger ("Skip"); 
+		basketController.SetTrigger ("StartSkip"); 
+		basketController.SetBool ("Skip", true);
 	}
 
 	public void tripBasket()
@@ -346,6 +354,7 @@ public class AnimationManager : Observer {
 		randomAnimation (payoffList);
 		GetComponent<AudioSource>().clip = null;
 		clearCards();
+		startTransition ();
 	}	
 
 	void startTransition ()
@@ -413,6 +422,7 @@ public class AnimationManager : Observer {
 	}
 	void startAnimation(string s)
 	{
+		Debug.Log ("calling startAnimation with string: " + "\"" + s + "\"");
 		switch (s) {
 		case "Dump":
 			dumpBasket ();
