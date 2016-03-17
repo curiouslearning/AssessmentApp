@@ -291,7 +291,6 @@ public class AnimationManager : Observer {
 	
 	public void throwBasket ()
 	{
-		animator.SetBool ("Carry", false);		
 		basketController.SetBool("Carry", false);
 		animator.SetTrigger ("Throw");
 		basketController.SetTrigger("Throw");
@@ -354,7 +353,6 @@ public class AnimationManager : Observer {
 		randomAnimation (payoffList);
 		GetComponent<AudioSource>().clip = null;
 		clearCards();
-		startTransition ();
 	}	
 
 	void startTransition ()
@@ -544,7 +542,7 @@ public class AnimationManager : Observer {
 		Debug.Log("caught tap");
 		if(GetComponent<AudioSource>().clip != null)
 		{
-			animator.SetTrigger("Talk");
+			animator.SetTrigger("TapTalk");
 			audioCounter = 0f;
 		}
 		
