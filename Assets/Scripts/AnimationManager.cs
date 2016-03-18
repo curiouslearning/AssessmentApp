@@ -15,6 +15,7 @@ public class AnimationManager : Observer {
 	public Animator rectangleCard;
 	public Animator basketController;
 	public Animator rakeController;
+	public Animator[] tokenControllers;
 	ScoreTracker scoreTracker;
 	Material square;
 	Material rectangle;
@@ -315,12 +316,14 @@ public class AnimationManager : Observer {
 		Debug.Log ("called search");
 		animator.SetTrigger ("Search");
 		basketController.SetTrigger("Search");
+		setTokens ("Search");
 	}
 	public void dumpBasket()
 	{
 		animator.SetTrigger ("Dump");
 		basketController.SetTrigger ("Dump");
 		rakeController.SetTrigger ("Rake");
+		setTokens ("Dump");
 	}
 
 	public void rideBasket()
@@ -345,6 +348,7 @@ public class AnimationManager : Observer {
 	{
 		animator.SetTrigger ("TripBasket");
 		basketController.SetTrigger ("Trip");
+		setTokens ("Trip");
 	}
 
 	public void jump ()
@@ -366,8 +370,17 @@ public class AnimationManager : Observer {
 	{
 		animator.SetTrigger ("Rummage");
 		basketController.SetTrigger ("Rummage");
+		setTokens ("Rummage");
 	}
 
+	//call the specified animation on all tokens in the basket
+	void setTokens (string s)
+	{
+		for (int i = 0; i < tokenControllers.Length; i++) {
+			tokenControllers[i].SetTrigger (s);
+		}
+		
+	}
 	public void startPayoff()
 	{
 		animator.SetBool ("ShowCard", false);
@@ -375,7 +388,7 @@ public class AnimationManager : Observer {
 		animator.ResetTrigger ("Landed");
 		animator.ResetTrigger ("Throw");
 		animator.ResetTrigger ("Point");
-		randomAnimation (littlePayoffList);
+		randomAnimation (bigPayoffList);
 		GetComponent<AudioSource>().clip = null;
 		clearCards();
 	}	

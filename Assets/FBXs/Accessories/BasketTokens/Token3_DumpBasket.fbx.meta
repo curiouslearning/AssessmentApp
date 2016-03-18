@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: e7bf0122b45fa45aaa41ad2bdd10ad40
+guid: 9f164d8ff87434c30bb42553eb0e5c0f
 timeCreated: 1458333261
 licenseType: Free
 ModelImporter:
@@ -9,8 +9,8 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: BasketWithItems:Token3:token
-    7400000: Take 001
+    4300000: BasketWithItems:Token2:token
+    7400000: token3Dump
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -32,7 +32,37 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: token3Dump
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 301
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []

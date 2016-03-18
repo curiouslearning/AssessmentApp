@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: f1e1204f023f245b8aec1c58e4363cf7
+guid: a4c0c1d5877f3461286b7377a55aab3f
 timeCreated: 1458333261
 licenseType: Free
 ModelImporter:
@@ -9,8 +9,8 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: BasketWithItems:Token:token
-    7400000: Take 001
+    4300000: BasketWithItems:Token1:token
+    7400000: Token2Trip
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -32,7 +32,37 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Token2Trip
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 211
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
