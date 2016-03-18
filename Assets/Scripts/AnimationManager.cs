@@ -33,7 +33,8 @@ public class AnimationManager : Observer {
 	Animator partHighlighter;
 	public Highlighter mainHighlighter;
 	public string [] actionList;
-	public string [] payoffList;
+	public string [] littlePayoffList;
+	public string [] bigPayoffList;
 	float audioCounter;
 	public float audioInterval;
 	public Selectable touchDetect;
@@ -342,10 +343,31 @@ public class AnimationManager : Observer {
 
 	public void tripBasket()
 	{
-		Debug.Log ("Triggering TripBasket");
 		animator.SetTrigger ("TripBasket");
 		basketController.SetTrigger ("Trip");
 	}
+
+	public void jump ()
+	{
+		animator.SetTrigger ("Jump");
+	}
+
+	public void jumpSpin()
+	{
+		animator.SetTrigger ("JumpSpin");
+	}
+
+	public void clap ()
+	{
+		animator.SetTrigger ("Clap");
+	}
+
+	public void rummage()
+	{
+		animator.SetTrigger ("Rummage");
+		basketController.SetTrigger ("Rummage");
+	}
+
 	public void startPayoff()
 	{
 		animator.SetBool ("ShowCard", false);
@@ -353,7 +375,7 @@ public class AnimationManager : Observer {
 		animator.ResetTrigger ("Landed");
 		animator.ResetTrigger ("Throw");
 		animator.ResetTrigger ("Point");
-		randomAnimation (payoffList);
+		randomAnimation (littlePayoffList);
 		GetComponent<AudioSource>().clip = null;
 		clearCards();
 	}	
@@ -448,6 +470,18 @@ public class AnimationManager : Observer {
 			break;
 		case "GrabBasket":
 			carryBasket ();
+			break;
+		case "Jump":
+			jump ();
+			break;
+		case "JumpSpin":
+			jumpSpin ();
+			break;
+		case "Rummage":
+			rummage ();
+			break;
+		case "Clap":
+			clap ();
 			break;
 		}
 	}

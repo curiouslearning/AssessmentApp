@@ -375,7 +375,7 @@ ModelImporter:
     4300046: MainCharacter:mouth
     4300048: MainCharacter:l_eye
     4300050: MainCharacter:r_eye
-    7400000: Card
+    7400000: MainCard
     9500000: //RootNode
     13700000: MainCharacter:body
     13700002: MainCharacter:eyes
@@ -425,7 +425,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: Card
+      name: MainCard
       takeName: Take 001
       firstFrame: 1
       lastFrame: 91

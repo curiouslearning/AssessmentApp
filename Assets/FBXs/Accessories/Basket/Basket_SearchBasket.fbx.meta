@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: ae7098ce26a0d49fe8ef6a68b76cfe77
-timeCreated: 1457550162
+guid: fc7580ce13d2a4bcaa67000a12b55da5
+timeCreated: 1458333304
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -16,7 +16,7 @@ ModelImporter:
     400006: Basket:Skeleton
     400008: //RootNode
     4300000: Basket:basket
-    7400000: Search
+    7400000: BasketSearch
     9500000: //RootNode
     13700000: Basket:basket
   materials:
@@ -41,7 +41,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: Search
+      name: BasketSearch
       takeName: Take 001
       firstFrame: 1
       lastFrame: 421

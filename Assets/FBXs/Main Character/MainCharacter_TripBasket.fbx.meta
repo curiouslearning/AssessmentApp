@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 959545f19b6da4c7581cce4a998f34e5
-timeCreated: 1457552080
+guid: 5362586ab2da2439c8d49c1c82017a28
+timeCreated: 1458333235
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -428,7 +428,7 @@ ModelImporter:
       name: MainTripBasket
       takeName: Take 001
       firstFrame: 1
-      lastFrame: 181
+      lastFrame: 211
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

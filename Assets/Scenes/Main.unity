@@ -132,6 +132,14 @@ Prefab:
       propertyPath: payoffList.Array.size
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 11474328, guid: 24cfefb2d97714555a40308930997e64, type: 2}
+      propertyPath: bigPayoffList.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 11474328, guid: 24cfefb2d97714555a40308930997e64, type: 2}
+      propertyPath: littlePayoffList.Array.size
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 432144, guid: 24cfefb2d97714555a40308930997e64, type: 2}
       propertyPath: m_LocalPosition.x
       value: -6.27
@@ -552,6 +560,38 @@ Prefab:
     - target: {fileID: 8284884, guid: 24cfefb2d97714555a40308930997e64, type: 2}
       propertyPath: BypassListenerEffects
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11474328, guid: 24cfefb2d97714555a40308930997e64, type: 2}
+      propertyPath: touchDetect
+      value: 
+      objectReference: {fileID: 813173559}
+    - target: {fileID: 11474328, guid: 24cfefb2d97714555a40308930997e64, type: 2}
+      propertyPath: bigPayoffList.Array.data[0]
+      value: Trip
+      objectReference: {fileID: 0}
+    - target: {fileID: 11474328, guid: 24cfefb2d97714555a40308930997e64, type: 2}
+      propertyPath: bigPayoffList.Array.data[1]
+      value: Dump
+      objectReference: {fileID: 0}
+    - target: {fileID: 11474328, guid: 24cfefb2d97714555a40308930997e64, type: 2}
+      propertyPath: bigPayoffList.Array.data[2]
+      value: Search
+      objectReference: {fileID: 0}
+    - target: {fileID: 11474328, guid: 24cfefb2d97714555a40308930997e64, type: 2}
+      propertyPath: littlePayoffList.Array.data[0]
+      value: Jump
+      objectReference: {fileID: 0}
+    - target: {fileID: 11474328, guid: 24cfefb2d97714555a40308930997e64, type: 2}
+      propertyPath: littlePayoffList.Array.data[1]
+      value: JumpSpin
+      objectReference: {fileID: 0}
+    - target: {fileID: 11474328, guid: 24cfefb2d97714555a40308930997e64, type: 2}
+      propertyPath: littlePayoffList.Array.data[2]
+      value: Clap
+      objectReference: {fileID: 0}
+    - target: {fileID: 11474328, guid: 24cfefb2d97714555a40308930997e64, type: 2}
+      propertyPath: bigPayoffList.Array.data[3]
+      value: Rummage
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11484366, guid: 24cfefb2d97714555a40308930997e64, type: 2}
