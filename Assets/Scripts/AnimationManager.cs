@@ -36,6 +36,7 @@ public class AnimationManager : Observer {
 	public string [] payoffList;
 	float audioCounter;
 	public float audioInterval;
+	public Selectable touchDetect;
 //	public SpriteRenderer talkBubble;
 //	public Sprite talkBubbleSprite;
 
@@ -61,6 +62,7 @@ public class AnimationManager : Observer {
 		animator = GetComponent<Animator>();
 		square = squareCard.GetComponent<MeshRenderer>().material;
 		rectangle = rectangleCard.GetComponent<MeshRenderer>().material;
+		touchDetect.initP (this.onSelect);
 		initTextures();
 	}
 
@@ -258,7 +260,7 @@ public class AnimationManager : Observer {
 				throwBasket ();
 			}
 			basketController.SetBool ("Carry", false);
-			basketController.SetBool ("Ride", false);
+			basketController.ResetTrigger ("Ride");
 			basketController.SetBool ("Skip", false);
 			basketController.SetBool ("Fly", false);
 			if(GetComponent<AudioSource>().clip != null)
@@ -322,13 +324,13 @@ public class AnimationManager : Observer {
 
 	public void rideBasket()
 	{
-		animator.SetBool ("Ride", true);
+		animator.SetTrigger ("Ride");
 		basketController.SetBool ("Ride", true);
 	}
 
 	public void endRide ()
 	{
-		animator.SetBool ("Ride", false);
+		animator.ResetTrigger("Ride");
 		basketController.SetBool ("Ride", false);
 	}
 	public void skipBasket ()
@@ -340,7 +342,8 @@ public class AnimationManager : Observer {
 
 	public void tripBasket()
 	{
-		animator.SetTrigger ("Trip");
+		Debug.Log ("Triggering TripBasket");
+		animator.SetTrigger ("TripBasket");
 		basketController.SetTrigger ("Trip");
 	}
 	public void startPayoff()

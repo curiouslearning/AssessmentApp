@@ -199,15 +199,14 @@ public class SOOScript : Observer {
 		if(moving == false && !movingAlreadyFalse)
 		{		
 			setDrag("Stimulus");
-			if(curDest == destArray[0])
-			{
-				eventWrapper.sendEvent(eType.Ready);
+			if (curDest == destArray[0]){
+				eventWrapper.sendEvent (eType.Ready);
 			}
 			movingAlreadyFalse = true; // only do this once per move
 		}
-		if(moving == true)
-		{
-			transform.position = Vector3.Lerp(transform.position, curDest, Time.deltaTime * speed);
+		if (moving == true) {
+			transform.position = Vector3.Lerp (transform.position, curDest, Time.deltaTime * speed);
+
 		}
 		if(moving == true && ((transform.position.x < curDest.x + marginOfError) && (transform.position.x > curDest.x - marginOfError)))
 		{

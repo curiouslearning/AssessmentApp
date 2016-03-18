@@ -85,9 +85,7 @@ public class TouchProcessor : Observer {
 						offset= selection.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, screenPoint));
 					}
 					
-					if(selection.GetComponent<Selectable>() != null) {
-						selection.GetComponent<Selectable>().onSelect(t); //notify the selection it has been touched
-					}
+
 				}
 			
 			}
@@ -115,7 +113,10 @@ public class TouchProcessor : Observer {
 			}
 
 			if (touch.phase == TouchPhase.Ended)
-			{	
+			{
+				if(selection.GetComponent<Selectable>() != null) {
+					selection.GetComponent<Selectable>().onSelect(t); //notify the selection it has been touched
+				}	
 				sendTouch("End Touch", touch.position);
 				if(t.isInit()){ //if t.type was not modified in a Drag phase
 					t.setTouch(eType.Tap);

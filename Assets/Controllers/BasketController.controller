@@ -349,7 +349,7 @@ AnimatorStateTransition:
   m_PrefabInternal: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 1
+  - m_ConditionMode: 2
     m_ConditionEvent: Ride
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
@@ -819,7 +819,7 @@ AnimatorState:
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 48ca861e44c1c4ccba0d18fd2e0404ec, type: 3}
+  m_Motion: {fileID: 7400000, guid: 076c86e7f303e4009ac6a06f6020ab32, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

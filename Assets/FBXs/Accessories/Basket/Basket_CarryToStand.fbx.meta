@@ -16,7 +16,7 @@ ModelImporter:
     400006: Basket:Skeleton
     400008: //RootNode
     4300000: Basket:basket
-    7400000: CarryToStand
+    7400000: BasketCarryToStand
     9500000: //RootNode
     13700000: Basket:basket
   materials:
@@ -41,7 +41,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: CarryToStand
+      name: BasketCarryToStand
       takeName: Take 001
       firstFrame: 61
       lastFrame: 105
