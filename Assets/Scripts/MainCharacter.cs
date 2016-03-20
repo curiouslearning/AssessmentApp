@@ -29,6 +29,7 @@ public class MainCharacter : AnimationManager {
 	public Highlighter mainHighlighter;
 	public string [] littlePayoffList;
 	public string [] bigPayoffList;
+	public string [] transitionList;
 	float audioCounter;
 	public float audioInterval;
 	void Awake()
@@ -246,7 +247,8 @@ public class MainCharacter : AnimationManager {
 			return;	
 		}
 	}
-	//************************************
+
+//************************************
 // Animation initialization functions*
 //************************************
 	public void carryBasket ()
@@ -365,7 +367,7 @@ public class MainCharacter : AnimationManager {
 	/// <summary>
 	/// Starts the question transition sequence.
 	/// </summary>
-	void startTransition ()
+	public void startTransition ()
 	{
 		eventHandler.sendEvent (eType.Transition);
 		animator.SetBool("ShowCard", false);
@@ -373,7 +375,7 @@ public class MainCharacter : AnimationManager {
 		animator.ResetTrigger("Landed");
 		animator.ResetTrigger("Throw");
 		animator.ResetTrigger("Point");
-		randomAnimation(actionList);
+		randomAnimation(transitionList);
 		GetComponent<AudioSource>().clip = null;
 		clearCards();
 	}
@@ -452,6 +454,9 @@ public class MainCharacter : AnimationManager {
 			break;
 		case "Clap":
 			clap ();
+			break;
+		default:
+			base.startAnimation (s);
 			break;
 		}
 	}

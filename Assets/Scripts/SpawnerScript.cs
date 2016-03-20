@@ -23,7 +23,7 @@ public class SpawnerScript : MonoBehaviour {
 	public Texture2D[] secondaryAtlases;
 	//components
 	public GameObject character;
-	public AnimationManager host;
+	public MainCharacter host;
 	public BackgroundScroller background;
 	public List<Observer> observers;
 	//placement modifiers for stimulus positions

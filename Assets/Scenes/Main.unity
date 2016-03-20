@@ -85,6 +85,11 @@ NavMeshSettings:
     cellSize: 0.16666667
     manualCellSize: 0
   m_NavMeshData: {fileID: 0}
+--- !u!95 &12018452 stripped
+Animator:
+  m_PrefabParentObject: {fileID: 9571092, guid: 24cfefb2d97714555a40308930997e64,
+    type: 2}
+  m_PrefabInternal: {fileID: 131004598}
 --- !u!1 &85796400 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 139272, guid: 24cfefb2d97714555a40308930997e64, type: 2}
@@ -616,6 +621,7 @@ Prefab:
     m_RemovedComponents:
     - {fileID: 11484366, guid: 24cfefb2d97714555a40308930997e64, type: 2}
     - {fileID: 6199682, guid: 24cfefb2d97714555a40308930997e64, type: 2}
+    - {fileID: 11474328, guid: 24cfefb2d97714555a40308930997e64, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 24cfefb2d97714555a40308930997e64, type: 2}
   m_IsPrefabParent: 0
 --- !u!114 &148135401 stripped
@@ -847,12 +853,10 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &423845921 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 11474328, guid: 24cfefb2d97714555a40308930997e64,
-    type: 2}
+--- !u!1 &564167851 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 183628, guid: 24cfefb2d97714555a40308930997e64, type: 2}
   m_PrefabInternal: {fileID: 131004598}
-  m_Script: {fileID: 11500000, guid: 084af37bf0e37414993ef1e9b87c6c4f, type: 3}
 --- !u!1 &624026511
 GameObject:
   m_ObjectHideFlags: 0
@@ -1193,6 +1197,10 @@ MonoBehaviour:
   Canvas: {fileID: 339596391}
   eventHandler: {fileID: 829527127}
   currentCategory: 2
+--- !u!1 &866044724 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 151242, guid: 24cfefb2d97714555a40308930997e64, type: 2}
+  m_PrefabInternal: {fileID: 131004598}
 --- !u!1 &888977026
 GameObject:
   m_ObjectHideFlags: 0
@@ -1299,10 +1307,10 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 035f50abc211e4d9bb25e55056161845, type: 3}
   - {fileID: 2800000, guid: 66b51fdfb4d05440e95ca53a09c5ae8d, type: 3}
   character: {fileID: 116526, guid: 00f2b761211464ae99fab1806c7446e4, type: 2}
-  host: {fileID: 423845921}
+  host: {fileID: 1676663072}
   background: {fileID: 276359290}
   observers:
-  - {fileID: 423845921}
+  - {fileID: 1676663072}
   - {fileID: 276359290}
   - {fileID: 829527126}
   - {fileID: 285965001}
@@ -1330,6 +1338,10 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
+--- !u!1 &1023231312 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 187334, guid: 24cfefb2d97714555a40308930997e64, type: 2}
+  m_PrefabInternal: {fileID: 131004598}
 --- !u!1 &1073020890 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 133346, guid: 24cfefb2d97714555a40308930997e64, type: 2}
@@ -1760,6 +1772,10 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a6bfe1bbc677f4acc9c0818ea48ce0ce, type: 3}
   m_IsPrefabParent: 0
+--- !u!1 &1581384812 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 160006, guid: 24cfefb2d97714555a40308930997e64, type: 2}
+  m_PrefabInternal: {fileID: 131004598}
 --- !u!95 &1589137415 stripped
 Animator:
   m_PrefabParentObject: {fileID: 9500000, guid: 0a8f60ea0e280492d8b4667963be7a08,
@@ -1889,6 +1905,65 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9f164d8ff87434c30bb42553eb0e5c0f, type: 3}
   m_IsPrefabParent: 0
+--- !u!1 &1676663068 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 178776, guid: 24cfefb2d97714555a40308930997e64, type: 2}
+  m_PrefabInternal: {fileID: 131004598}
+--- !u!114 &1676663072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1676663068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c99774c99e4f0a90e6dd2ec62c1b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  eventHandler: {fileID: 0}
+  scoreTracker: {fileID: 829527128}
+  subjects:
+  - {fileID: 829527119}
+  - {fileID: 813173556}
+  - {fileID: 1331431048}
+  currentCategory: 0
+  touchDetect: {fileID: 813173559}
+  squareCard: {fileID: 12018452}
+  rectangleCard: {fileID: 1745116242}
+  basketController: {fileID: 1294714895}
+  rakeController: {fileID: 1691715515}
+  tokenControllers:
+  - {fileID: 1722815577}
+  - {fileID: 773769297}
+  - {fileID: 913530801}
+  - {fileID: 1589137415}
+  optionsList: {fileID: 4900000, guid: 97cca580a92084e4bade0df31b92344f, type: 3}
+  bodyParts:
+  - {fileID: 1073020890}
+  - {fileID: 1581384812}
+  - {fileID: 1023231312}
+  - {fileID: 564167851}
+  - {fileID: 1874585353}
+  - {fileID: 85796400}
+  - {fileID: 866044724}
+  defaultPos: 0
+  mainHighlighter: {fileID: 285965001}
+  littlePayoffList:
+  - Clap
+  - Jump
+  - JumpSpin
+  bigPayoffList:
+  - Dump
+  - Trip
+  - Search
+  - Rummage
+  transitionList:
+  - GrabBasket
+  - Skip
+  - Fly
+  - Ride
+  audioInterval: 5
 --- !u!95 &1691715515 stripped
 Animator:
   m_PrefabParentObject: {fileID: 9500000, guid: b6aba09b845db49d7af3cd531a356a3c,
@@ -1903,6 +1978,11 @@ Animator:
   m_PrefabParentObject: {fileID: 9500000, guid: a6bfe1bbc677f4acc9c0818ea48ce0ce,
     type: 3}
   m_PrefabInternal: {fileID: 1571305707}
+--- !u!95 &1745116242 stripped
+Animator:
+  m_PrefabParentObject: {fileID: 9543214, guid: 24cfefb2d97714555a40308930997e64,
+    type: 2}
+  m_PrefabInternal: {fileID: 131004598}
 --- !u!1001 &1859803525
 Prefab:
   m_ObjectHideFlags: 0
@@ -1977,3 +2057,7 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6768cae03ca1d4fab97a9b4b686d2751, type: 3}
   m_IsPrefabParent: 0
+--- !u!1 &1874585353 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 194624, guid: 24cfefb2d97714555a40308930997e64, type: 2}
+  m_PrefabInternal: {fileID: 131004598}
