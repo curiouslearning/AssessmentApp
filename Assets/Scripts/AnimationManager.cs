@@ -9,17 +9,16 @@ using UnityEngine.SceneManagement;
 /// system and organizes the firing of animations and changing of customizable options.
 /// </summary>
 public class AnimationManager : Observer {
-	Animator animator;
-	Subject eventHandler;
+	public  Animator animator;
+	public Subject eventHandler;
+	//<move to MainCharacter>
 	public Animator squareCard;
 	public Animator rectangleCard;
 	public Animator basketController;
 	public Animator rakeController;
-	public Animator[] tokenControllers;
-	ScoreTracker scoreTracker;
+	public Animator[] tokenControllers;	
 	Material square;
 	Material rectangle;
-	public GameObject[] subjects;
 	public TextAsset optionsList;
 	const int NUMBODYPARTS = 7;
 	const int NUMOPTIONS = 10;
@@ -30,14 +29,17 @@ public class AnimationManager : Observer {
 	public int defaultPos; //standard index for the default texture for each body part
 	string[] sourceLines;
 	bool[] bodyPartCustomized; //tracks which options have been customized
-	Category currentCategory;
 	Animator partHighlighter;
 	public Highlighter mainHighlighter;
-	public string [] actionList;
 	public string [] littlePayoffList;
 	public string [] bigPayoffList;
 	float audioCounter;
 	public float audioInterval;
+	//</move>
+	public  ScoreTracker scoreTracker;
+	public GameObject[] subjects;
+	public Category currentCategory;
+	public string [] actionList;
 	public Selectable touchDetect;
 //	public SpriteRenderer talkBubble;
 //	public Sprite talkBubbleSprite;
@@ -82,10 +84,9 @@ public class AnimationManager : Observer {
 	/// <summary>
 	/// Function for initializing the Observer design pattern.
 	/// NOTE: ANY NEW SUBJECT MUST BE MANUALLY INSERTED INTO THE ARRAY EITHER IN THE EDITOR OR IN START()
-    /// called by Start()
 	/// </summary>
     
-	void addSelfToSubjects()
+	public virtual void addSelfToSubjects()
 	{
 		GameObject temp;
 		for (int i = 0; i < subjects.Length; i++)
@@ -98,7 +99,7 @@ public class AnimationManager : Observer {
 	}	
 
     /// <summary>
-    /// needs summary; called in Awake()
+    /// On Awake, initialize the list of body parts with left/right mirrors
     /// </summary>
     /// <param name="numbers">array of ints</param>
     /// <param name="parts">array of strings</param>
@@ -112,8 +113,11 @@ public class AnimationManager : Observer {
 			mirror.Add (numbers[i], g);
 		}
 	}
-
-	public override void registerGameObjectWithSoo(GameObject SOO)
+	/// <summary>
+	/// Registers this game object with each new SOO.
+	/// </summary>
+	/// <param name="SOO">SO.</param>
+	public virtual void registerGameObjectWithSoo(GameObject SOO)
 	{
 		base.registerGameObjectWithSoo(SOO);
 	}
@@ -220,7 +224,7 @@ public class AnimationManager : Observer {
 	/// </summary>
 	/// <param name="e">Event Instance.</param>
     
-	public override void onNotify (EventInstance<GameObject> e)
+	public virtual void onNotify (EventInstance<GameObject> e)
 	{
 		if (e.type == eType.NewQuestion)
 		{
@@ -276,8 +280,11 @@ public class AnimationManager : Observer {
 			return;
 		}
 	}
-
-	public override void onNotify (EventInstance<bool> e)
+	/// <summary>
+	/// overridden method to handle events with bool subjects
+	/// </summary>
+	/// <param name="e">Event Instance containing the subject and the type of event thrown.</param>
+	public virtual void onNotify (EventInstance<bool> e)
 	{
 		Debug.Log ("boop boop");
 		if(e.type == eType.Selected)
@@ -287,6 +294,9 @@ public class AnimationManager : Observer {
 		}
 	}
 
+//************************************
+// Animation initialization functions*
+//************************************
 	public void carryBasket ()
 	{
 		animator.SetTrigger ("GrabBasket");
@@ -373,7 +383,10 @@ public class AnimationManager : Observer {
 		setTokens ("Rummage");
 	}
 
-	//call the specified animation on all tokens in the basket
+	/// <summary>
+	///call the specified animation on all tokens in the basket
+	/// </summary>
+	/// <param name="s">S.</param>
 	void setTokens (string s)
 	{
 		for (int i = 0; i < tokenControllers.Length; i++) {
@@ -381,10 +394,14 @@ public class AnimationManager : Observer {
 		}
 		
 	}
+
+	/// <summary>
+	/// Starts the payoff animation sequence.
+	/// </summary>
 	public void startPayoff()
 	{
 		animator.SetBool ("ShowCard", false);
-		hideCards ();
+		hideVisibleCards ();
 		animator.ResetTrigger ("Landed");
 		animator.ResetTrigger ("Throw");
 		animator.ResetTrigger ("Point");
@@ -393,11 +410,14 @@ public class AnimationManager : Observer {
 		clearCards();
 	}	
 
+	/// <summary>
+	/// Starts the question transition sequence.
+	/// </summary>
 	void startTransition ()
 	{
 		eventHandler.sendEvent (eType.Transition);
 		animator.SetBool("ShowCard", false);
-		hideCards();
+		hideVisibleCards();
 		animator.ResetTrigger("Landed");
 		animator.ResetTrigger("Throw");
 		animator.ResetTrigger("Point");
@@ -405,58 +425,55 @@ public class AnimationManager : Observer {
 		GetComponent<AudioSource>().clip = null;
 		clearCards();
 	}
-
+	/// <summary>
+	/// Reveal the MainCharacter's card. Show square if both are null. 
+	/// </summary>
 	public void startCards()
 	{
-		if(square.mainTexture != null)
-		{
-			squareCard.SetTrigger("ShowCard");
-		}
-		else if (rectangle.mainTexture != null) 
+		if(rectangle.mainTexture != null)
 		{
 			rectangleCard.SetTrigger("ShowCard");
+		}
+		else
+		{
+			squareCard.SetTrigger("ShowCard");
 			
 		}	
 		
-	}	
+	}
+
 	void clearCards ()
 	{
 		square.mainTexture = null;
 		rectangle.mainTexture = null;
 	}
-	public void hideCards ()
+
+	/// <summary>
+	/// Hides the visible card.
+	/// </summary>
+	public void hideVisibleCards ()
 	{
 		squareCard.SetTrigger("RemoveCard");
 		rectangleCard.SetTrigger("RemoveCard");
 	}
-	void updateHighlighter()
-	{
-		int part = getBodyPart();
-		bodyParts[part].transform.GetChild(0).gameObject.SetActive(true);
-		for (int i =0; i < bodyParts.Length; i++)
-		{
-			if (i != part)	
-			{	
-				bodyParts[i].transform.GetChild(0).gameObject.SetActive(false);
-			}
-		}
-	}
-	
-	void hideHighlighter()
-	{
-		for (int i = 0; i < bodyParts.Length; i++)
-		{
-			bodyParts[i].transform.GetChild(0).gameObject.SetActive(false);
-		}
-	}
-	void randomAnimation (string[] s)
+	/// <summary>
+	/// Randomly choose animation name from array of strings
+	/// </summary>
+	/// <param name="s">S.</param>
+	protected virtual void randomAnimation (string[] s)
 	{
 		int val = Random.Range(0, s.Length);
 		Debug.Log ("using animation: " + s [val]);
 		startAnimation (s [val]);
 		return;
 	}
-	void startAnimation(string s)
+
+	/// <summary>
+	/// Starts the given animation.
+	/// </summary>
+	/// <param name="s">S.</param>
+	//TODO: refactor for polymorphism
+	protected virtual void startAnimation(string s)
 	{
 		Debug.Log ("calling startAnimation with string: " + "\"" + s + "\"");
 		switch (s) {
@@ -495,11 +512,41 @@ public class AnimationManager : Observer {
 			break;
 		case "Clap":
 			clap ();
-			break;
+			break;	
 		}
 	}
+
+//*************************************
+//Other MainCharacter Helper Functions*
+//TODO: Split into a Maincharacter    *
+//extension of AnimationManager       *
+//*************************************
+
+//TODO: refactor this according to new highlighter
+	void updateHighlighter()
+	{
+		int part = getBodyPart();
+		bodyParts[part].transform.GetChild(0).gameObject.SetActive(true);
+		for (int i =0; i < bodyParts.Length; i++)
+		{
+			if (i != part)	
+			{	
+				bodyParts[i].transform.GetChild(0).gameObject.SetActive(false);
+			}
+		}
+	}
+	
+	void hideHighlighter()
+	{
+		for (int i = 0; i < bodyParts.Length; i++)
+		{
+			bodyParts[i].transform.GetChild(0).gameObject.SetActive(false);
+		}
+	}
+
+
 	/// <summary>
-	/// Changes the body part.
+	/// Swaps the texture on the selected body part.
 	/// </summary>
 	/// <param name="part">Index of the bone to be changed in bodyParts.</param>
 	/// <param name="newTexture"> Replacement Texture.</param>
@@ -517,7 +564,7 @@ public class AnimationManager : Observer {
 	
 
 	/// <summary>
-	/// Gets the options for the first not-customized body part.
+	/// Gets the options for the first not-yet-customized body part.
 	/// </summary>
 	/// <returns>texture options converted into sprites.</returns>
 	public List<Sprite> getOptions ()
@@ -572,6 +619,9 @@ public class AnimationManager : Observer {
 		bodyPartCustomized[i] = true;
 		return i;
 	}
+	/// <summary>
+	/// Plays the audio, if present.
+	/// </summary>
 	public void playAudio ()
 	{
 		Debug.Log("play");
@@ -583,10 +633,17 @@ public class AnimationManager : Observer {
             a.Play();
         }
 	}
+	/// <summary>
+	/// Resets the talk animation.
+	/// </summary>
 	public void resetTalk ()
 	{
 		animator.ResetTrigger ("Talk");
 	}
+	/// <summary>
+	/// catches tap events and plays audio (if present)
+	/// </summary>
+	/// <param name="t">T.</param>
 	public void onSelect (touchInstance t)
 	{
 		Debug.Log("caught tap");
@@ -597,7 +654,7 @@ public class AnimationManager : Observer {
 		}
 		
 	}
-	// Update is called once per frame
+	//controls the automatic talking timer
 	void Update () {
 		if(GetComponent<AudioSource>().clip != null)
 		{
