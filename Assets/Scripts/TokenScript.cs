@@ -38,17 +38,23 @@ public class TokenScript : MonoBehaviour {
 	{
 		return isTarget;
 	}
-	
+
+	/// <summary>
+	/// Parses touch events for the Secondary Character's Token
+	/// </summary>
+	/// <param name="t">T.</param>
 	public void onSelect(touchInstance t)
 	{
-//		GetComponent<Animator>().enabled =false;
-		animator.SetTrigger ("Speak");
-//		GetComponent<Animator>().SetBool("Selected", true);
+		Debug.Log (t.getType ());
+		if (t.getType () == eType.Tap) {
+			animator.SetTrigger ("Speak");
+		} else {
+			//GetComponent<Animator> ().SetBool ("Selected", true);
+		}
 	}
 	public void offSelect(touchInstance t)
 	{
-		GetComponent<Animator>().enabled = true;
-		GetComponent<Animator>().SetBool("Selected", false);
+		GetComponent<Animator> ().SetBool ("Selected", false);
 	}
 	public void talk()
 	{

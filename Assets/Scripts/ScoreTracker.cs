@@ -46,9 +46,15 @@ public class ScoreTracker : Observer {
 	int numWrong;
 	int numAnswered;
 	//question-capping variables
+	//external
+	public int wrongQuestionLimit;
+	public int rightQuestionLimit;
+	public int totalQuestionLimit;
+	//internal
 	int correctCap;
 	int wrongCap;
 	int totalCap;
+
 	public Category currentCategory; // currently a public variable for debugging purposes
 	Category lastCategory;
 	Score s;
@@ -90,28 +96,28 @@ public class ScoreTracker : Observer {
 	}
 
     /// <summary>
-    /// set caps for right, wrong, and total number of questions; only called in Start()
+    /// set caps for right, wrong, and total number of questions, using stimCount and publicly set variables
     /// </summary>
 
 	void setCaps()
 	{
 		int stimCount = spawnHolder.getStimsByDifficulty(Difficulty.Hard, "visual");
-		if(stimCount < 4)
+		if(stimCount < wrongQuestionLimit)
 		{
 			wrongCap = stimCount;
 			correctCap = stimCount;
 		}
-		else if (stimCount > 4 && stimCount < 20)
+		else if (stimCount > wrongQuestionLimit && stimCount < totalQuestionLimit)
 		{
-			wrongCap = 4;
-			correctCap = 3;
+			wrongCap = wrongQuestionLimit;
+			correctCap = rightQuestionLimit;
 			totalCap = stimCount;
 		}
 		else
 		{
-			wrongCap = 4;
-			correctCap = 3;
-			totalCap = 20;
+			wrongCap = wrongQuestionLimit;
+			correctCap = rightQuestionLimit;
+			totalCap = totalQuestionLimit;
 		}
 	}
 
@@ -485,8 +491,12 @@ public class ScoreTracker : Observer {
 			s = new Score(questionNumber);
 			s.setCategory(currentCategory);
 			s.setDifficulty(temp);
-			if(numWrong >= wrongCap || numAnswered >= totalCap || currentCategory == Category.Customization){
+		
+			if((numWrong >= wrongCap && s.returnDifficulty() == Difficulty.Easy) || numAnswered >= totalCap || currentCategory == Category.Customization){
 				setCategory();
+			}
+			if (numWrong >= wrongCap) {
+				resetDifficulty (s.returnDifficulty());
 			}
 			if(gameOver)
 				return;

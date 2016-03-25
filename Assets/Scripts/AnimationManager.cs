@@ -56,14 +56,7 @@ public class AnimationManager : Observer {
 		}
 	}	
 		
-	/// <summary>
-	/// Registers this game object with each new SOO.
-	/// </summary>
-	/// <param name="SOO">SO.</param>
-	public virtual void registerGameObjectWithSoo(GameObject SOO)
-	{
-		base.registerGameObjectWithSoo(SOO);
-	}
+
 
 	/// <summary>
 	/// Chooses a random animation from an array of strings

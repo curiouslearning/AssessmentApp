@@ -79,8 +79,9 @@ public class TouchProcessor : Observer {
 					selection = touchHit.transform.gameObject; 
 					AndroidBroadcastIntentHandler.BroadcastJSONData("PlayerSelection", selection.gameObject.name);
 					if(selection.gameObject.tag == "Stimulus")
-					{
-						parentBuffer = selection.transform.parent;  //store and remove the parent to prevent weird parent-child behavior during dragging
+					{ 
+						 //store and remove the parent to prevent weird parent-child behavior during dragging
+						parentBuffer = selection.transform.parent; 
 						selection.transform.parent = null;
 						offset= selection.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, screenPoint));
 					}
@@ -114,13 +115,14 @@ public class TouchProcessor : Observer {
 
 			if (touch.phase == TouchPhase.Ended)
 			{
-				if(selection.GetComponent<Selectable>() != null) {
-					selection.GetComponent<Selectable>().onSelect(t); //notify the selection it has been touched
-				}	
+				
 				sendTouch("End Touch", touch.position);
 				if(t.isInit()){ //if t.type was not modified in a Drag phase
 					t.setTouch(eType.Tap);
 				}
+				if(selection.GetComponent<Selectable>() != null) {
+					selection.GetComponent<Selectable>().onSelect(t); //notify the selection it has been touched
+				}	
 				t.addTime(touch.deltaTime);
 				if(selection != null) //if object was not placed in receptacle
 				{

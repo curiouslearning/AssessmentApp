@@ -544,7 +544,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 443138, guid: 24cfefb2d97714555a40308930997e64, type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 448082, guid: 24cfefb2d97714555a40308930997e64, type: 2}
       propertyPath: m_RootOrder
@@ -552,15 +552,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400776, guid: 24cfefb2d97714555a40308930997e64, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 483162, guid: 24cfefb2d97714555a40308930997e64, type: 2}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 450658, guid: 24cfefb2d97714555a40308930997e64, type: 2}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11474328, guid: 24cfefb2d97714555a40308930997e64, type: 2}
       propertyPath: actionList.Array.data[3]
@@ -655,8 +655,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 276359288}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.12, y: -1.89, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.119999886, y: -1.8899996, z: 1}
   m_LocalScale: {x: 30, y: 15, z: 1}
   m_Children:
   - {fileID: 624026515}
@@ -1196,6 +1196,9 @@ MonoBehaviour:
   replayButtonPrefab: {fileID: 11482010, guid: 10493332d5feaae41bcf2735c218bffc, type: 2}
   Canvas: {fileID: 339596391}
   eventHandler: {fileID: 829527127}
+  wrongQuestionLimit: 0
+  rightQuestionLimit: 0
+  totalQuestionLimit: 0
   currentCategory: 2
 --- !u!1 &866044724 stripped
 GameObject:
@@ -1333,7 +1336,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 955094559}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 24.35, y: 1.54, z: -0}
+  m_LocalPosition: {x: 23.88, y: 1.34, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1489,7 +1492,7 @@ Transform:
   m_LocalScale: {x: 0.006850216, y: 0.006850216, z: 0.006850216}
   m_Children: []
   m_Father: {fileID: 1522602331}
-  m_RootOrder: 5
+  m_RootOrder: 3
 --- !u!212 &1158815551
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1953,6 +1956,7 @@ MonoBehaviour:
   - Clap
   - Jump
   - JumpSpin
+  - Dance
   bigPayoffList:
   - Dump
   - Trip
@@ -1964,6 +1968,8 @@ MonoBehaviour:
   - Fly
   - Ride
   audioInterval: 5
+  newColor: {r: 0.99264705, g: 0, b: 0, a: 0}
+  oldColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!95 &1691715515 stripped
 Animator:
   m_PrefabParentObject: {fileID: 9500000, guid: b6aba09b845db49d7af3cd531a356a3c,
@@ -1992,7 +1998,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400016, guid: 6768cae03ca1d4fab97a9b4b686d2751, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.91
+      value: -6.6
       objectReference: {fileID: 0}
     - target: {fileID: 400016, guid: 6768cae03ca1d4fab97a9b4b686d2751, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2024,11 +2030,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400016, guid: 6768cae03ca1d4fab97a9b4b686d2751, type: 3}
       propertyPath: m_LocalScale.x
-      value: 20
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 400016, guid: 6768cae03ca1d4fab97a9b4b686d2751, type: 3}
       propertyPath: m_LocalScale.y
-      value: 20
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 400012, guid: 6768cae03ca1d4fab97a9b4b686d2751, type: 3}
       propertyPath: m_LocalRotation.y

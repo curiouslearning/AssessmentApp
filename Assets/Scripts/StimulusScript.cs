@@ -191,8 +191,10 @@ public class StimulusScript : MonoBehaviour{
 		this.isTarget = input.isTarget;
 		this.isDraggable = input.isDraggable;
 		this.difficulty = input.difficulty;
-		if(input.stimType == "visual")
-			this.visStim  = input.sprite;
+		if (input.stimType == "visual") {
+			this.visStim = input.sprite;
+			GetComponent<AudioSource> ().clip = Resources.Load<AudioClip> ("Audio/" + input.hostStim);
+		}
 		else if(input.stimType == "audio")
 			this.GetComponent<AudioSource>().clip = Resources.Load<AudioClip>("Audio/" + input.audio);
 		this.stimType = input.stimType;
@@ -230,7 +232,9 @@ public class StimulusScript : MonoBehaviour{
 		if (audio.clip != null)
 		{
 			audio.Play();
-			anim.SetTrigger("Talk");
+			if (anim != null) {
+				anim.SetTrigger ("Talk");
+			}
 		}
 			
 	}
@@ -238,7 +242,6 @@ public class StimulusScript : MonoBehaviour{
 	{
 		token.talk ();
 	}
-
 
 	
 	void Update () {

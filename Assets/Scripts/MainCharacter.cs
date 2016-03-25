@@ -32,6 +32,8 @@ public class MainCharacter : AnimationManager {
 	public string [] transitionList;
 	float audioCounter;
 	public float audioInterval;
+	public Color newColor;
+	public Color oldColor;
 	void Awake()
 	{
 		Application.targetFrameRate = 15;
@@ -211,6 +213,7 @@ public class MainCharacter : AnimationManager {
 		if (e.type == eType.Grab)
 		{
 			animator.SetTrigger("Point");
+			//StartCoroutine (Flash());
 			return;
 		}
 		if (e.type == eType.Ready)
@@ -223,13 +226,14 @@ public class MainCharacter : AnimationManager {
 			basketController.ResetTrigger ("Ride");
 			basketController.SetBool ("Skip", false);
 			basketController.SetBool ("Fly", false);
-			if(GetComponent<AudioSource>().clip != null)
-			{
-				animator.SetTrigger("Talk");
-            }
-			else if( square.mainTexture != null || rectangle.mainTexture != null)
-			{
-				animator.SetBool("ShowCard", true);
+			if (GetComponent<AudioSource> ().clip != null) {
+				GetComponentInChildren<SpriteRenderer> ().enabled = true;
+				animator.SetTrigger ("Talk");
+			} else if (square.mainTexture != null || rectangle.mainTexture != null) {
+				GetComponentInChildren<SpriteRenderer> ().enabled = false;
+				animator.SetBool ("ShowCard", true);
+			} else {
+				GetComponentInChildren<SpriteRenderer> ().enabled = false;
 			}
 			return;
 		}
@@ -247,14 +251,27 @@ public class MainCharacter : AnimationManager {
 			return;	
 		}
 	}
-
+	IEnumerator Flash (){
+		Renderer renderer = GetComponentInChildren<Renderer> ();
+		Debug.Log ("using: " + renderer);
+		for (int i = 0; i < 5; i++)
+		{
+			Debug.Log ("switching to: " + newColor);
+			renderer.material.color = newColor;
+			yield return new WaitForSeconds(.1f);
+			Debug.Log ("switching to: " + oldColor);
+			renderer.material.color = oldColor; 
+			yield return new WaitForSeconds(.1f);
+		}
+	}
 //************************************
 // Animation initialization functions*
 //************************************
 	public void carryBasket ()
 	{
-		animator.SetTrigger ("GrabBasket");
 		basketController.SetBool("Carry", true);
+		basketController.SetTrigger ("StartCarry");
+		animator.SetTrigger ("GrabBasket");
 	}
 	
 	public void throwBasket ()
@@ -266,8 +283,9 @@ public class MainCharacter : AnimationManager {
 
 	public void flyBasket()
 	{
-		animator.SetTrigger ("Fly");
 		basketController.SetBool("Fly", true);
+		basketController.SetTrigger ("StartFly");
+		animator.SetTrigger ("Fly");
 	}
 
 
@@ -278,40 +296,41 @@ public class MainCharacter : AnimationManager {
 	public void searchBasket ()
 	{
 		Debug.Log ("called search");
-		animator.SetTrigger ("Search");
 		basketController.SetTrigger("Search");
+		animator.SetTrigger ("Search");
 		setTokens ("Search");
 	}
 	public void dumpBasket()
 	{
-		animator.SetTrigger ("Dump");
 		basketController.SetTrigger ("Dump");
 		rakeController.SetTrigger ("Rake");
+		animator.SetTrigger ("Dump");
 		setTokens ("Dump");
 	}
 
 	public void rideBasket()
 	{
-		animator.SetTrigger ("Ride");
 		basketController.SetBool ("Ride", true);
+		basketController.SetTrigger ("StartRide");
+		animator.SetTrigger ("Ride");
 	}
 
 	public void endRide ()
 	{
-		animator.ResetTrigger("Ride");
 		basketController.SetBool ("Ride", false);
+		animator.ResetTrigger("Ride");
 	}
 	public void skipBasket ()
 	{
-		animator.SetTrigger ("Skip");
 		basketController.SetTrigger ("StartSkip"); 
 		basketController.SetBool ("Skip", true);
+		animator.SetTrigger ("Skip");
 	}
 
 	public void tripBasket()
 	{
-		animator.SetTrigger ("TripBasket");
 		basketController.SetTrigger ("Trip");
+		animator.SetTrigger ("TripBasket");
 		setTokens ("Trip");
 	}
 
@@ -336,6 +355,10 @@ public class MainCharacter : AnimationManager {
 		basketController.SetTrigger ("Rummage");
 		setTokens ("Rummage");
 	}
+	public void dance ()
+	{
+		animator.SetTrigger ("Dance");
+	}
 
 	/// <summary>
 	///call the specified animation on all tokens in the basket
@@ -359,7 +382,14 @@ public class MainCharacter : AnimationManager {
 		animator.ResetTrigger ("Landed");
 		animator.ResetTrigger ("Throw");
 		animator.ResetTrigger ("Point");
-		randomAnimation (bigPayoffList);
+		if(currentCategory == Category.Customization)
+		{
+			randomAnimation (bigPayoffList);
+		}
+		else
+		{
+			randomAnimation (littlePayoffList);
+		}
 		GetComponent<AudioSource>().clip = null;
 		clearCards();
 	}	
@@ -454,6 +484,9 @@ public class MainCharacter : AnimationManager {
 			break;
 		case "Clap":
 			clap ();
+			break;
+		case "Dance":
+			dance ();
 			break;
 		default:
 			base.startAnimation (s);
@@ -588,7 +621,7 @@ public class MainCharacter : AnimationManager {
 	/// catches tap events and plays audio (if present)
 	/// </summary>
 	/// <param name="t">T.</param>
-	public void onSelect (touchInstance t)
+	override public void onSelect (touchInstance t)
 	{
 		Debug.Log("caught tap");
 		if(GetComponent<AudioSource>().clip != null)
@@ -601,6 +634,7 @@ public class MainCharacter : AnimationManager {
 	//controls the automatic talking timer
 	void Update () 
 	{
+		//StartCoroutine (Flash()); //TEST
 		if(GetComponent<AudioSource>().clip != null)
 		{
 			audioCounter += Time.deltaTime;
