@@ -45,16 +45,16 @@ public class TokenScript : MonoBehaviour {
 	/// <param name="t">T.</param>
 	public void onSelect(touchInstance t)
 	{
-		Debug.Log (t.getType ());
+		startPos = transform.position;
+	}
+	public void offSelect(touchInstance t)
+	{
 		if (t.getType () == eType.Tap) {
+			Debug.Log ("Speaking");
 			animator.SetTrigger ("Speak");
 		} else {
 			//GetComponent<Animator> ().SetBool ("Selected", true);
 		}
-	}
-	public void offSelect(touchInstance t)
-	{
-		GetComponent<Animator> ().SetBool ("Selected", false);
 	}
 	public void talk()
 	{

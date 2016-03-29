@@ -84,6 +84,9 @@ public class TouchProcessor : Observer {
 						parentBuffer = selection.transform.parent; 
 						selection.transform.parent = null;
 						offset= selection.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, screenPoint));
+						if(selection.GetComponent<Selectable>() != null) {
+							selection.GetComponent<Selectable>().onSelect(t); //notify the selection it has been touched
+						}
 					}
 					
 
@@ -95,6 +98,7 @@ public class TouchProcessor : Observer {
 				t.addTime(touch.deltaTime);
 				if(selection != null && selection.gameObject.tag == "Stimulus") 
 				{
+					//selection.transform.parent = null;
 					sendEvent(eType.Grab);
 					if(touch.phase == TouchPhase.Moved && t.getTime() > 0.5f){
 						t.setTouch(eType.Drag);
@@ -120,9 +124,7 @@ public class TouchProcessor : Observer {
 				if(t.isInit()){ //if t.type was not modified in a Drag phase
 					t.setTouch(eType.Tap);
 				}
-				if(selection.GetComponent<Selectable>() != null) {
-					selection.GetComponent<Selectable>().onSelect(t); //notify the selection it has been touched
-				}	
+					
 				t.addTime(touch.deltaTime);
 				if(selection != null) //if object was not placed in receptacle
 				{

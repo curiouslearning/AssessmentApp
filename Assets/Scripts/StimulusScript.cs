@@ -227,7 +227,7 @@ public class StimulusScript : MonoBehaviour{
 	/// <param name="t">touch instance information</param>
 	public void onSelect (touchInstance t)
 	{	
-		AudioSource audio = GetComponent<AudioSource>();
+		/*AudioSource audio = GetComponent<AudioSource>();
 		Animator anim = GetComponent<Animator>();
 		if (audio.clip != null)
 		{
@@ -235,7 +235,7 @@ public class StimulusScript : MonoBehaviour{
 			if (anim != null) {
 				anim.SetTrigger ("Talk");
 			}
-		}
+		}*/
 			
 	}
 	void tokenTalk ()
