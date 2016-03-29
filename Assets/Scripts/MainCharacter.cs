@@ -198,8 +198,12 @@ public class MainCharacter : AnimationManager {
 			startTransition ();
 			return;
 		}
+		if (e.type == eType.FingerUp) {
+			StopCoroutine (Flash ());
+		}
 		if(e.type == eType.Selected)
 		{
+			StopCoroutine (Flash ());
 			startPayoff();
 			if(e.signaler.GetComponent<StimulusScript>() != null && e.signaler.GetComponent<StimulusScript>().isOption()) //if selected object is a body part
 			{
@@ -213,7 +217,7 @@ public class MainCharacter : AnimationManager {
 		if (e.type == eType.Grab)
 		{
 			animator.SetTrigger("Point");
-			//StartCoroutine (Flash());
+			StartCoroutine (Flash());
 			return;
 		}
 		if (e.type == eType.Ready)
@@ -254,15 +258,10 @@ public class MainCharacter : AnimationManager {
 	IEnumerator Flash (){
 		Renderer renderer = GetComponentInChildren<Renderer> ();
 		Debug.Log ("using: " + renderer);
-		for (int i = 0; i < 5; i++)
-		{
-			Debug.Log ("switching to: " + newColor);
-			renderer.material.color = newColor;
-			yield return new WaitForSeconds(.1f);
-			Debug.Log ("switching to: " + oldColor);
-			renderer.material.color = oldColor; 
-			yield return new WaitForSeconds(.1f);
-		}
+		renderer.enabled = false;
+		yield return new WaitForSeconds(1f);
+		renderer.enabled = true;
+		yield return new WaitForSeconds(1f);
 	}
 //************************************
 // Animation initialization functions*

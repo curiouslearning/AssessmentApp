@@ -1,17 +1,24 @@
 fileFormatVersion: 2
-guid: ed367c639e70244d691a235a818ed140
-timeCreated: 1442856537
+guid: e678964d1c4fe4775a5b76f61f094456
+timeCreated: 1459259582
 licenseType: Free
 ModelImporter:
-  serializedVersion: 18
+  serializedVersion: 19
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
+    100000: Token:Mesh
+    100002: Token:Skeleton
+    100004: Token:token
+    100006: Token:token_joint
+    100008: //RootNode
+    400000: Token:Mesh
+    400002: Token:Skeleton
+    400004: Token:token
+    400006: Token:token_joint
+    400008: //RootNode
     4300000: Token:token
-    7400000: Token_Carry
+    7400000: TokenCarry
     9500000: //RootNode
+    13700000: Token:token
   materials:
     importMaterials: 1
     materialName: 0
@@ -19,6 +26,7 @@ ModelImporter:
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
+    resampleRotations: 1
     optimizeGameObjects: 0
     motionNodeName: 
     animationImportErrors: 
@@ -26,14 +34,14 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     animationCompression: 1
-    animationRotationError: .5
-    animationPositionError: .5
-    animationScaleError: .5
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: Token_Carry
+      name: TokenCarry
       takeName: Take 001
       firstFrame: 1
       lastFrame: 18
@@ -42,6 +50,7 @@ ModelImporter:
       level: 0
       cycleOffset: 0
       loop: 0
+      hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
@@ -58,8 +67,17 @@ ModelImporter:
       transformMask:
       - path: 
         weight: 1
+      - path: Token:Mesh
+        weight: 1
+      - path: Token:Mesh/Token:token
+        weight: 1
+      - path: Token:Skeleton
+        weight: 1
+      - path: Token:Skeleton/Token:token_joint
+        weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
@@ -80,25 +98,25 @@ ModelImporter:
     useFileScale: 1
   tangentSpace:
     normalSmoothAngle: 60
-    splitTangentsAcrossUV: 1
     normalImportMode: 0
-    tangentImportMode: 1
+    tangentImportMode: 3
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
     human: []
     skeleton: []
-    armTwist: .5
-    foreArmTwist: .5
-    upperLegTwist: .5
-    legTwist: .5
-    armStretch: .0500000007
-    legStretch: .0500000007
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 2b9be02ceeb9f45f4aa900ac678d9ec5,
-    type: 3}
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 2
+  humanoidOversampling: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
