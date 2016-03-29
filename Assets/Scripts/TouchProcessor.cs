@@ -52,7 +52,7 @@ public class TouchProcessor : Observer {
 	void sendTouch(string key, Vector2 pos)
 	{
 		string value = "posX: " + pos.x.ToString() + ", posY: " + pos.y.ToString();
-		AndroidBroadcastIntentHandler.BroadcastJSONData(key, value);
+		scoring.broadcastData(key, value);
 	}
 	void sendEvent(eType type)
 	{
@@ -77,8 +77,8 @@ public class TouchProcessor : Observer {
 				if(touchHit.collider != null && touchHit.collider.gameObject.tag != "Suspended") //we got a hit
 				{	
 					selection = touchHit.transform.gameObject; 
-					AndroidBroadcastIntentHandler.BroadcastJSONData("PlayerSelection", selection.gameObject.name);
-					if(selection.gameObject.tag == "Stimulus")
+					scoring.broadcastData("PlayerSelection", selection.gameObject.name);
+					if(selection.gameObject.tag == "Stimulus") //ALWAYS make sure your objects are tagged properly!
 					{ 
 						 //store and remove the parent to prevent weird parent-child behavior during dragging
 						parentBuffer = selection.transform.parent; 

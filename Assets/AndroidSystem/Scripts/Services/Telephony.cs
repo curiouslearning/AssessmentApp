@@ -7,6 +7,36 @@ namespace FourthSky
 	{
 		namespace Services
 		{
+			public class SmsMessage 
+			{
+				public string OriginAddress {
+					get {
+						return originAddress;
+					}
+				}
+
+				public string MessageBody {
+					get {
+						return messageBody;
+					}
+				}
+
+				public long Timestamp {
+					get {
+						return timestamp;
+					}
+				}
+
+				private readonly string originAddress;
+				private readonly string messageBody;
+				private readonly long timestamp;
+
+				public SmsMessage(string addr, string body, long stamp) {
+					originAddress = addr;
+					messageBody = body;
+					timestamp = stamp;
+				}
+			}
 			
 			public static class Telephony
 			{
@@ -32,7 +62,9 @@ namespace FourthSky
 							smsReceiver.OnReceive += OnReceive;
 							
 							// Register to receive events
-							smsReceiver.Register(SMS_SENT, SMS_DELIVERED);
+							smsReceiver.Register(BroadcastActions.Telephony.ACTION_SMS_SENT,
+                                                 BroadcastActions.Telephony.ACTION_SMS_DELIVER,
+                                                 BroadcastActions.Telephony.ACTION_SMS_RECEIVED);
 						}
 						
 						// Create pending intent to trigger broadcast
@@ -43,7 +75,7 @@ namespace FourthSky
 								sentPendingIntent = PendingIntent.CallStatic<AndroidJavaObject>("getBroadcast", 
 								                                                                AndroidSystem.UnityContext,
 								                                                                0,
-								                                                                new AndroidJavaObject(AndroidSystem.INTENT, SMS_SENT),
+								                                                                new AndroidJavaObject(AndroidSystem.INTENT, BroadcastActions.Telephony.ACTION_SMS_SENT),
 								                                                                0);
 							}
 							
@@ -52,7 +84,7 @@ namespace FourthSky
 								deliveredPendingIntent = PendingIntent.CallStatic<AndroidJavaObject>("getBroadcast", 
 								                                                                     AndroidSystem.UnityContext,
 								                                                                     0,
-								                                                                     new AndroidJavaObject(AndroidSystem.INTENT, SMS_DELIVERED),
+								                                                                     new AndroidJavaObject(AndroidSystem.INTENT, BroadcastActions.Telephony.ACTION_SMS_DELIVER),
 								                                                                     0);
 							}
 						}
@@ -61,7 +93,8 @@ namespace FourthSky
 					// Send the message
 					if (message.Length <= 160)
 					{
-						SmsManager.Call("sendTextMessage",	phoneNumber, 
+						SmsManager.Call("sendTextMessage",	
+						                phoneNumber, 
 						                null, 
 						                message, 
 						                sentPendingIntent,
@@ -84,6 +117,36 @@ namespace FourthSky
 #endif
 					
 				}
+
+				public static bool ListenForSms(Action<SmsMessage[]> callback) 
+				{
+#if UNITY_ANDROID
+					if (callback != null)
+					{
+						// Prepare broadcast receiver
+						if (smsReceiver == null)
+						{
+							smsReceiver = new BroadcastReceiver();
+							smsReceiver.OnReceive += OnReceive;
+							
+							// Register to receive events
+							smsReceiver.Register(BroadcastActions.Telephony.ACTION_SMS_SENT,
+                                                 BroadcastActions.Telephony.ACTION_SMS_DELIVER,
+                                                 BroadcastActions.Telephony.ACTION_SMS_RECEIVED);
+						}
+
+						smsReceivedCallback = callback;
+					}
+
+					return true;
+#else
+					return false;
+#endif
+				}
+
+				public static void StopListenForSms() {
+					smsReceivedCallback = null;
+				}
 				
 				/// <summary>
 				/// Makes the a phone call.
@@ -97,7 +160,7 @@ namespace FourthSky
 					// Fill intent
 					AndroidJavaObject intent = new AndroidJavaObject (AndroidSystem.INTENT, 
 					                                                  callImmediately ? ActivityActions.ACTION_CALL
-					                                                  : ActivityActions.ACTION_DIAL);
+					                                                  				  : ActivityActions.ACTION_DIAL);
 					using (AndroidJavaClass Uri = new AndroidJavaClass("android.net.Uri"))
 					{
 						intent.Call<AndroidJavaObject>("setData", Uri.CallStatic<AndroidJavaObject>("parse", "tel:" + phoneNumber));
@@ -117,14 +180,14 @@ namespace FourthSky
 				#region private variables
 				private const int MAKE_CALL_ID = 999813;
 				
-				private static readonly string SMS_SENT = "SMS_SENT";
-				private static readonly string SMS_DELIVERED = "SMS_DELIVERED";
+				public static readonly string SMS_EXTRA_NAME = "pdus";
 				
 				// Broadcast receiver to handle sms events
 				private static BroadcastReceiver smsReceiver;
 
 				private static Action<bool> smsSentCallback = null;
 				private static Action<bool> smsDeliveredCallback = null;
+				private static Action<SmsMessage[]> smsReceivedCallback = null;
 
 #if UNITY_ANDROID
 				// android.telephony.SmsManager object
@@ -153,6 +216,37 @@ namespace FourthSky
 						return mSmsManager;
 					}
 				}
+
+				private static SmsMessage[] ExtractSmsMessages(AndroidJavaObject intent) {
+					SmsMessage[] messages = null;
+
+					AndroidJavaObject extras = intent.Call<AndroidJavaObject>("getExtras");
+					if (extras != null && extras.GetRawObject().ToInt32() != 0) 
+					{
+						AndroidJavaObject pdus = extras.Call<AndroidJavaObject>("get", SMS_EXTRA_NAME);
+						if (pdus != null &&  pdus.GetRawObject().ToInt32() != 0)
+						{
+							AndroidJavaObject[] smss = AndroidJNIHelper.ConvertFromJNIArray<AndroidJavaObject[]>(pdus.GetRawObject());
+							if (smss != null && smss.Length > 0) 
+							{
+								using (AndroidJavaClass SmsMessage = new AndroidJavaClass("android.telephony.SmsMessage")) {
+									messages = new SmsMessage[smss.Length];
+									for (int i = 0; i < smss.Length; i++) 
+									{
+										AndroidJavaObject smsMsg = SmsMessage.CallStatic<AndroidJavaObject>("createFromPdu", smss[i]);
+											
+										string addr = smsMsg.Call<string>("getOriginatingAddress");
+										string body = smsMsg.Call<string>("getMessageBody");
+										long timestamp = smsMsg.Call<long>("getTimestampMillis");
+										messages[i] = new SmsMessage(addr, body, timestamp);
+									}
+								}
+							}
+						}
+					}
+
+					return messages;
+				}
 				
 				/// <summary>
 				/// Handles SMS sent and delivered broadcasts
@@ -166,15 +260,23 @@ namespace FourthSky
 					// Get result code 
 					int resultCode = smsReceiver.GetResultCode ();
 					
-					if ( SMS_SENT == action )
+					if (BroadcastActions.Telephony.ACTION_SMS_SENT == action )
 					{
 						if (smsSentCallback != null)
 							smsSentCallback.Invoke((resultCode == AndroidSystem.RESULT_OK));
 					}
-					else if ( SMS_DELIVERED == action )
+					else if (BroadcastActions.Telephony.ACTION_SMS_DELIVER == action )
 					{
 						if (smsDeliveredCallback != null)
 							smsDeliveredCallback.Invoke((resultCode == AndroidSystem.RESULT_OK));
+					}
+					else if (BroadcastActions.Telephony.ACTION_SMS_RECEIVED == action ) 
+					{
+						if (smsReceivedCallback != null)  
+						{
+							SmsMessage[] messages = ExtractSmsMessages(intent);
+							smsReceivedCallback.Invoke(messages);
+						}
 					}
 				}
 

@@ -1,62 +1,76 @@
 ﻿using UnityEngine;
+using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using FourthSky.Android.Services;
 
-public class PickerBehaviorHelper : MonoBehaviour {
+public class PickerBehaviorHelper : MonoBehaviour
+{
 
-	public bool foundTexture = false;
+    public bool foundTexture = false;
 
-	private byte[] imgBytes = null;
+    public string imgPath = null;
+    private byte[] imgBytes = null;
 
-	private Picker.OnImagePickedDelegate m_Callback;
-	private GCHandle m_CallbackHandle;
-	
-	// Update is called once per frame
-	void Update () {
-		if (foundTexture) {
+    private Picker.OnImagePickedDelegate m_Callback;
+    private GCHandle m_CallbackHandle;
 
-			// Create a new texture and load file content to it
-			Texture2D tex = new Texture2D(4, 4);
-			tex.wrapMode = TextureWrapMode.Clamp;
-			
-			float start = Time.realtimeSinceStartup;
-			bool loaded = tex.LoadImage(imgBytes);
-			Debug.Log("Image bytes loaded in " + (Time.realtimeSinceStartup - start) + " seconds");
-			
-			if (loaded) {
-				Debug.Log("Texture format: " + tex.format + "\n" +
-				          "Texture dimensions" + tex.width + "x" + tex.height);
-				
-				// Invoke callback
-				m_Callback.Invoke(tex);
-				
-			} else {
-				Debug.LogError("Error loading image");
-				
-			}
+    // Update is called once per frame
+    void Update()
+    {
+        if (foundTexture)
+        {
 
-			// 
-			m_CallbackHandle.Free();
-			m_Callback = null;
+            // Create a new texture and load file content to it
+            Texture2D tex = new Texture2D(4, 4);
+            tex.wrapMode = TextureWrapMode.Clamp;
 
-			foundTexture = false;
-		}
-	}
+            float start = Time.realtimeSinceStartup;
+            imgBytes = File.ReadAllBytes(imgPath);
+            bool loaded = tex.LoadImage(imgBytes);
+            Debug.Log("Image bytes loaded in " + (Time.realtimeSinceStartup - start) + " seconds");
 
-	internal void RegisterDelegate(Picker.OnImagePickedDelegate callback) {
-		this.m_Callback = new Picker.OnImagePickedDelegate(callback);
-		m_CallbackHandle = GCHandle.Alloc (this.m_Callback);
-	}
+            if (loaded)
+            {
+                Debug.Log("Texture format: " + tex.format + "\n" +
+                          "Texture dimensions" + tex.width + "x" + tex.height);
 
-	internal void NotifyImageLoaded(string path) {
+                // Invoke callback
+                m_Callback.Invoke(tex);
 
-		// Read all bytes from image file
-		float start = Time.realtimeSinceStartup;
-		imgBytes = File.ReadAllBytes(path); // this line of code was giving me an error message - internet recommended I switch from web player to standalone in the build settings
-		Debug.Log("Image bytes read from file in " + (Time.realtimeSinceStartup - start) + " seconds");
+            }
+            else
+            {
+                Debug.LogError("Error loading image");
 
-		foundTexture = true;
-	}
+            }
+
+            // 
+            m_CallbackHandle.Free();
+            m_Callback = null;
+
+            foundTexture = false;
+        }
+    }
+
+    internal void RegisterDelegate(Picker.OnImagePickedDelegate callback)
+    {
+        this.m_Callback = new Picker.OnImagePickedDelegate(callback);
+        m_CallbackHandle = GCHandle.Alloc(this.m_Callback);
+    }
+
+    internal void NotifyImageLoaded(string path)
+    {
+
+        // Read all bytes from image file
+        //float start = Time.realtimeSinceStartup;
+        //double start = DateTime.Now.TimeOfDay.TotalMilliseconds;
+
+        //imgPath = path;
+        //imgBytes = File.ReadAllBytes(path);
+        //Debug.Log("Image bytes read from file in " + (DateTime.Now.TimeOfDay.TotalMilliseconds - start) + " milliseconds");
+
+        foundTexture = true;
+    }
 
 }

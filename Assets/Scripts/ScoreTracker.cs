@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class ScoreTracker : Observer {
 
+	private string user_id;
 	//timekeeping variables
 	public int questionNumber;
 	public float questionTime;
@@ -46,11 +47,11 @@ public class ScoreTracker : Observer {
 	int numWrong;
 	int numAnswered;
 	//question-capping variables
-	//external
+		//external
 	public int wrongQuestionLimit;
 	public int rightQuestionLimit;
 	public int totalQuestionLimit;
-	//internal
+		//internal
 	int correctCap;
 	int wrongCap;
 	int totalCap;
@@ -77,6 +78,7 @@ public class ScoreTracker : Observer {
 		s.setCategory (Category.Customization);
 		currentCategory = s.returnCategory ();
 		lastCategory = currentCategory;
+		user_id = "000"; //default
 	}
     
     /// <summary>
@@ -94,7 +96,20 @@ public class ScoreTracker : Observer {
 		setCaps();
 		startQuestion ();
 	}
-
+	/// <summary>
+	/// Sets the user id for broadcast purposes.
+	/// </summary>
+	/// <param name="id">Identifier string.</param>
+	public void setUser (string id)
+	{
+		Debug.Assert (id != "000");
+		user_id = id;
+	}
+	public void broadcastData (string key, string value) //prep all data w/ user_id
+	{
+		key = user_id + ": " + key;
+		AndroidBroadcastIntentHandler.BroadcastJSONData (key, value);
+	}
     /// <summary>
     /// set caps for right, wrong, and total number of questions, using stimCount and publicly set variables
     /// </summary>
@@ -241,7 +256,7 @@ public class ScoreTracker : Observer {
         Debug.Log("Button Clicked"); //debugging
         Destroy(replayButton.gameObject);
         Debug.Log("Destroyed?: " + replayButton.IsDestroyed());
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene("0");
     }
 
     /// <summary>
@@ -327,7 +342,7 @@ public class ScoreTracker : Observer {
                 lastCategory = currentCategory;
                 s.setCategory(Category.Customization);
                 currentCategory = Category.Customization;
-                AndroidBroadcastIntentHandler.BroadcastJSONData("Category Change", "Customization"); //data recording
+				AndroidBroadcastIntentHandler.BroadcastJSONData("Category Change", "Customization"); //data recording
             }
             else
             {
@@ -543,7 +558,7 @@ public class ScoreTracker : Observer {
     void Update() 
 	{
 		if (gameOver) {
-			string junk = "meaningless"; //hack to get around control flow after GameOver
+			Debug.Log ("Game is over!");
 			return;
 		}
 		// questionTime keeps track of the elapsed time since the

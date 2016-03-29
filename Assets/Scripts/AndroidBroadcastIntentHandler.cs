@@ -15,7 +15,7 @@ public class AndroidBroadcastIntentHandler : MonoBehaviour {
 	public static List<GameObject> listeners = new List<GameObject>();
 	
 	public static int tablet_id = 1;
-	
+
 
 	
 	// Use this for initialization
@@ -41,7 +41,8 @@ public class AndroidBroadcastIntentHandler : MonoBehaviour {
 	void Update () {
 	
 	}
-	
+
+
 	public static void BroadcastHashtable(Hashtable hashtable) {
 		foreach (DictionaryEntry entry in hashtable)
 		{

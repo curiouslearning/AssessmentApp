@@ -381,7 +381,7 @@ public class MainCharacter : AnimationManager {
 		animator.ResetTrigger ("Landed");
 		animator.ResetTrigger ("Throw");
 		animator.ResetTrigger ("Point");
-		if(currentCategory == Category.Customization)
+		if(currentCategory == Category.Customization && scoreTracker.questionNumber > 1)
 		{
 			randomAnimation (bigPayoffList);
 		}

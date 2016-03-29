@@ -157,7 +157,6 @@ public class SpawnerScript : MonoBehaviour {
             
 		//find and add the target stimulus
 		serStim temp = selectTarget(cat, diffLevel, type);
-        string hostStim = temp.hostStim;
 		answer.Add (temp);
         //find and add the remaining stimuli
         while (answer.Count < 4) 

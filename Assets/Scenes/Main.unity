@@ -661,7 +661,7 @@ Transform:
   m_Children:
   - {fileID: 624026515}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
 --- !u!114 &276359290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1135,7 +1135,7 @@ Transform:
   m_Children:
   - {fileID: 339596388}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
 --- !u!114 &829527125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1264,7 +1264,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
 --- !u!4 &913530798 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 9f164d8ff87434c30bb42553eb0e5c0f, type: 3}
@@ -1340,7 +1340,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
 --- !u!1 &1023231312 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 187334, guid: 24cfefb2d97714555a40308930997e64, type: 2}
@@ -1614,7 +1614,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -87, y: -4.3456807}
@@ -1686,7 +1686,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
 --- !u!61 &1331431051
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1874,48 +1874,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b6aba09b845db49d7af3cd531a356a3c, type: 3}
   m_IsPrefabParent: 0
---- !u!1001 &1668408458
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 495584, guid: 00f2b761211464ae99fab1806c7446e4, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: -1.2391536
-      objectReference: {fileID: 0}
-    - target: {fileID: 495584, guid: 00f2b761211464ae99fab1806c7446e4, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: -3.1090717
-      objectReference: {fileID: 0}
-    - target: {fileID: 495584, guid: 00f2b761211464ae99fab1806c7446e4, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 495584, guid: 00f2b761211464ae99fab1806c7446e4, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 495584, guid: 00f2b761211464ae99fab1806c7446e4, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 495584, guid: 00f2b761211464ae99fab1806c7446e4, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 495584, guid: 00f2b761211464ae99fab1806c7446e4, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: -0.00000016292068
-      objectReference: {fileID: 0}
-    - target: {fileID: 495584, guid: 00f2b761211464ae99fab1806c7446e4, type: 2}
-      propertyPath: m_RootOrder
-      value: 2
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 00f2b761211464ae99fab1806c7446e4, type: 2}
-  m_IsPrefabParent: 0
 --- !u!1001 &1674933880
 Prefab:
   m_ObjectHideFlags: 0
@@ -2033,9 +1991,8 @@ MonoBehaviour:
   - Dance
   bigPayoffList:
   - Dump
-  - Trip
-  - Search
   - Rummage
+  - Search
   transitionList:
   - GrabBasket
   - Skip

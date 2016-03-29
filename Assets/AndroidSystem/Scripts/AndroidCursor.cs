@@ -15,7 +15,7 @@ namespace FourthSky
 
 				private AndroidCursor(AndroidJavaObject cursor)
 				{
-					mJavaObject = cursor;
+					JavaObject = cursor;
 				}
 
 				protected override void Dispose(bool disposing) {
@@ -23,13 +23,13 @@ namespace FourthSky
 					if (!this.disposed) {
 						if (disposing) {
 							
-							if (mJavaObject != null) {
+							if (JavaObject != null) {
 								// First, close the cursor
-								mJavaObject.Call ("close");
+								JavaObject.Call ("close");
 
 								// Now, release Java object
-								mJavaObject.Dispose();
-								mJavaObject = null;
+								JavaObject.Dispose();
+								JavaObject = null;
 							}
 							
 						}
@@ -39,7 +39,7 @@ namespace FourthSky
 
 				public int RowCount {
 					get {
-						return mJavaObject.Call<int>("getCount");
+						return JavaObject.Call<int>("getCount");
 					}
 				}
 
@@ -47,7 +47,7 @@ namespace FourthSky
 					get {
 						if (columnNames == null)
 						{
-							columnNames = mJavaObject.Call<string[]>("getColumnNames");
+							columnNames = JavaObject.Call<string[]>("getColumnNames");
 						}
 
 						return columnNames;
@@ -56,29 +56,29 @@ namespace FourthSky
 
 				public int ColumnCount {
 					get {
-						return mJavaObject.Call<int>("getColumnCount");
+						return JavaObject.Call<int>("getColumnCount");
 					}
 				}
 
 				public bool Closed {
 					get {
-						return mJavaObject.Call<bool>("isClosed");
+						return JavaObject.Call<bool>("isClosed");
 					}
 				}
 
 				public bool MoveToFirst ()
 				{
-					return mJavaObject.Call<bool> ("moveToFirst");
+					return JavaObject.Call<bool> ("moveToFirst");
 				}
 
 				public bool MoveToNext ()
 				{
-					return mJavaObject.Call<bool> ("moveToNext");
+					return JavaObject.Call<bool> ("moveToNext");
 				}
 
 				public int GetColumnIndex (string columnName)
 				{
-					return mJavaObject.Call<int> ("getColumnIndex", columnName);
+					return JavaObject.Call<int> ("getColumnIndex", columnName);
 				}
 
 				public ReturnType Get<ReturnType>(int columnIndex)
@@ -88,31 +88,31 @@ namespace FourthSky
 					{
 						if (typeof(ReturnType) == typeof(int))
 						{
-							result = mJavaObject.Call<ReturnType>("getInt", columnIndex);
+							result = JavaObject.Call<ReturnType>("getInt", columnIndex);
 						}
 						else
 						{
 							if (typeof(ReturnType) == typeof(short))
 							{
-								result = mJavaObject.Call<ReturnType>("getShort", columnIndex);
+								result = JavaObject.Call<ReturnType>("getShort", columnIndex);
 							}
 							else
 							{
 								if (typeof(ReturnType) == typeof(long))
 								{
-									result = mJavaObject.Call<ReturnType>("getLong", columnIndex);
+									result = JavaObject.Call<ReturnType>("getLong", columnIndex);
 								}
 								else
 								{
 									if (typeof(ReturnType) == typeof(float))
 									{
-										result = mJavaObject.Call<ReturnType>("getFloat", columnIndex);
+										result = JavaObject.Call<ReturnType>("getFloat", columnIndex);
 									}
 									else
 									{
 										if (typeof(ReturnType) == typeof(double))
 										{
-											result = mJavaObject.Call<ReturnType>("getDouble", columnIndex);
+											result = JavaObject.Call<ReturnType>("getDouble", columnIndex);
 										}
 										else
 										{
@@ -127,13 +127,13 @@ namespace FourthSky
 					{
 						if (typeof(ReturnType) == typeof(string))
 						{
-							result = mJavaObject.Call<ReturnType>("getString", columnIndex);
+							result = JavaObject.Call<ReturnType>("getString", columnIndex);
 						}
 						else
 						{
 							if (typeof(ReturnType) == typeof(byte[]))
 							{
-								result = mJavaObject.Call<ReturnType>("getBlob", columnIndex);
+								result = JavaObject.Call<ReturnType>("getBlob", columnIndex);
 							}
 						}
 					}
@@ -141,6 +141,11 @@ namespace FourthSky
 					return result;
 				}
 
+				/// <summary>
+				/// Get the specified columnName.
+				/// </summary>
+				/// <param name="columnName">Column name.</param>
+				/// <typeparam name="ReturnType">The 1st type parameter.</typeparam>
 				public ReturnType Get<ReturnType>(string columnName) {
 					int idx = GetColumnIndex (columnName);
 					return Get<ReturnType> (idx);
@@ -155,7 +160,7 @@ namespace FourthSky
 				/// <param name="selection">Selection clause (WHERE clause)</param>
 				/// <param name="selectionArgs">Arguments for selection</param>
 				/// <param name="sortOrder">Sort order, by column and ASC or DESC</param>
-				public static AndroidCursor Open(string contentUri, string[] columns = null, string selection = "", string[] selectionArgs = null, string sortOrder = "")
+				public static AndroidCursor Open(string contentUri, string[] columns, string selection = "", string[] selectionArgs = null, string sortOrder = "")
 				{
 					// TODO if Uri is null or empty, throw error
 					if (string.IsNullOrEmpty(contentUri))

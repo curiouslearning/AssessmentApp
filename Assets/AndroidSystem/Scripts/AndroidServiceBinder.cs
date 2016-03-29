@@ -50,14 +50,14 @@ namespace FourthSky {
 			
 			protected AndroidServiceBinder(string descriptor, IntPtr binderPtr) {
 				mDescriptor = descriptor;
-				mJavaObject = AndroidSystem.ConstructJavaObjectFromPtr(binderPtr);
+				JavaObject = AndroidSystem.ConstructJavaObjectFromPtr(binderPtr);
 				
 				Initialize();
 			}
 			
 			protected AndroidServiceBinder(string descriptor, AndroidJavaObject binder) {
 				mDescriptor = descriptor;
-				mJavaObject = binder;
+				JavaObject = binder;
 								
 				Initialize();
 			}
@@ -69,40 +69,9 @@ namespace FourthSky {
 			private void Initialize() {
 				// Check if methods are called by transactions or directly
 				Debug.Log("Querying for " + mDescriptor + " interface from binder object");
-				/*
-				using (AndroidJavaObject iInterface = mJavaObject.Call<AndroidJavaObject>("queryLocalInterface", mDescriptor)) {
-					if (iInterface == null || iInterface.GetRawObject() == IntPtr.Zero) {
-						Debug.Log(mDescriptor + " local interface query from binder object failed, use transactions");
-						mUseProxy = true;
-						
-					} else {
-						try {
-							AndroidJavaClass klazz = new AndroidJavaClass(mDescriptor);
-							if (klazz == null || klazz.GetRawClass() == IntPtr.Zero) {
-								Debug.LogError(mDescriptor + " class not found, use transactions");
-								mUseProxy = true;
 								
-							} else {
-								Debug.Log("Test if local interface is an instance of " + mDescriptor + " class");
-								if (AndroidJNI.IsInstanceOf(iInterface.GetRawObject(), klazz.GetRawClass())) {
-									mUseProxy = false;
-								} else {
-									mUseProxy = true;
-									
-								}		
-								
-							}
-					
-						} catch (Exception) {
-							Debug.LogError(mDescriptor + " class not found, use transactions");
-							mUseProxy = true;
-						}
-					}
-				}
-				*/
-				
 				try {
-					AndroidJavaObject iInterface = mJavaObject.Call<AndroidJavaObject>("queryLocalInterface", mDescriptor);
+					AndroidJavaObject iInterface = JavaObject.Call<AndroidJavaObject>("queryLocalInterface", mDescriptor);
 					
 					// Unity 4.1 and before don't catch the exception if internal Android object pointer is null, 
 					// so force flow to exception block 
