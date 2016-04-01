@@ -49,14 +49,14 @@ public class AndroidBroadcastIntentHandler : MonoBehaviour {
 	    Console.WriteLine("{0}, {1}", entry.Key, entry.Value);
 		}
 	}
-	
 	public static void BroadcastData(string key, string value) {
+	#if UNITY_ANDROID && !UNITY_EDITOR
 		Hashtable extras = new Hashtable();
 		extras.Add(key, value);
 		AndroidSystem.SendBroadcast(AndroidBroadcastIntentHandler.testBroadcastAction, extras);
 		AndroidBroadcastIntentHandler.sendLog("AssessmentAppProbe", value);
+	#endif	
 	}
-	
 	public static void BroadcastJSONData(string key, string value) {
 		string msg = "{\"tablet_id\":" + tablet_id;
 		msg = msg + ", \"key\":\""+ key + "\"";

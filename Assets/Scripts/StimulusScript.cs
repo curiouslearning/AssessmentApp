@@ -45,8 +45,12 @@ public class StimulusScript : MonoBehaviour{
 		GameObject.Find("Main Camera").GetComponent<ScreenCleaner>().registerObject (this.gameObject, OnscreenObjectList.MyObjectTypes.Stimulus); //register with screen cleaner
 		isBeingDragged = false;
 		touchInput = GetComponent<Selectable>();
-		if(touchInput != null)
-			touchInput.initP(onSelect); //attach self to input wrapper
+		if (touchInput != null) {
+			touchInput.initP (onSelect); //attach self to input wrapper
+		} else if (GetComponentInChildren<Selectable> () != null) {
+			touchInput = GetComponentInChildren<Selectable> ();
+			touchInput.initP (onSelect);
+		}
 	}
 
 	void OnDestroy ()

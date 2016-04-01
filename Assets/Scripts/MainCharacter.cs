@@ -30,6 +30,10 @@ public class MainCharacter : AnimationManager {
 	public string [] littlePayoffList;
 	public string [] bigPayoffList;
 	public string [] transitionList;
+	bool ride;
+	bool fly;
+	bool skip;
+	bool carry;
 	float audioCounter;
 	public float audioInterval;
 	public Color newColor;
@@ -63,6 +67,10 @@ public class MainCharacter : AnimationManager {
 		eventHandler = GetComponent<Subject> ();	
 		addSelfToSubjects();
 		scoreTracker = GameObject.Find("Main Camera").GetComponent<ScoreTracker>();
+		ride = false;
+		skip = false;
+		carry = false;
+		fly = false;
 	}
 	
 	/// <summary>
@@ -222,20 +230,13 @@ public class MainCharacter : AnimationManager {
 		}
 		if (e.type == eType.Ready)
 		{
-			animator.SetTrigger("Landed");
-			if (basketController.GetBool ("Carry")) { //throw the basket if it's being carried
-				throwBasket ();
-			}
-			basketController.SetBool ("Carry", false);
-			basketController.ResetTrigger ("Ride");
-			basketController.SetBool ("Skip", false);
-			basketController.SetBool ("Fly", false);
+			finishTransitions();
 			if (GetComponent<AudioSource> ().clip != null) {
-				GetComponentInChildren<SpriteRenderer> ().enabled = true;
-				animator.SetTrigger ("Talk");
-			} else if (square.mainTexture != null || rectangle.mainTexture != null) {
-				GetComponentInChildren<SpriteRenderer> ().enabled = false;
-				animator.SetBool ("ShowCard", true);
+				setAudioSource ();
+			}
+			 else if (square.mainTexture != null || rectangle.mainTexture != null) {
+				setCards ();
+
 			} else {
 				GetComponentInChildren<SpriteRenderer> ().enabled = false;
 			}
@@ -255,6 +256,36 @@ public class MainCharacter : AnimationManager {
 			return;	
 		}
 	}
+	//reset animators for new question
+	void finishTransitions()
+	{
+		animator.SetTrigger("Landed");
+		if (carry) { //throw the basket if it's being carried
+			throwBasket ();
+			carry = false;
+		} else if (ride){
+			endRide ();
+			ride = false;
+		} else if (skip){
+			endSkip ();
+			skip = false;
+		} else if (fly){
+			flyToStand();
+			fly = false;
+		}
+	}
+
+	void setAudioSource()
+	{
+			GetComponentInChildren<SpriteRenderer> ().enabled = true;
+			animator.SetTrigger ("Talk");
+	}
+	//set the flashcards
+	void setCards()
+	{
+		GetComponentInChildren<SpriteRenderer> ().enabled = false;
+		animator.SetBool ("ShowCard", true);
+	}
 	IEnumerator Flash (){
 		Renderer renderer = GetComponentInChildren<Renderer> ();
 		Debug.Log ("using: " + renderer);
@@ -266,32 +297,92 @@ public class MainCharacter : AnimationManager {
 //************************************
 // Animation initialization functions*
 //************************************
+
+//Transitions
+//------------
+
+	/// <summary>
+	/// Starts the walk with basket transition animation
+	/// </summary>
 	public void carryBasket ()
 	{
-		basketController.SetBool("Carry", true);
 		basketController.SetTrigger ("StartCarry");
 		animator.SetTrigger ("GrabBasket");
+		carry = true;
 	}
-	
+	/// <summary>
+	/// Throws the basket.
+	/// </summary>
 	public void throwBasket ()
 	{
-		basketController.SetBool("Carry", false);
+		animator.ResetTrigger ("GrabBasket");
+		animator.ResetTrigger ("StartCarry");
 		animator.SetTrigger ("Throw");
 		basketController.SetTrigger("Throw");
 	}
-
+	/// <summary>
+	/// Starts the fly with basket transition animation
+	/// </summary>
 	public void flyBasket()
 	{
-		basketController.SetBool("Fly", true);
 		basketController.SetTrigger ("StartFly");
 		animator.SetTrigger ("Fly");
+		fly = true;
 	}
 
-
+	/// <summary>
+	/// End the flying transition animation
+	/// </summary>
 	public void flyToStand()
 	{
-		basketController.SetBool ("Fly", false);
+		animator.ResetTrigger ("Fly");
+		animator.SetTrigger ("FinishFly");
+		basketController.SetTrigger ("FinishFly");
 	}
+
+	/// <summary>
+	/// Start the skip with basket transition animation
+	/// </summary>
+	public void skipBasket ()
+	{
+		basketController.SetTrigger ("StartSkip"); 
+		animator.SetTrigger ("Skip");
+		skip = true;
+	}
+	/// <summary>
+	/// Ends the skip.
+	/// </summary>
+	public void endSkip ()
+	{
+		animator.SetTrigger("FinishSkip");
+		basketController.SetTrigger ("FinishSkip");
+	}
+	/// <summary>
+	/// Start the ride in basket transition animation
+	/// </summary>
+	public void rideBasket()
+	{
+		basketController.SetTrigger ("StartRide");
+		animator.SetTrigger ("Ride");
+		ride = true;
+	}
+	/// <summary>
+	/// Ends the ride transition animation
+	/// </summary>
+	public void endRide ()
+	{
+		animator.ResetTrigger("Ride");
+		basketController.ResetTrigger ("StartRide");
+		animator.SetTrigger ("FinishRide");
+		basketController.SetTrigger ("FinishRide");
+	}
+
+//Big Payoff Animations
+//-----------------------
+
+	/// <summary>
+	/// Starts the search through basket payoff animation
+	/// </summary>
 	public void searchBasket ()
 	{
 		Debug.Log ("called search");
@@ -299,6 +390,10 @@ public class MainCharacter : AnimationManager {
 		animator.SetTrigger ("Search");
 		setTokens ("Search");
 	}
+
+	/// <summary>
+	/// Start the dump and rake basket payoff animation
+	/// </summary>
 	public void dumpBasket()
 	{
 		basketController.SetTrigger ("Dump");
@@ -307,53 +402,54 @@ public class MainCharacter : AnimationManager {
 		setTokens ("Dump");
 	}
 
-	public void rideBasket()
-	{
-		basketController.SetBool ("Ride", true);
-		basketController.SetTrigger ("StartRide");
-		animator.SetTrigger ("Ride");
-	}
-
-	public void endRide ()
-	{
-		basketController.SetBool ("Ride", false);
-		animator.ResetTrigger("Ride");
-	}
-	public void skipBasket ()
-	{
-		basketController.SetTrigger ("StartSkip"); 
-		basketController.SetBool ("Skip", true);
-		animator.SetTrigger ("Skip");
-	}
-
+	/// <summary>
+	/// Start the trip over basket payoff animation
+	/// </summary>
 	public void tripBasket()
 	{
 		basketController.SetTrigger ("Trip");
 		animator.SetTrigger ("TripBasket");
 		setTokens ("Trip");
 	}
-
-	public void jump ()
-	{
-		animator.SetTrigger ("Jump");
-	}
-
-	public void jumpSpin()
-	{
-		animator.SetTrigger ("JumpSpin");
-	}
-
-	public void clap ()
-	{
-		animator.SetTrigger ("Clap");
-	}
-
+	/// <summary>
+	/// Starts the rummage payoff animation
+	/// </summary>
 	public void rummage()
 	{
 		animator.SetTrigger ("Rummage");
 		basketController.SetTrigger ("Rummage");
 		setTokens ("Rummage");
 	}
+
+//Quick Payoff Animations
+//-----------------------
+
+	/// <summary>
+	/// Start the jump payoff animation
+	/// </summary>
+	public void jump ()
+	{
+		animator.SetTrigger ("Jump");
+	}
+	/// <summary>
+	/// Start the Jump and spin payoff animation
+	/// </summary>
+	public void jumpSpin()
+	{
+		animator.SetTrigger ("JumpSpin");
+	}
+	/// <summary>
+	/// Starts the clap payoff animation
+	/// </summary>
+	public void clap ()
+	{
+		animator.SetTrigger ("Clap");
+	}
+
+
+	/// <summary>
+	/// starts the dance payoff animation
+	/// </summary>
 	public void dance ()
 	{
 		animator.SetTrigger ("Dance");

@@ -1199,7 +1199,7 @@ MonoBehaviour:
   wrongQuestionLimit: 4
   rightQuestionLimit: 3
   totalQuestionLimit: 20
-  currentCategory: 2
+  currentCategory: 0
 --- !u!1 &866044724 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 151242, guid: 24cfefb2d97714555a40308930997e64, type: 2}
