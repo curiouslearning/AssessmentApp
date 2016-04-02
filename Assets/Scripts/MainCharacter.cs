@@ -56,7 +56,6 @@ public class MainCharacter : AnimationManager {
 		animator = GetComponent<Animator>();
 		square = squareCard.GetComponent<MeshRenderer>().material;
 		rectangle = rectangleCard.GetComponent<MeshRenderer>().material;
-		touchDetect.initP (this.onSelect);
 		initTextures();
 		
 	}
@@ -67,6 +66,7 @@ public class MainCharacter : AnimationManager {
 		base.addSelfToSubjects();
 		scoreTracker = GameObject.Find("Main Camera").GetComponent<ScoreTracker>();
 		partHighlighter = activateNextHighlighter ();
+		base.touchDetect.initP (this.onSelect);
 		ride = false;
 		skip = false;
 		carry = false;
@@ -193,9 +193,7 @@ public class MainCharacter : AnimationManager {
 		if (e.type == eType.NewQuestion)
 		{
 			currentCategory = scoreTracker.queryCategory();
-			Debug.Log ("boop");
 			if (currentCategory == Category.Customization) {
-				Debug.Log ("beep boop");
 				partHighlighter = activateNextHighlighter ();
 			} else {
 				hideAllHighlighters ();
@@ -531,7 +529,6 @@ public class MainCharacter : AnimationManager {
 	/// <param name="s">S.</param>
 	protected override void startAnimation(string s)
 	{
-		Debug.Log ("calling startAnimation with string: " + "\"" + s + "\"");
 		switch (s) {
 		case "Dump":
 			dumpBasket ();
@@ -704,7 +701,9 @@ public class MainCharacter : AnimationManager {
 		Debug.Log("caught tap");
 		if(GetComponent<AudioSource>().clip != null)
 		{
+			Debug.Log ("notNull!");
 			animator.SetTrigger("TapTalk");
+			playAudio ();
 			audioCounter = 0f;
 		}
 		

@@ -65,7 +65,6 @@ public class AnimationManager : Observer {
 	protected virtual void randomAnimation (string[] s)
 	{
 		int val = Random.Range(0, s.Length);
-		Debug.Log ("using animation: " + s [val]);
 		startAnimation (s [val]);
 		return;
 	}

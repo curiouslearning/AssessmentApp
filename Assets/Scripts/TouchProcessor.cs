@@ -84,11 +84,11 @@ public class TouchProcessor : Observer {
 						parentBuffer = selection.transform.parent; 
 						selection.transform.parent = null;
 						offset= selection.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, screenPoint));
-						if(selection.GetComponent<Selectable>() != null) {
-							selection.GetComponent<Selectable>().onSelect(t); //notify the selection it has been touched
-						}
+
 					}
-					
+					if(selection.GetComponent<Selectable>() != null) {
+						selection.GetComponent<Selectable>().onSelect(t); //notify the selection it has been touched
+					}				
 
 				}
 			

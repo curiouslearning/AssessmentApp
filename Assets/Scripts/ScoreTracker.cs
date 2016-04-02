@@ -208,7 +208,6 @@ public class ScoreTracker : Observer {
 			}
 			return;
 		} else if (e.type == eType.Transition) {
-			Debug.Log ("transition!");
 			sooHolder.move (1);
 			return;
 		}
@@ -588,7 +587,6 @@ public class ScoreTracker : Observer {
 		
 			AndroidBroadcastIntentHandler.BroadcastJSONData ("TimeOut", ("Question Number: " + questionNumber.ToString() + ", Category: " + currentCategory.ToString() + ", Difficulty: " + s.returnDifficulty().ToString()));
 			eventHandler.sendEvent (eType.TimedOut); // temporary fix here
-			Debug.Log("sent timeout");
 			timeOutBroadcastSent = true;
 
 			sooHolder.move (1);

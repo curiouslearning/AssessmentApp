@@ -23,7 +23,7 @@ public class StimulusScript : MonoBehaviour{
 	private Difficulty difficulty;
 	private Vector3 homePos; //snapback functionality
 	private Vector3 startScale; //scaling functionality
-	public Selectable touchInput;
+	Selectable touchInput;
 	private int optionBodyPart;
 	string textureName;
 	public TokenScript token;
@@ -44,7 +44,11 @@ public class StimulusScript : MonoBehaviour{
 		//other initializations
 		GameObject.Find("Main Camera").GetComponent<ScreenCleaner>().registerObject (this.gameObject, OnscreenObjectList.MyObjectTypes.Stimulus); //register with screen cleaner
 		isBeingDragged = false;
-	//	touchInput.initP (onSelect); //attach self to input wrapper
+		if (GetComponentInChildren<Selectable>() == null){
+			Debug.Log ("using own input wrapper");
+		}
+			touchInput = GetComponent<Selectable> ();
+			touchInput.initP (onSelect); //attach self to input wrapper
 	}
 
 	void OnDestroy ()
