@@ -118,7 +118,7 @@ public class Subject : MonoBehaviour {
 	public void removeObserver (GameObjectNotify ob)
 	{
 		gameObjectEvent -= ob; 
-		numObservers--;                                                             
+		numObservers--; 
 	}
 	public void removeObserver (scoreTrackerNotify ob)
 	{

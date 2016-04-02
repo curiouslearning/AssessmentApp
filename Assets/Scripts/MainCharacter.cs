@@ -25,8 +25,7 @@ public class MainCharacter : AnimationManager {
 	public int defaultPos; //standard index for the default texture for each body part
 	string[] sourceLines;
 	bool[] bodyPartCustomized; //tracks which options have been customized
-	Animator partHighlighter;
-	public Highlighter mainHighlighter;
+	Highlighter partHighlighter;
 	public string [] littlePayoffList;
 	public string [] bigPayoffList;
 	public string [] transitionList;
@@ -65,8 +64,9 @@ public class MainCharacter : AnimationManager {
 	void Start ()
 	{
 		eventHandler = GetComponent<Subject> ();	
-		addSelfToSubjects();
+		base.addSelfToSubjects();
 		scoreTracker = GameObject.Find("Main Camera").GetComponent<ScoreTracker>();
+		partHighlighter = activateNextHighlighter ();
 		ride = false;
 		skip = false;
 		carry = false;
@@ -193,25 +193,25 @@ public class MainCharacter : AnimationManager {
 		if (e.type == eType.NewQuestion)
 		{
 			currentCategory = scoreTracker.queryCategory();
-			if(currentCategory == Category.Customization)
-			{
-				updateHighlighter(); 
+			Debug.Log ("boop");
+			if (currentCategory == Category.Customization) {
+				Debug.Log ("beep boop");
+				partHighlighter = activateNextHighlighter ();
+			} else {
+				hideAllHighlighters ();
 			}
-			else
-			{
-				hideHighlighter();
-			}
+
 		}	
 		if (e.type == eType.TimedOut) {
 			startTransition ();
 			return;
 		}
 		if (e.type == eType.FingerUp) {
-			StopCoroutine (Flash ());
+			partHighlighter.reset ();
 		}
 		if(e.type == eType.Selected)
 		{
-			StopCoroutine (Flash ());
+			partHighlighter.reset ();
 			startPayoff();
 			if(e.signaler.GetComponent<StimulusScript>() != null && e.signaler.GetComponent<StimulusScript>().isOption()) //if selected object is a body part
 			{
@@ -224,21 +224,21 @@ public class MainCharacter : AnimationManager {
 
 		if (e.type == eType.Grab)
 		{
-			animator.SetTrigger("Point");
-			StartCoroutine (Flash());
+			
+				animator.SetTrigger("Point");
 			return;
 		}
 		if (e.type == eType.Ready)
 		{
 			finishTransitions();
-			if (GetComponent<AudioSource> ().clip != null) {
+			if (GetComponent<AudioSource> ().clip != null) { //if the prompt is auditory
 				setAudioSource ();
 			}
-			 else if (square.mainTexture != null || rectangle.mainTexture != null) {
+			 else if (square.mainTexture != null || rectangle.mainTexture != null) { //if the prompt is visual
 				setCards ();
-
-			} else {
-				GetComponentInChildren<SpriteRenderer> ().enabled = false;
+			} 
+			if (GetComponent<AudioSource>().clip == null){
+				GetComponentInChildren<SpriteRenderer> ().enabled = false;  //remove the talk bubble if no audio
 			}
 			return;
 		}
@@ -286,12 +286,11 @@ public class MainCharacter : AnimationManager {
 		GetComponentInChildren<SpriteRenderer> ().enabled = false;
 		animator.SetBool ("ShowCard", true);
 	}
-	IEnumerator Flash (){
-		Renderer renderer = GetComponentInChildren<Renderer> ();
-		Debug.Log ("using: " + renderer);
-		renderer.enabled = false;
+	IEnumerator Flash (Renderer r){
+		Debug.Log ("using: " + r);
+		r.enabled = false;
 		yield return new WaitForSeconds(1f);
-		renderer.enabled = true;
+		r.enabled = true;
 		yield return new WaitForSeconds(1f);
 	}
 //************************************
@@ -316,7 +315,7 @@ public class MainCharacter : AnimationManager {
 	public void throwBasket ()
 	{
 		animator.ResetTrigger ("GrabBasket");
-		animator.ResetTrigger ("StartCarry");
+		basketController.ResetTrigger ("StartCarry");
 		animator.SetTrigger ("Throw");
 		basketController.SetTrigger("Throw");
 	}
@@ -588,31 +587,26 @@ public class MainCharacter : AnimationManager {
 			break;
 		}
 	}
-	//*************************************
+//*************************************
 //Other MainCharacter Helper Functions*
-//TODO: Split into a Maincharacter    *
-//extension of AnimationManager       *
 //*************************************
 
 //TODO: refactor this according to new highlighter
-	void updateHighlighter()
+	Highlighter activateNextHighlighter()
 	{
+		hideAllHighlighters (); //reset all body parts
 		int part = getBodyPart();
-		bodyParts[part].transform.GetChild(0).gameObject.SetActive(true);
-		for (int i =0; i < bodyParts.Length; i++)
-		{
-			if (i != part)	
-			{	
-				bodyParts[i].transform.GetChild(0).gameObject.SetActive(false);
-			}
-		}
+		Highlighter h = bodyParts [part].GetComponent<Highlighter> ();
+		h.toggleActive (true);
+		return h;
 	}
+
 	
-	void hideHighlighter()
+	void hideAllHighlighters()
 	{
 		for (int i = 0; i < bodyParts.Length; i++)
 		{
-			bodyParts[i].transform.GetChild(0).gameObject.SetActive(false);
+			bodyParts [i].GetComponent<Highlighter> ().toggleActive (false);
 		}
 	}
 
@@ -701,7 +695,6 @@ public class MainCharacter : AnimationManager {
         if (a != null && !a.isPlaying)
         {
             //talkBubble.sprite = talkBubbleSprite;
-            mainHighlighter.highlightOnce();
             a.Play();
         }
 	}
@@ -729,7 +722,6 @@ public class MainCharacter : AnimationManager {
 	//controls the automatic talking timer
 	void Update () 
 	{
-		//StartCoroutine (Flash()); //TEST
 		if(GetComponent<AudioSource>().clip != null)
 		{
 			audioCounter += Time.deltaTime;

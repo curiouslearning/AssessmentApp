@@ -21,6 +21,7 @@ public class SpawnerScript : MonoBehaviour {
 	public GameObject sooPrefab;
 	public GameObject stimPrefab;
 	public Texture2D[] secondaryAtlases;
+	public Subject[] subjects;
 	//components
 	public GameObject character;
 	public MainCharacter host;
@@ -497,7 +498,6 @@ public class SpawnerScript : MonoBehaviour {
 				}
 			}
 			newStims[i].transform.SetParent(newSoo.transform);
-			
 			//set stimulus position within SOO
 			switch(i)
 			{

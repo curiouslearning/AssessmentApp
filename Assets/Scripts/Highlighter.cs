@@ -7,81 +7,102 @@ using System.Collections.Generic;
 /// </summary>
 public class Highlighter : Observer {
 
-/* TODO:
- *	Put in reference to controller
- *	logic for receiving highlight requests
- * 	scale star-burst to parent
- */
 	Animator controller;
 	//triggering variables
 	public List<Subject> subjects;
 	public eType[] start;
 	public eType[] stop;
-	public Texture tex;
+	public bool active;
+	bool running; //coroutine failsafe;
+	public Renderer r;
+	Subject.GameObjectNotify eventHandler;
+
 	void Awake () {
 		controller = this.GetComponent<Animator>();
-		Subject s;
-		s = GameObject.Find("Main Camera").GetComponent<Subject>();
-		if(!subjects.Contains(s))
-		{
-			subjects.Add(s);
+		if (r == null) {
+			r = GetComponent<Renderer> (); //default to renderer on this gameobject
 		}
-		this.GetComponent<MeshRenderer>().material.mainTexture = null;
-		//this.gameObject.SetActive(false);
+		active = false;
+		running = false; 
+		eventHandler = this.onNotify;
 	}
 
 	void Start ()
 	{
-		for (int i = 0; i < subjects.Count; i++)
-		{
-			subjects[i].addObserver(new Subject.GameObjectNotify (this.onNotify));
+		if (subjects != null) {
+			registerSubjects ();
 		}
 	}
-	bool isPlaying ()
+
+	/// <summary>
+	/// Initialize the subject list of a highlighter instance
+	/// </summary>
+	/// <param name="list">List.</param>
+	public void registerSubjects (Subject[] list)
 	{
-		return (controller.GetCurrentAnimatorStateInfo(0).shortNameHash == Animator.StringToHash("Highlight80")|| controller.GetAnimatorTransitionInfo(0).anyState);
+		if (list == null) {
+			throw new System.ArgumentNullException ("your subject list is null!");
+		}
+		subjects.AddRange (list);
+		registerSubjects ();
+	}
+
+	//internal member, assumes subjects is not null
+	void registerSubjects()
+	{
+		for (int i = 0; i < subjects.Count; i++)
+		{
+			try{
+				subjects[i].addObserver(eventHandler);
+			}
+			catch(System.Exception e) {
+				Debug.Log (e + " on: " + this.gameObject.name + " at subjects index: " + i);
+			}
+		}
+	}
+	/// <summary>
+	/// Toggles whether or not this highlighter is active.
+	/// </summary>
+	/// <param name="b">If set to <c>true</c> b.</param>
+	public void toggleActive(bool b)
+	{
+		active = b;
+	}
+	/// <summary>
+	/// returns the activity state of the instance
+	/// </summary>
+	/// <returns><c>true</c>, if active was checked, <c>false</c> otherwise.</returns>
+	public bool checkActive ()
+	{
+		return active;
 	}
 	/// <summary>
 	/// Begin cycling the highlight animation.
 	/// </summary>
 	public void highlight ()
 	{
-		//this.gameObject.SetActive(true);
-		if(isPlaying ()) //prevent multiple calls from interrupting animation
-		{
-			return;
+		if (active) {
+			running = true;
+			StartCoroutine (Flash ());
 		}
-		else
-		{
-			this.GetComponent<MeshRenderer>().material.mainTexture = tex;
-			controller.SetBool("Highlight80", true);
+	}
+	IEnumerator Flash (){
+		while (running) {
+			r.enabled = false;
+			yield return new WaitForSeconds (.25f);
+			r.enabled = true;
+			yield return new WaitForSeconds (.25f);
 		}
-		
 	}
 
-	public void highlightOnce ()
-	{
-		Texture t = GetComponent<MeshRenderer>().material.mainTexture;
-		//this.gameObject.SetActive(true);
-		if(isPlaying ()) //prevent multiple calls from interrupting animation
-		{
-			return;
-		}
-		else
-		{
-			t = tex;
-			controller.SetTrigger("OneHighlight80");
-		}
-	}
-	
+
 	/// <summary>
 	/// Reset this instance.
 	/// </summary>
 	public void reset () 
 	{
-		controller.SetBool("Highlight80", false);
-		this.GetComponent<MeshRenderer>().material.mainTexture = null;
-		//this.gameObject.SetActive(false);
+		StopCoroutine (Flash());
+		running = false;
 	}
 	bool listContains (eType e, eType[] list)
 	{
@@ -94,20 +115,26 @@ public class Highlighter : Observer {
 	}	
 	public override void onNotify (EventInstance<GameObject> e)
 	{
-		if (listContains (e.type, start) && this.gameObject.activeSelf)
+		if (listContains (e.type, start))
 		{
 			highlight();
 		}
-		else if (listContains(e.type, stop) && this.gameObject.activeSelf)
+		else if (listContains(e.type, stop))
 		{
+			try{
 			reset();
+			}
+			catch(System.Exception l)
+			{
+				Debug.Log ("Missing Reference: " + l.Source);
+			}
 		}
 	}
-	void OnDestroy ()
+	void OnDisable ()
 	{
 		for (int i = 0; i < subjects.Count; i++)
 		{
-			subjects[i].removeObserver(new Subject.GameObjectNotify(this.onNotify)); //deregister from observers
+			subjects [i].removeObserver (eventHandler);
 		}
 	}
 }

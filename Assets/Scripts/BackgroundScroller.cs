@@ -11,9 +11,9 @@ public class BackgroundScroller : Observer {
 	// Use this for initialization
 	void Start () {
 		startPostition = transform.position;
-		GameObject.Find ("Main Camera").GetComponent<ScoreTracker>().eventHandler.addObserver(new Subject.GameObjectNotify(this.onNotify));
-		GameObject.Find ("Receptacle").GetComponent<CollisionNotification>().sub.addObserver(new Subject.GameObjectNotify(this.onNotify));
-		GameObject.Find ("Receptacle").GetComponent<CollisionNotification>().sub.addObserver(new Subject.boolNotify(this.onNotify));
+		GameObject.Find ("Main Camera").GetComponent<Subject> ().addObserver (new Subject.GameObjectNotify (this.onNotify));
+		GameObject.Find ("Receptacle").GetComponent<Subject>().addObserver(new Subject.GameObjectNotify(this.onNotify));
+		GameObject.Find ("Receptacle").GetComponent<Subject>().addObserver(new Subject.boolNotify(this.onNotify));
 	}
 	
 	public bool isScrolling()

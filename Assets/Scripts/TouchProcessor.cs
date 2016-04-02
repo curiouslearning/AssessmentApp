@@ -119,7 +119,8 @@ public class TouchProcessor : Observer {
 
 			if (touch.phase == TouchPhase.Ended)
 			{
-				
+
+				sendEvent(eType.FingerUp);
 				sendTouch("End Touch", touch.position);
 				if(t.isInit()){ //if t.type was not modified in a Drag phase
 					t.setTouch(eType.Tap);
@@ -147,7 +148,6 @@ public class TouchProcessor : Observer {
 					}
 					selection = null;
 				}
-				sendEvent(eType.FingerUp);
 				touchSum.addTouch(t); //store touch instance data
 				t = null;
 			}

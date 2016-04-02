@@ -23,7 +23,7 @@ public class StimulusScript : MonoBehaviour{
 	private Difficulty difficulty;
 	private Vector3 homePos; //snapback functionality
 	private Vector3 startScale; //scaling functionality
-	Selectable touchInput;
+	public Selectable touchInput;
 	private int optionBodyPart;
 	string textureName;
 	public TokenScript token;
@@ -44,13 +44,7 @@ public class StimulusScript : MonoBehaviour{
 		//other initializations
 		GameObject.Find("Main Camera").GetComponent<ScreenCleaner>().registerObject (this.gameObject, OnscreenObjectList.MyObjectTypes.Stimulus); //register with screen cleaner
 		isBeingDragged = false;
-		touchInput = GetComponent<Selectable>();
-		if (touchInput != null) {
-			touchInput.initP (onSelect); //attach self to input wrapper
-		} else if (GetComponentInChildren<Selectable> () != null) {
-			touchInput = GetComponentInChildren<Selectable> ();
-			touchInput.initP (onSelect);
-		}
+	//	touchInput.initP (onSelect); //attach self to input wrapper
 	}
 
 	void OnDestroy ()
@@ -232,9 +226,12 @@ public class StimulusScript : MonoBehaviour{
 	public void onSelect (touchInstance t)
 	{	
 		AudioSource audio = GetComponent<AudioSource>();
-		if (audio.clip != null && t.getType() == eType.Tap)
+		if (audio.clip != null)
 		{
 			audio.Play();
+			if (GetComponent<Animator> () != null) {
+				GetComponent<Animator> ().SetTrigger ("Talk");
+			}
 
 		}
 			

@@ -38,8 +38,9 @@ public class Selectable : MonoBehaviour {
 		else {
 			Debug.LogError("null p");
 		}
-		if(p1 != null)
-			p1(t);
+		if (p1 != null) {
+			p1 (t);
+		}
 	}
 	public void offSelect(touchInstance t)
 	{
