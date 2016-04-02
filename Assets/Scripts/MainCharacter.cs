@@ -11,8 +11,8 @@ public class MainCharacter : AnimationManager {
 	public Animator squareCard;
 	public Animator rectangleCard;
 	public Animator basketController;
+	public BasketAnim basket;
 	public Animator rakeController;
-	public Animator[] tokenControllers;	
 	Material square;
 	Material rectangle;
 	public TextAsset optionsList;
@@ -387,7 +387,7 @@ public class MainCharacter : AnimationManager {
 		Debug.Log ("called search");
 		basketController.SetTrigger("Search");
 		animator.SetTrigger ("Search");
-		setTokens ("Search");
+		basket.setTokens ("Search");
 	}
 
 	/// <summary>
@@ -398,7 +398,7 @@ public class MainCharacter : AnimationManager {
 		basketController.SetTrigger ("Dump");
 		rakeController.SetTrigger ("Rake");
 		animator.SetTrigger ("Dump");
-		setTokens ("Dump");
+		basket.setTokens ("Dump");
 	}
 
 	/// <summary>
@@ -408,7 +408,7 @@ public class MainCharacter : AnimationManager {
 	{
 		basketController.SetTrigger ("Trip");
 		animator.SetTrigger ("TripBasket");
-		setTokens ("Trip");
+		basket.setTokens ("Trip");
 	}
 	/// <summary>
 	/// Starts the rummage payoff animation
@@ -417,7 +417,7 @@ public class MainCharacter : AnimationManager {
 	{
 		animator.SetTrigger ("Rummage");
 		basketController.SetTrigger ("Rummage");
-		setTokens ("Rummage");
+		basket.setTokens ("Rummage");
 	}
 
 //Quick Payoff Animations
@@ -454,17 +454,7 @@ public class MainCharacter : AnimationManager {
 		animator.SetTrigger ("Dance");
 	}
 
-	/// <summary>
-	///call the specified animation on all tokens in the basket
-	/// </summary>
-	/// <param name="s">S.</param>
-	void setTokens (string s)
-	{
-		for (int i = 0; i < tokenControllers.Length; i++) {
-			tokenControllers[i].SetTrigger (s);
-		}
-		
-	}
+
 
 	/// <summary>
 	/// Starts the payoff animation sequence.
