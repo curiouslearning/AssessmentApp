@@ -276,6 +276,9 @@ public class ScoreTracker : Observer {
     	
 	void checkAnswer()
 	{
+		if (currentCategory == Category.Customization) {
+			return;
+		}
 		string response;
 		string value;
 		if (s.isCorrect()) {

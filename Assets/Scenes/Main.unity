@@ -848,7 +848,7 @@ MonoBehaviour:
   questionTime: 0
   timeLeft: 0
   pointInterval: 10
-  timeLimit: 15
+  timeLimit: 25
   spawner: {fileID: 955094559}
   receptacle: {fileID: 813173556}
   gCollector: {fileID: 1331431048}

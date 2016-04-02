@@ -201,6 +201,7 @@ public class MainCharacter : AnimationManager {
 
 		}	
 		if (e.type == eType.TimedOut) {
+			GetComponentInChildren<SpriteRenderer> ().enabled = false;
 			startTransition ();
 			return;
 		}
@@ -209,6 +210,7 @@ public class MainCharacter : AnimationManager {
 		}
 		if(e.type == eType.Selected)
 		{
+			GetComponentInChildren<SpriteRenderer> ().enabled = false;
 			partHighlighter.reset ();
 			startPayoff();
 			if(e.signaler.GetComponent<StimulusScript>() != null && e.signaler.GetComponent<StimulusScript>().isOption()) //if selected object is a body part
