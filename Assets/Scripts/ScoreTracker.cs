@@ -103,10 +103,11 @@ public class ScoreTracker : Observer {
 	public void setUser (string id)
 	{
 		Debug.Assert (id != "000");
-		user_id = id;
+		user_id = id.ToString ();
 	}
 	public void broadcastData (string key, string value) //prep all data w/ user_id
 	{
+		Debug.Log ("ScoreTrackerBroadcast: Key " + key + ", Value " + value); //debugger
 		key = user_id + ": " + key;
 		AndroidBroadcastIntentHandler.BroadcastJSONData (key, value);
 	}
@@ -294,7 +295,7 @@ public class ScoreTracker : Observer {
 		}
 		//data recording
 		value = ("Question: " + s.getNum().ToString() + ", Result: " + response + ", time: " + s.getTime().ToString() + ", total score: " + totalScore);
-		AndroidBroadcastIntentHandler.BroadcastJSONData("Question Answer", value);
+		broadcastData ("Question Answer", value);
 	}
 
     /// <summary>
@@ -303,13 +304,14 @@ public class ScoreTracker : Observer {
 
 	void updateDifficulty()
 	{
-		if (s.returnDifficulty().Equals(Difficulty.Easy) || s.returnCategory().Equals (Difficulty.Medium)) {
-			Difficulty diff = s.returnDifficulty();
-			s.setDifficulty (getNextDifficulty(diff));
-			AndroidBroadcastIntentHandler.BroadcastJSONData("Difficulty Change", diff.ToString());  //data recording
-		} else
+		if (s.returnDifficulty ().Equals (Difficulty.Easy) || s.returnCategory ().Equals (Difficulty.Medium)) {
+			Difficulty diff = s.returnDifficulty ();
+			s.setDifficulty (getNextDifficulty (diff));
+			broadcastData ("Difficulty Change", diff.ToString ());  //data recording
+		} else {
 			s.setDifficulty (Difficulty.Hard);
-			AndroidBroadcastIntentHandler.BroadcastJSONData("Difficulty Change", "Hard");  //data recording
+			broadcastData("Difficulty Change", "Hard");  //data recording
+		}
 	}
 	
 	/// <summary>
@@ -334,8 +336,8 @@ public class ScoreTracker : Observer {
 			numAnswered = 0;
 			currentCategory = getNextCategory(lastCategory);
 			s.setDifficulty(Difficulty.Easy);
-			AndroidBroadcastIntentHandler.BroadcastJSONData("Difficulty Change", "Easy");  //data recording
-			AndroidBroadcastIntentHandler.BroadcastJSONData("Category Change", lastCategory.ToString()); //data recording
+			broadcastData("Difficulty Change", "Easy");  //data recording
+			broadcastData("Category Change", lastCategory.ToString()); //data recording
 		}
 		 //change category and drop difficulty level after 4 wrong answers, 3 correct answers on hard difficulty, or the category total has been reached.	 
 		else  {
@@ -344,7 +346,7 @@ public class ScoreTracker : Observer {
                 lastCategory = currentCategory;
                 s.setCategory(Category.Customization);
                 currentCategory = Category.Customization;
-				AndroidBroadcastIntentHandler.BroadcastJSONData("Category Change", "Customization"); //data recording
+				broadcastData("Category Change", "Customization"); //data recording
             }
             else
             {
@@ -352,7 +354,7 @@ public class ScoreTracker : Observer {
                 numWrong = 0;
                 numAnswered = 0;
                 currentCategory = getNextCategory(currentCategory);
-                AndroidBroadcastIntentHandler.BroadcastJSONData("Category Change", currentCategory.ToString()); //data recording
+				broadcastData("Category Change", currentCategory.ToString()); //data recording
             }       
 		}
 	}
@@ -534,8 +536,20 @@ public class ScoreTracker : Observer {
         }
 		//data recording
 		eventHandler.sendEvent (eType.NewQuestion);
-		string value = "Question Number: " + questionNumber + ", Category: " + currentCategory + ", Difficulty: " + s.returnDifficulty();
-		AndroidBroadcastIntentHandler.BroadcastJSONData("New Question", value);
+		newQuestionBroadcast ();
+	}
+
+	void newQuestionBroadcast ()
+	{
+		string[] stims;
+		string target;
+		stims = sooHolder.returnStims ();
+		target = sooHolder.returnTarget ();
+		string value = "Question Number: " + questionNumber + ", Category: " + currentCategory + ", Difficulty: " + s.returnDifficulty() + ", Target: " +target + ", StimArray: ";
+		for (int i = 0; i < stims.Length; i++) { //add all stims
+			value = value + stims [i] + ", ";
+		}
+		broadcastData("New Question", value);
 	}
 
     /// <summary>
@@ -588,7 +602,7 @@ public class ScoreTracker : Observer {
 			s.addTime (timeLimit);
 			s.addScore (false);
 		
-			AndroidBroadcastIntentHandler.BroadcastJSONData ("TimeOut", ("Question Number: " + questionNumber.ToString() + ", Category: " + currentCategory.ToString() + ", Difficulty: " + s.returnDifficulty().ToString()));
+			broadcastData ("TimeOut", ("Question Number: " + questionNumber.ToString() + ", Category: " + currentCategory.ToString() + ", Difficulty: " + s.returnDifficulty().ToString()));
 			eventHandler.sendEvent (eType.TimedOut); // temporary fix here
 			timeOutBroadcastSent = true;
 
@@ -598,7 +612,7 @@ public class ScoreTracker : Observer {
 		{
 			string value = ("First Touch for Question " + questionNumber.ToString() + " Occurred at " + Time.time.ToString());
 			timeLeft = timeLimit;
-			AndroidBroadcastIntentHandler.BroadcastJSONData("First Touch", value);
+			broadcastData("First Touch", value);
 			touchBroadcastSent = true;
 		}
 		//if scene is changing do not process input

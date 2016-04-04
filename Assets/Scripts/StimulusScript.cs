@@ -9,6 +9,7 @@ using System.Collections;
 /// </summary>
 public class StimulusScript : MonoBehaviour{
 
+	private string stim;
 	public bool isTarget;
 	private bool hasBeenTarget;
 	private bool option;
@@ -64,7 +65,11 @@ public class StimulusScript : MonoBehaviour{
 	public string returnStimType (){
 		return stimType;
 	}
-	
+
+	public string returnStim (){
+		return stim;
+	}
+
 	public bool returnHasBeenTarget(){
 		return hasBeenTarget;
 	}
@@ -194,11 +199,13 @@ public class StimulusScript : MonoBehaviour{
 		this.isDraggable = input.isDraggable;
 		this.difficulty = input.difficulty;
 		if (input.stimType == "visual") {
-			this.visStim = input.sprite;
+			this.visStim = input.sprite.ToString();
+			this.stim = this.visStim;
 			GetComponent<AudioSource> ().clip = Resources.Load<AudioClip> ("Audio/" + input.hostStim);
+		} else if (input.stimType == "audio") {
+			this.GetComponent<AudioSource> ().clip = Resources.Load<AudioClip> ("Audio/" + input.audio);
+			this.stim = input.audio.ToString();
 		}
-		else if(input.stimType == "audio")
-			this.GetComponent<AudioSource>().clip = Resources.Load<AudioClip>("Audio/" + input.audio);
 		this.stimType = input.stimType;
 		this.option = false;
 	}
@@ -222,6 +229,7 @@ public class StimulusScript : MonoBehaviour{
 		}
 		this.optionBodyPart = input.bodyPart;
 		this.option = true;
+		this.stim = input.bodyPart.ToString () + ": " + this.textureName; //name the body part option as "[partnumber]: textureName"
 	}
 	/// <summary>
 	/// Handles touch event by user

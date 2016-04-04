@@ -284,7 +284,8 @@ public class MainCharacter : AnimationManager {
 	void setCards()
 	{
 		GetComponentInChildren<SpriteRenderer> ().enabled = false;
-		animator.SetBool ("ShowCard", true);
+		animator.SetTrigger ("ShowCard");
+		animator.SetBool ("CardUp", true);
 	}
 	IEnumerator Flash (Renderer r){
 		Debug.Log ("using: " + r);

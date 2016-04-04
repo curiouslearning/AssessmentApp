@@ -77,14 +77,16 @@ public class TouchProcessor : Observer {
 				if(touchHit.collider != null && touchHit.collider.gameObject.tag != "Suspended") //we got a hit
 				{	
 					selection = touchHit.transform.gameObject; 
-					scoring.broadcastData("PlayerSelection", selection.gameObject.name);
-					if(selection.gameObject.tag == "Stimulus") //ALWAYS make sure your objects are tagged properly!
-					{ 
-						 //store and remove the parent to prevent weird parent-child behavior during dragging
+					if (selection.gameObject.tag == "Stimulus") { //ALWAYS make sure your objects are tagged properly!
+						string val = selection.GetComponent<StimulusScript> ().returnStim ();
+						scoring.broadcastData ("PlayerSelection", "Stimulus: " + val);
+						//store and remove the parent to prevent weird parent-child behavior during dragging
 						parentBuffer = selection.transform.parent; 
 						selection.transform.parent = null;
-						offset= selection.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, screenPoint));
+						offset = selection.transform.position - Camera.main.ScreenToWorldPoint (new Vector3 (touch.position.x, touch.position.y, screenPoint));
 
+					} else {
+						scoring.broadcastData("PlayerSelection", selection.gameObject.name);
 					}
 					if(selection.GetComponent<Selectable>() != null) {
 						selection.GetComponent<Selectable>().onSelect(t); //notify the selection it has been touched

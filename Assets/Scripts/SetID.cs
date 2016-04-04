@@ -16,7 +16,7 @@ public class SetID : MonoBehaviour {
 
 	public void setID (Text s)
 	{
-		id = s.ToString();
+		id = s.text;
 	}
 	public void nextLevel() //change the level after setting the id
 	{

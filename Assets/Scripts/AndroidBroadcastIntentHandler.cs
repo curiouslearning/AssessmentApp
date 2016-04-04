@@ -50,20 +50,19 @@ public class AndroidBroadcastIntentHandler : MonoBehaviour {
 		}
 	}
 	public static void BroadcastData(string key, string value) {
-	#if UNITY_ANDROID && !UNITY_EDITOR
+	#if UNITY_ANDROID
 		Hashtable extras = new Hashtable();
 		extras.Add(key, value);
 		AndroidSystem.SendBroadcast(AndroidBroadcastIntentHandler.testBroadcastAction, extras);
-		AndroidBroadcastIntentHandler.sendLog("AssessmentAppProbe", value);
+		AndroidBroadcastIntentHandler.sendLog("org.curiouslearning.AssessmentApp", value);
 	#endif	
 	}
 	public static void BroadcastJSONData(string key, string value) {
-		string msg = "{\"tablet_id\":" + tablet_id;
-		msg = msg + ", \"key\":\""+ key + "\"";
+		string msg = "\"key\":\""+ key + "\"";
 		msg = msg + ", \"value\":\"" + value +"\"";
 		msg = msg + "}";
 		AndroidBroadcastIntentHandler.BroadcastData("data", msg);
-		//Debug.Log ("Broadcasting: " + msg);
+		Debug.Log ("Broadcasting: " + msg); //debugger
 	}
 	
 

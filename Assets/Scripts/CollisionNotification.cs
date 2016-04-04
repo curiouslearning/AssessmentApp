@@ -31,6 +31,8 @@ public class CollisionNotification : MonoBehaviour {
 		if (dragTag == "Stimulus" && selected.GetComponent<TokenScript>() != null)
 		{
 			sub.sendBoolEvent(eType.Selected, selected.GetComponent<TokenScript>().returnIsTarget());
+			string value = selected.GetComponent<StimulusScript> ().returnStim ();
+			track.broadcastData ("ReceptacleDrop", value);
 			Destroy(selected.gameObject);
 		}
 		else

@@ -50,6 +50,35 @@ public class SOOScript : Observer {
 		return destArray;
 	}
 
+	/// <summary>
+	/// Get the names of the stimuli in the SOO
+	/// </summary>
+	/// <returns>an array of stimulus names.</returns>
+	public string [] returnStims() {
+		string[] retVal = new string[stimArray.Length];
+		for (int i = 0; i < stimArray.Length; i++) {
+			string s = stimArray [i].GetComponent<StimulusScript> ().returnStim ();
+			retVal [i] = s;
+		}
+		return retVal;
+	}
+
+	/// <summary>
+	/// Returns the target word.
+	/// </summary>
+	/// <returns>target word string.</returns>
+	public string returnTarget()
+	{
+		string retVal = "";
+		for (int i = 0; i < stimArray.Length; i++) {
+			
+			if (stimArray [i].GetComponent<StimulusScript>().isTarget) {
+				retVal = stimArray [i].GetComponent<StimulusScript> ().returnStim ();
+			}
+		}
+		return retVal;
+	}
+
 // Methods for setting variables
 	
 	public void setQNumber (int num)
