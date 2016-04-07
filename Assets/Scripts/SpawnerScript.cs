@@ -208,8 +208,9 @@ public class SpawnerScript : MonoBehaviour {
 		if(cat.Equals(Category.GameOver)){
 			return "gameOver";
 		}
-		if (cat.Equals (Category.ReceptiveVocabulary) || cat.Equals(Category.Customization) || cat.Equals(Category.BlendingWordIdentification) || cat.Equals(Category.PseudowordMatching)) 
+		if (cat.Equals (Category.ReceptiveVocabulary) || cat.Equals(Category.Customization) || cat.Equals(Category.PseudowordMatching)) 
 		{
+			Debug.Log ("got visual stimulus");
 			type = "visual";
 		} else 
 		{
@@ -586,8 +587,6 @@ public class SpawnerScript : MonoBehaviour {
 			return false;
 		case Category.PseudowordMatching:
 			return false;
-        case Category.BlendingWordIdentification:
-            return false;
 		default:
 			return true;
 		}

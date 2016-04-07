@@ -107,7 +107,7 @@ public class ScoreTracker : Observer {
 	}
 	public void broadcastData (string key, string value) //prep all data w/ user_id
 	{
-		Debug.Log ("ScoreTrackerBroadcast: Key " + key + ", Value " + value); //debugger
+		//Debug.Log ("ScoreTrackerBroadcast: Key " + key + ", Value " + value); //debugger
 		key = user_id + ": " + key;
 		AndroidBroadcastIntentHandler.BroadcastJSONData (key, value);
 	}
@@ -335,6 +335,8 @@ public class ScoreTracker : Observer {
 			numWrong = 0;
 			numAnswered = 0;
 			currentCategory = getNextCategory(lastCategory);
+			if(currentCategory == Category.BlendingWordIdentification)
+				Debug.Log("Blending @ 339");
 			s.setDifficulty(Difficulty.Easy);
 			broadcastData("Difficulty Change", "Easy");  //data recording
 			broadcastData("Category Change", lastCategory.ToString()); //data recording
@@ -354,6 +356,8 @@ public class ScoreTracker : Observer {
                 numWrong = 0;
                 numAnswered = 0;
                 currentCategory = getNextCategory(currentCategory);
+				if(currentCategory == Category.BlendingWordIdentification)
+					Debug.Log("Blending @ 360");
 				broadcastData("Category Change", currentCategory.ToString()); //data recording
             }       
 		}
@@ -371,7 +375,7 @@ public class ScoreTracker : Observer {
 		switch (last)
 		{
 			case Category.Customization:
-				return Category.ReceptiveVocabulary;
+			return Category.ReceptiveVocabulary;
 
 			case Category.ReceptiveVocabulary:
 				return Category.LetterNameRecognition;	
@@ -389,9 +393,11 @@ public class ScoreTracker : Observer {
 				return Category.BlendingWordIdentification;
 
 			case Category.BlendingWordIdentification:
+			Debug.Log ("Blending!");
 				return Category.PseudowordMatching;
 	
 			case Category.PseudowordMatching:
+				Debug.Log ("Pseudo!");
 				gameOver = true;
 				endGame();
 				return Category.GameOver;
@@ -520,7 +526,6 @@ public class ScoreTracker : Observer {
 			if(gameOver)
 				return;
 		}
-
 		stimOrgOb = spawnHolder.spawnNext(currentCategory,s.returnDifficulty(),questionNumber);
         if (stimOrgOb != null)
         {
@@ -531,8 +536,9 @@ public class ScoreTracker : Observer {
             //return;     // rather than running out of input, at least for the time being
         }
         else {
-            setCategory();
-            changeQuestion();
+			Debug.Log ("in the weird else!");
+			setCategory ();
+			changeQuestion ();
         }
 		//data recording
 		eventHandler.sendEvent (eType.NewQuestion);

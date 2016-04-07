@@ -62,7 +62,7 @@ public class AndroidBroadcastIntentHandler : MonoBehaviour {
 		msg = msg + ", \"value\":\"" + value +"\"";
 		msg = msg + "}";
 		AndroidBroadcastIntentHandler.BroadcastData("data", msg);
-		Debug.Log ("Broadcasting: " + msg); //debugger
+		//Debug.Log ("Broadcasting: " + msg); //debugger
 	}
 	
 

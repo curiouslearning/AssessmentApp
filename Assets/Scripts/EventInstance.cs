@@ -18,16 +18,4 @@ public class EventInstance <T>
 {
 	public eType type;
 	public T signaler;
-	/// <summary>
-	/// Initializes the instance with the subject and the event type 
-	/// </summary>
-	/// <param name="input">event type</param>
-	/// <param name="param"> the subject</param>
-	/// <typeparam name="T">type parameter restricting use to classes.</typeparam>
-	public void setEvent <T> (eType input, T param) where T : class
-	{
-		type = input;
-		signaler = param;  
-	}
-	
 }

@@ -42,7 +42,8 @@ public class Subject : MonoBehaviour {
 	{
 		EventInstance<GameObject> e;
 		e = new EventInstance<GameObject> ();
-		e.setEvent (type, this.gameObject);
+		e.type = type;
+		e.signaler = this.gameObject;
 		notify (e);	
 	}
 
@@ -50,7 +51,8 @@ public class Subject : MonoBehaviour {
 	{
 		EventInstance<GameObject> e;
 		e = new EventInstance<GameObject> ();
-		e.setEvent (type, g);
+		e.type = type;
+		e.signaler = g;
 		notify (e);	
 	}	
 	

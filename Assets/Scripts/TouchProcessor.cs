@@ -58,7 +58,8 @@ public class TouchProcessor : Observer {
 	{
 		EventInstance<GameObject> e;
 		e = new EventInstance<GameObject>();
-		e.setEvent(type, this.gameObject);
+		e.type = type;
+		e.signaler = this.gameObject;
 		eventWrapper.notify(e);
 	}
 	
@@ -78,7 +79,12 @@ public class TouchProcessor : Observer {
 				{	
 					selection = touchHit.transform.gameObject; 
 					if (selection.gameObject.tag == "Stimulus") { //ALWAYS make sure your objects are tagged properly!
-						string val = selection.GetComponent<StimulusScript> ().returnStim ();
+						string val;
+						if(selection.GetComponent<StimulusScript>() != null){
+							val = selection.GetComponent<StimulusScript> ().returnStim ();
+						}else{
+							val = "Token";
+						}
 						scoring.broadcastData ("PlayerSelection", "Stimulus: " + val);
 						//store and remove the parent to prevent weird parent-child behavior during dragging
 						parentBuffer = selection.transform.parent; 
