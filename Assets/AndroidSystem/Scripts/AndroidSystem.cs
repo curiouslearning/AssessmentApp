@@ -383,7 +383,7 @@ namespace FourthSky
 
             public static void SendBroadcast(string action, Hashtable extras = null)
             {
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
                 AndroidJavaObject intent = new AndroidJavaObject(AndroidSystem.INTENT, action);
                 // Add args to intent
                 PackIntentExtras(intent, extras);

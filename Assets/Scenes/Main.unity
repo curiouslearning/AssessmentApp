@@ -976,7 +976,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3aef12636142a45429941274116efac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stimList: {fileID: 4900000, guid: aeac18b4abb714e208799f7e17a6d7c3, type: 3}
+  stimList: {fileID: 4900000, guid: 665f93e23c1f0489c9a5d13e6e4cafb5, type: 3}
   sooPrefab: {fileID: 165186, guid: d05e9179393e8e34dbddf638c38d1650, type: 2}
   stimPrefab: {fileID: 149632, guid: 873fc4085838221469616a470a98ebac, type: 2}
   secondaryAtlases:

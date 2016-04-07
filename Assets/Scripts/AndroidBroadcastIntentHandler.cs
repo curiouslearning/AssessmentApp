@@ -58,7 +58,7 @@ public class AndroidBroadcastIntentHandler : MonoBehaviour {
 	#endif	
 	}
 	public static void BroadcastJSONData(string key, string value) {
-		string msg = "\"key\":\""+ key + "\"";
+		string msg = "{\"key\":\""+ key + "\"";
 		msg = msg + ", \"value\":\"" + value +"\"";
 		msg = msg + "}";
 		AndroidBroadcastIntentHandler.BroadcastData("data", msg);

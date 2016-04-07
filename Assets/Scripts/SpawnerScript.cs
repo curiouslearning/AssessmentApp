@@ -138,6 +138,7 @@ public class SpawnerScript : MonoBehaviour {
 
 	List<serStim> findStim (Category cat, Difficulty diffLevel) 
 	{
+		Debug.Log ("Stimpool count: " + stimPool.Count);//debugger
 		List<serStim> answer = new List<serStim>();
 		int counter = 0;
 		string type;
