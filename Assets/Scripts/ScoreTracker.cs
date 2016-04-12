@@ -105,6 +105,10 @@ public class ScoreTracker : Observer {
 		Debug.Assert (id != "000");
 		user_id = id.ToString ();
 	}
+	public string returnUser ()
+	{
+		return user_id;
+	}
 	public void broadcastData (string key, string value) //prep all data w/ user_id
 	{
 		//Debug.Log ("ScoreTrackerBroadcast: Key " + key + ", Value " + value); //debugger
@@ -256,7 +260,7 @@ public class ScoreTracker : Observer {
         Debug.Log("Button Clicked"); //debugging
         Destroy(replayButton.gameObject);
         Debug.Log("Destroyed?: " + replayButton.IsDestroyed());
-        SceneManager.LoadScene("0");
+        SceneManager.LoadScene(0);
     }
 
     /// <summary>

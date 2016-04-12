@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.IO;
 using UnityEngine.UI;
@@ -11,6 +12,8 @@ public class CameraGrab : MonoBehaviour {
 	RectTransform rawImageRT;
 	bool tookPicture;
 	bool deviceFound;
+	public ScoreTracker gameInfo;
+	private string id;
 
 	// Use this for initialization
 	void Start () {
@@ -19,10 +22,12 @@ public class CameraGrab : MonoBehaviour {
 		tex = new WebCamTexture ();
 		rawImageRT = rawImage.rectTransform;
 		deviceFound = false;
+		id = gameInfo.returnUser();
 	}
 
 	void takeAPicture()
 	{
+		string identifier = id + System.DateTime.Today.ToString ();
 		int counter = 0;
 		//yield return new WaitForEndOfFrame ();
 		while (!tex.isPlaying && counter < 500) {
@@ -35,7 +40,7 @@ public class CameraGrab : MonoBehaviour {
 			photo.Apply ();
 			byte[] bytes = photo.EncodeToPNG();
 			Debug.Log ("writing to: " + Application.persistentDataPath);
-			File.WriteAllBytes (Application.persistentDataPath + "/startupPhoto" + pictureCount + ".png", bytes);
+			File.WriteAllBytes (Application.persistentDataPath + "/startupPhoto" + identifier + ".png", bytes);
 			tookPicture = true;
 		}
 

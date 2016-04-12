@@ -1173,7 +1173,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1179946387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1187,6 +1187,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rawImage: {fileID: 1179946388}
   rawImageARF: {fileID: 1179946391}
+  gameInfo: {fileID: 829527128}
 --- !u!114 &1179946388
 MonoBehaviour:
   m_ObjectHideFlags: 0
