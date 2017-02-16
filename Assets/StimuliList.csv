@@ -305,9 +305,6 @@ will,audio,Hard,visual,will,SightWordIdentification
 foil,audio,Hard,visual,foil,SightWordIdentification
 able,audio,Hard,visual,able,SightWordIdentification
 shoe,audio,Hard,visual,shoe,SightWordIdentification
-put,audio,Easy,visual,put,CVCWordIdentification
-pot,audio,Easy,visual,pot,CVCWordIdentification
-bag,audio,Easy,visual,bag,CVCWordIdentification
 mud,audio,Easy,visual,mud,CVCWordIdentification
 bad,audio,Easy,visual,bad,CVCWordIdentification
 ban,audio,Easy,visual,ban,CVCWordIdentification
@@ -410,7 +407,6 @@ cab,audio,Hard,visual,cab,CVCWordIdentification
 cap,audio,Hard,visual,cap,CVCWordIdentification
 cat,audio,Hard,visual,cat,CVCWordIdentification
 cop,audio,Hard,visual,cop,CVCWordIdentification
-cub,audio,Hard,visual,cub,CVCWordIdentification
 cup,audio,Hard,visual,cup,CVCWordIdentification
 cut,audio,Hard,visual,cut,CVCWordIdentification
 kid,audio,Hard,visual,kid,CVCWordIdentification
@@ -418,13 +414,7 @@ kin,audio,Hard,visual,kin,CVCWordIdentification
 kit,audio,Hard,visual,kit,CVCWordIdentification
 yes,audio,Hard,visual,yes,CVCWordIdentification
 yet,audio,Hard,visual,yet,CVCWordIdentification
-put,audio,Easy,audio,put_blend,BlendingWordIdentification
-pot,audio,Easy,audio,pot_blend,BlendingWordIdentification
-bag,audio,Easy,audio,bag_blend,BlendingWordIdentification
 mud,audio,Easy,audio,mud_blend,BlendingWordIdentification
-bad,audio,Easy,audio,bad_blend,BlendingWordIdentification
-ban,audio,Easy,audio,ban_blend,BlendingWordIdentification
-bat,audio,Easy,audio,bat_blend,BlendingWordIdentification
 bed,audio,Easy,audio,bed_blend,BlendingWordIdentification
 beg,audio,Easy,audio,beg_blend,BlendingWordIdentification
 bet,audio,Easy,audio,bet_blend,BlendingWordIdentification
@@ -435,7 +425,6 @@ bud,audio,Easy,audio,bud_blend,BlendingWordIdentification
 bug,audio,Easy,audio,bug_blend,BlendingWordIdentification
 bun,audio,Easy,audio,bun_blend,BlendingWordIdentification
 but,audio,Easy,audio,but_blend,BlendingWordIdentification
-dad,audio,Easy,audio,dad_blend,BlendingWordIdentification
 den,audio,Easy,audio,den_blend,BlendingWordIdentification
 did,audio,Easy,audio,did_blend,BlendingWordIdentification
 dim,audio,Easy,audio,dim_blend,BlendingWordIdentification
@@ -445,12 +434,10 @@ dud,audio,Easy,audio,dud_blend,BlendingWordIdentification
 dug,audio,Easy,audio,dug_blend,BlendingWordIdentification
 gap,audio,Easy,audio,gap_blend,BlendingWordIdentification
 get,audio,Easy,audio,get_blend,BlendingWordIdentification
-got,audio,Easy,audio,got_blend,BlendingWordIdentification
 gum,audio,Easy,audio,gum_blend,BlendingWordIdentification
 sir,audio,Medium,audio,sir_blend,BlendingWordIdentification
 nor,audio,Medium,audio,nor_blend,BlendingWordIdentification
 ham,audio,Medium,audio,ham_blend,BlendingWordIdentification
-has,audio,Medium,audio,has_blend,BlendingWordIdentification
 web,audio,Medium,audio,web_blend,BlendingWordIdentification
 fur,audio,Medium,audio,fur_blend,BlendingWordIdentification
 job,audio,Medium,audio,job_blend,BlendingWordIdentification
@@ -458,12 +445,10 @@ rid,audio,Medium,audio,rid_blend,BlendingWordIdentification
 log,audio,Medium,audio,log_blend,BlendingWordIdentification
 lad,audio,Medium,audio,lad_blend,BlendingWordIdentification
 let,audio,Medium,audio,let_blend,BlendingWordIdentification
-was,audio,Medium,audio,was_blend,BlendingWordIdentification
 lap,audio,Medium,audio,lap_blend,BlendingWordIdentification
 jet,audio,Medium,audio,jet_blend,BlendingWordIdentification
 bus,audio,Medium,audio,bus_blend,BlendingWordIdentification
 fan,audio,Medium,audio,fan_blend,BlendingWordIdentification
-far,audio,Medium,audio,far_blend,BlendingWordIdentification
 fat,audio,Medium,audio,fat_blend,BlendingWordIdentification
 fed,audio,Medium,audio,fed_blend,BlendingWordIdentification
 fib,audio,Medium,audio,fib_blend,BlendingWordIdentification
@@ -513,7 +498,6 @@ sum,audio,Medium,audio,sum_blend,BlendingWordIdentification
 sun,audio,Medium,audio,sun_blend,BlendingWordIdentification
 wag,audio,Medium,audio,wag_blend,BlendingWordIdentification
 wed,audio,Medium,audio,wed_blend,BlendingWordIdentification
-wet,audio,Medium,audio,wet_blend,BlendingWordIdentification
 wig,audio,Medium,audio,wig_blend,BlendingWordIdentification
 win,audio,Medium,audio,win_blend,BlendingWordIdentification
 won,audio,Medium,audio,won_blend,BlendingWordIdentification
@@ -523,7 +507,6 @@ cab,audio,Hard,audio,cab_blend,BlendingWordIdentification
 cap,audio,Hard,audio,cap_blend,BlendingWordIdentification
 cat,audio,Hard,audio,cat_blend,BlendingWordIdentification
 cop,audio,Hard,audio,cop_blend,BlendingWordIdentification
-cub,audio,Hard,audio,cub_blend,BlendingWordIdentification
 cup,audio,Hard,audio,cup_blend,BlendingWordIdentification
 cut,audio,Hard,audio,cut_blend,BlendingWordIdentification
 kid,audio,Hard,audio,kid_blend,BlendingWordIdentification
@@ -711,3 +694,4 @@ bab,visual,Medium,audio,bab,PseudoWordMatching
 fev,visual,Hard,audio,fev,PseudoWordMatching
 zon,visual,Medium,audio,zon,PseudoWordMatching
 kos,visual,Easy,audio,kos,PseudoWordMatching
+

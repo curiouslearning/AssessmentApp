@@ -27,7 +27,7 @@ public class CameraGrab : MonoBehaviour {
 
 	void takeAPicture()
 	{
-		string identifier = id + System.DateTime.Today.ToString ();
+		string identifier = id + System.DateTime.Today.ToString ("mm_dd_yyy-hh:mm:ss");
 		int counter = 0;
 		//yield return new WaitForEndOfFrame ();
 		while (!tex.isPlaying && counter < 500) {
@@ -40,8 +40,9 @@ public class CameraGrab : MonoBehaviour {
 			photo.Apply ();
 			byte[] bytes = photo.EncodeToPNG();
 			Debug.Log ("writing to: " + Application.persistentDataPath);
-			File.WriteAllBytes (Application.persistentDataPath + "/startupPhoto" + identifier + ".png", bytes);
+			File.WriteAllBytes (Application.persistentDataPath + identifier + ".png", bytes);
 			tookPicture = true;
+			tex.Stop ();
 		}
 
 	}
@@ -67,31 +68,32 @@ public class CameraGrab : MonoBehaviour {
 		}
 
 		// change as user rotates iPhone or Android:
-
-		int cwNeeded = tex.videoRotationAngle;
-		// Unity helpfully returns the _clockwise_ twist needed
-		// guess nobody at Unity noticed their product works in counterclockwise:
-		int ccwNeeded = -cwNeeded;
-
-		// IF the image needs to be mirrored, it seems that it
-		// ALSO needs to be spun. Strange: but true.
-		if ( tex.videoVerticallyMirrored ) ccwNeeded += 180;
-
-		// you'll be using a UI RawImage, so simply spin the RectTransform
-		rawImageRT.localEulerAngles = new Vector3(0f,0f,ccwNeeded);
-
-		float videoRatio = (float)tex.width/(float)tex.height;
-
-		// you'll be using an AspectRatioFitter on the Image, so simply set it
-		rawImageARF.aspectRatio = videoRatio;
-
-		// alert, the ONLY way to mirror a RAW image, is, the uvRect.
-		// changing the scale is completely broken.
-		if ( tex.videoVerticallyMirrored )
-			rawImage.uvRect = new Rect(1,0,-1,1);  // means flip on vertical axis
-		else
-			rawImage.uvRect = new Rect(0,0,1,1);  // means no flip
 		if (!tookPicture) {
+			int cwNeeded = tex.videoRotationAngle;
+			// Unity helpfully returns the _clockwise_ twist needed
+			// guess nobody at Unity noticed their product works in counterclockwise:
+			int ccwNeeded = -cwNeeded;
+
+			// IF the image needs to be mirrored, it seems that it
+			// ALSO needs to be spun. Strange: but true.
+			if ( tex.videoVerticallyMirrored ) ccwNeeded += 180;
+
+			// you'll be using a UI RawImage, so simply spin the RectTransform
+			rawImageRT.localEulerAngles = new Vector3(0f,0f,ccwNeeded);
+
+			float videoRatio = (float)tex.width/(float)tex.height;
+
+			// you'll be using an AspectRatioFitter on the Image, so simply set it
+			rawImageARF.aspectRatio = videoRatio;
+
+			// alert, the ONLY way to mirror a RAW image, is, the uvRect.
+			// changing the scale is completely broken.
+			if ( tex.videoVerticallyMirrored )
+				rawImage.uvRect = new Rect(1,0,-1,1);  // means flip on vertical axis
+			else{
+				rawImage.uvRect = new Rect(0,0,1,1);  // means no flip
+			}
+			
 			takeAPicture ();
 		}
 		// devText.text =

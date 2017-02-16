@@ -83,8 +83,11 @@ public class SpawnerScript : MonoBehaviour {
 	void parseData()
 	{ 
 		string[] sourceLines = stimList.text.Split('\n');
-		for(int i = 1; i < sourceLines.Length; i++)
+		for(int i = 1; i < sourceLines.Length-1; i++)
 		{
+			if (sourceLines [i] == "") {
+				continue;
+			}
 			serStim data = new serStim();
 			string [] vals = sourceLines[i].Split(',');
 			data.hasBeenTarget = false;
@@ -237,13 +240,13 @@ public class SpawnerScript : MonoBehaviour {
 		if(type == "gameOver")
 			return null;
         // return null if a complete SOO cannot be created
-        int numMatch = 0;
+		int matchCount = 0;
         for (int i = 0; i < stimPool.Count; i++)
         {
             if (matchesCriteria(cat, diffLevel, type, stimPool[i]))
-                numMatch++;
+                matchCount++;
         }
-        if (numMatch < 1)
+        if (matchCount < 1)
             return null;
         while (foundTarget == false)
 		{

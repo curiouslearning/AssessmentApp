@@ -42,10 +42,12 @@ public class ScoreTracker : Observer {
 	
 	// scorekeeping variables
 	bool gameOver;
-	int totalScore;
+	int categoryScore;
 	int numCorrect;
 	int numWrong;
 	int numAnswered;
+	string[] foils;
+	string qTarget;
 	//question-capping variables
 		//external
 	public int wrongQuestionLimit;
@@ -94,6 +96,7 @@ public class ScoreTracker : Observer {
 		resetTiming();
 		pauseTimer = false;
 		setCaps();
+		eventHandler.sendEvent (eType.NewGame, this.gameObject);
 		startQuestion ();
 	}
 	/// <summary>
@@ -139,6 +142,7 @@ public class ScoreTracker : Observer {
 			correctCap = rightQuestionLimit;
 			totalCap = totalQuestionLimit;
 		}
+		Debug.Log ("correct cap: " + correctCap);
 	}
 
     /// <summary>
@@ -287,19 +291,17 @@ public class ScoreTracker : Observer {
 		string response;
 		string value;
 		if (s.isCorrect()) {
-			totalScore++;
+			categoryScore++;
 			numCorrect++;
 			numWrong = 0; 
 			response = "correct";
 		} else {
-			totalScore--;
 			numWrong++; 
 			numCorrect = 0;
 			response = "incorrect";
 		}
 		//data recording
-		value = ("Question: " + s.getNum().ToString() + ", Result: " + response + ", time: " + s.getTime().ToString() + ", total score: " + totalScore);
-		broadcastData ("Question Answer", value);
+		questionAnswerBroadcast(response);
 	}
 
     /// <summary>
@@ -334,19 +336,26 @@ public class ScoreTracker : Observer {
 
 	void setCategory()
 	{
+		Debug.Log ("ta-da");
 		if (s.returnCategory().Equals(Category.Customization)) {//only ever spend one question in customization 	
+			Debug.Log("boink");
 			numCorrect = 0;
 			numWrong = 0;
 			numAnswered = 0;
+			categoryScore = 0;
 			currentCategory = getNextCategory(lastCategory);
-			if(currentCategory == Category.BlendingWordIdentification)
-				Debug.Log("Blending @ 339");
+/*			if(currentCategory == Category.BlendingWordIdentification)
+				Debug.Log("Blending @ 339");*/
 			s.setDifficulty(Difficulty.Easy);
 			broadcastData("Difficulty Change", "Easy");  //data recording
-			broadcastData("Category Change", lastCategory.ToString()); //data recording
+			broadcastData("Category Change", currentCategory.ToString()); //data recording
+			eventHandler.sendEvent(eType.CategoryChange, this.gameObject);
 		}
 		 //change category and drop difficulty level after 4 wrong answers, 3 correct answers on hard difficulty, or the category total has been reached.	 
 		else  {
+			Debug.Log ("doink");
+			string key = currentCategory.ToString () + " total";
+			broadcastData (key, categoryScore.ToString());
             if (s.returnCategory() != Category.PseudowordMatching)
             {
                 lastCategory = currentCategory;
@@ -359,10 +368,12 @@ public class ScoreTracker : Observer {
                 numCorrect = 0;
                 numWrong = 0;
                 numAnswered = 0;
+				categoryScore = 0;
                 currentCategory = getNextCategory(currentCategory);
-				if(currentCategory == Category.BlendingWordIdentification)
-					Debug.Log("Blending @ 360");
+				/*if(currentCategory == Category.BlendingWordIdentification)
+					Debug.Log("Blending @ 360");*/
 				broadcastData("Category Change", currentCategory.ToString()); //data recording
+				eventHandler.sendEvent(eType.CategoryChange, this.gameObject);
             }       
 		}
 	}
@@ -458,6 +469,7 @@ public class ScoreTracker : Observer {
     /// </summary>
 
 	void startQuestion() {
+		
 		eventHandler.sendEvent(eType.NewQuestion);
 		stimOrgOb = spawnHolder.spawnNext(currentCategory,s.returnDifficulty(),questionNumber);
 		sooHolder = stimOrgOb.GetComponent<SOOScript>();
@@ -479,7 +491,7 @@ public class ScoreTracker : Observer {
 		checkAnswer();
 		Debug.Log("numCorrect: " + numCorrect);	
 		Debug.Log("numWrong: " + numWrong);
-        Debug.Log("Total Score: " + totalScore); 
+        Debug.Log("Total Score: " + categoryScore); 
 
 		
 		if (numCorrect >= correctCap) {
@@ -502,6 +514,7 @@ public class ScoreTracker : Observer {
 			}
 		else
 			 {
+				Debug.Log("hello");
 				numCorrect = 0;
 				Difficulty temp = s.returnDifficulty();
 				scoreList.Add(s);
@@ -515,6 +528,7 @@ public class ScoreTracker : Observer {
 			}	
 		} 
 		else {
+			Debug.Log ("whaddup");
 			Difficulty temp = s.returnDifficulty();
 			scoreList.Add(s);
 			s = new Score(questionNumber);
@@ -554,12 +568,27 @@ public class ScoreTracker : Observer {
 		string[] stims;
 		string target;
 		stims = sooHolder.returnStims ();
-		target = sooHolder.returnTarget ();
+		target = sooHolder.returnTarget (); 
+		//save for questionAnswerBroadcast
+		foils = stims;
+		qTarget = target;
 		string value = "Question Number: " + questionNumber + ", Category: " + currentCategory + ", Difficulty: " + s.returnDifficulty() + ", Target: " +target + ", StimArray: ";
 		for (int i = 0; i < stims.Length; i++) { //add all stims
 			value = value + stims [i] + ", ";
 		}
 		broadcastData("New Question", value);
+	}
+
+	void questionAnswerBroadcast (string result){
+		string[] stims;
+		string target;
+		stims = foils;
+		target = qTarget;
+		string value = "Question Number: " + questionNumber + ", Category: " + currentCategory + ", Difficulty: " + s.returnDifficulty() + ", Response: " + result + ", Target: " +target + ", StimArray: ";
+		for (int i = 0; i < stims.Length; i++) { //add all stims
+			value = value + stims [i] + ", ";
+		}
+		broadcastData("Question Answer", value);
 	}
 
     /// <summary>
@@ -584,7 +613,6 @@ public class ScoreTracker : Observer {
     void Update() 
 	{
 		if (gameOver) {
-			Debug.Log ("Game is over!");
 			return;
 		}
 		// questionTime keeps track of the elapsed time since the
@@ -611,8 +639,7 @@ public class ScoreTracker : Observer {
 			s.setTimedOut(true);
 			s.addTime (timeLimit);
 			s.addScore (false);
-		
-			broadcastData ("TimeOut", ("Question Number: " + questionNumber.ToString() + ", Category: " + currentCategory.ToString() + ", Difficulty: " + s.returnDifficulty().ToString()));
+			questionAnswerBroadcast ("timeout");
 			eventHandler.sendEvent (eType.TimedOut); // temporary fix here
 			timeOutBroadcastSent = true;
 
@@ -633,7 +660,7 @@ public class ScoreTracker : Observer {
 
 	void printList () //debugger
 	{
-		Debug.Log("TOTAL SCORE: " + totalScore);
+		Debug.Log("TOTAL SCORE: " + categoryScore);
 		for(int i = 0; i < scoreList.Count; i++)
 		{
 			Debug.Log( "Question: " + scoreList[i].getNum());
@@ -720,7 +747,7 @@ public class ScoreTracker : Observer {
 	string printListString () 
 	{
 		string st = "";
-		st = (st + "TOTAL SCORE: " + totalScore + "\n\n");
+		st = (st + "TOTAL SCORE: " + categoryScore + "\n\n");
 		st = (st + averageTime());
 		st = (st + averagesBreakdown ());
 		st = (st + "\n\n");

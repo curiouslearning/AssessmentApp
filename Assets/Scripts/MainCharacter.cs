@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 /// <summary>
 /// Main character master controller, extends Animation Manager.
@@ -150,15 +151,22 @@ public class MainCharacter : AnimationManager {
 
 	void setHostMediaInternal (Sprite s)
 	{
+		Text t;
 		if ((s.rect.xMax-s.rect.xMin) >= (s.rect.yMax-s.rect.yMin +50)) //if the texture is a rectangle
 		{
+			t = rectangleCard.gameObject.GetComponentInChildren<Text> ();
+			t.text = s.name;
 			rectangle.mainTexture = s.texture;
 			square.mainTexture = null;
 		}
 		else {
+			t = squareCard.gameObject.GetComponentInChildren<Text> ();
+			t.text = s.name;
 			square.mainTexture = s.texture;
 			rectangle.mainTexture = null;
 		}
+		AudioSource host = GetComponent<AudioSource> ();
+		//host.clip = null;
 	}
 
 	/// <summary>
@@ -680,13 +688,14 @@ public class MainCharacter : AnimationManager {
 	/// </summary>
 	public void playAudio ()
 	{
-		Debug.Log("play");
 		AudioSource a = GetComponent<AudioSource>();
         if (a != null && !a.isPlaying)
         {
             //talkBubble.sprite = talkBubbleSprite;
             a.Play();
         }
+
+		eventHandler.sendEvent (eType.AudioFinish, this.gameObject);
 	}
 	/// <summary>
 	/// Resets the talk animation.
@@ -719,6 +728,7 @@ public class MainCharacter : AnimationManager {
 			audioCounter += Time.deltaTime;
 			if(audioCounter >= audioInterval && !GetComponent<AudioSource>().isPlaying)
 			{
+				eventHandler.sendEvent (eType.StartAudio, this.gameObject);
 				animator.SetTrigger("Talk");
 				audioCounter = 0f;
 			}
